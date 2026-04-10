@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://swiftdownlod.online/sitemap.xml
+
+# Crawl-delay (optional, for politeness)
+Crawl-delay: 1
+
+# Disallow admin and private paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /node_modules/
+Disallow: /adsense-verification.html
+
+# Allow all important pages
+Allow: /
+Allow: /about-us
+Allow: /contact-us
+Allow: /privacy-policy
+Allow: /terms-of-service
+Allow: /dmca
+Allow: /cookie-policy
+Allow: /supported-platforms
+Allow: /how-to-download-instagram-reels
+Allow: /how-to-download-facebook-videos
+Allow: /faq
+Allow: /pricing
