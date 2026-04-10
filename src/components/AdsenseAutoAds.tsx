@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useEntitlement } from '../context/EntitlementContext';
 
 const ADSENSE_CLIENT =
-  import.meta.env.VITE_ADSENSE_CLIENT || 'ca-pub-6370611592435649';
+  import.meta.env.VITE_ADSENSE_CLIENT || 'ca-pub-8549549826417735';
 const SCRIPT_ID = 'adsense-auto-ads';
 
 export default function AdsenseAutoAds() {
