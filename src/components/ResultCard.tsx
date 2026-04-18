@@ -22,6 +22,8 @@ export default function ResultCard({ videoData }: ResultCardProps) {
   const handleFinalDownload = () => {
     const link = document.createElement('a');
     link.href = videoData.downloadUrl;
+    // Set target blank in case cross-origin prevents actual download attribute from working
+    link.target = '_blank';
     link.download = `${sanitizeFilename(videoData.title)}.${videoData.ext || 'mp4'}`;
     document.body.appendChild(link);
     link.click();
