@@ -33,11 +33,19 @@ export default function DownloaderPanel({
   const handlePaste = async () => {
     try {
       const text = await navigator.clipboard.readText();
+      if (!text || text.trim() === '') {
+        toast.error('Clipboard is empty');
+        return;
+      }
       setUrl(text);
-      toast.success('Link pasted');
+      toast.success('Link pasted successfully');
       window.requestAnimationFrame(() => inputRef.current?.focus());
-    } catch {
-      toast.error('Clipboard access was blocked');
+    } catch (err: any) {
+      if (err.name === 'NotAllowedError') {
+         toast.error('Please allow clipboard access to use this feature');
+      } else {
+         toast.error('Failed to read clipboard');
+      }
     }
   };
 
