@@ -14,10 +14,18 @@ import { Link } from 'react-router-dom';
 import { siteConfig, siteUrl } from '../lib/site';
 
 const steps = [
-  'Open the Instagram reel or post and copy the share link.',
-  'Paste the link into SwiftDL and choose video or audio.',
-  'If the link needs login and you already have access, enable Cookies Mode and upload your own cookies.txt export.',
-  'Review the preview card, then save the file locally.',
+  'Locate the reel, post, or IGTV video on Instagram.',
+  'Tap the Share icon (paper airplane) and select "Copy Link".',
+  'Open SwiftDL in your web browser.',
+  'Paste the copied link into the main input field.',
+  'Select "Video" or "Audio" depending on what you want to extract.',
+  'If the content is age-restricted or private (and you follow the account), enable Cookies Mode.',
+  'Upload your fresh cookies.txt file if using Cookies Mode.',
+  'Click the primary download button to start extraction.',
+  'Wait a few seconds for our servers to process the Instagram URL.',
+  'Check the preview card to ensure the title and thumbnail match what you expect.',
+  'Click the final save button presented in the result card.',
+  'If the browser opens the video instead of saving it, use the browser\'s "Save Page As" or long-press context menu.',
 ];
 
 const faqs = [
@@ -40,6 +48,46 @@ const faqs = [
     question: 'Why did the link stop working later?',
     answer:
       'Instagram media URLs are often temporary. Save the file locally instead of relying on the temporary direct media URL.',
+  },
+  {
+    question: 'Can I download Instagram Stories?',
+    answer:
+      'Downloading stories is highly unreliable because they expire quickly and often require authentication. If you try, you must use the exact story URL and Cookies Mode.',
+  },
+  {
+    question: 'Are there limits on how many reels I can download?',
+    answer:
+      'Yes, we enforce daily quotas to prevent abuse. If you are a free user, you can upgrade to a premium plan for higher limits.',
+  },
+  {
+    question: 'Why is the video quality lower than on the app?',
+    answer:
+      'Instagram heavily compresses videos. We extract the highest quality stream the platform exposes to external applications, which may sometimes differ from the app playback.',
+  },
+  {
+    question: 'Can I download carousel posts?',
+    answer:
+      'If a carousel post contains multiple videos, our current system usually extracts the first video in the gallery.',
+  },
+  {
+    question: 'Why do I get a "Video not found" error?',
+    answer:
+      'This happens if the video was deleted, if the account went private, or if the URL was copied incorrectly.',
+  },
+  {
+    question: 'Can I download IGTV videos?',
+    answer:
+      'Yes, IGTV links are supported using the exact same workflow as standard reels and posts.',
+  },
+  {
+    question: 'Do I need to install a mobile app?',
+    answer:
+      'No. SwiftDL works entirely within your browser (Chrome, Safari, Firefox, etc.) without needing a dedicated mobile app.',
+  },
+  {
+    question: 'Is it safe to use my Instagram cookies?',
+    answer:
+      'Cookies Mode is secure, but you should treat your cookies like a password. We encrypt them and only use them to access the media you request.',
   },
 ];
 
@@ -138,6 +186,42 @@ export default function HowToDownloadInstagramReels() {
               your device.
             </p>
           </article>
+
+          <article className="feature-card">
+            <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
+              <Lock className="h-5 w-5" />
+            </div>
+            <h2 className="text-2xl font-black text-[var(--ink-900)]">
+              Watermark free
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
+              Unlike the in-app download feature, extracting reels via the direct link usually provides the original video without an added Instagram watermark.
+            </p>
+          </article>
+
+          <article className="feature-card">
+            <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
+              <Music4 className="h-5 w-5" />
+            </div>
+            <h2 className="text-2xl font-black text-[var(--ink-900)]">
+              Carousel Posts
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
+              For posts containing multiple images or videos, only the first valid media element in the gallery is typically extracted.
+            </p>
+          </article>
+
+          <article className="feature-card">
+            <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
+              <Smartphone className="h-5 w-5" />
+            </div>
+            <h2 className="text-2xl font-black text-[var(--ink-900)]">
+              Story Expiration
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
+              Stories disappear after 24 hours. Attempting to download a story link after it has expired will always result in an error.
+            </p>
+          </article>
         </div>
       </section>
 
@@ -160,6 +244,22 @@ export default function HowToDownloadInstagramReels() {
               <li className="flex gap-3">
                 <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
                 If the platform rate-limits requests, wait a little and retry with fewer repeated submissions.
+              </li>
+              <li className="flex gap-3">
+                <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
+                Verify the video has not been deleted or taken down for copyright reasons.
+              </li>
+              <li className="flex gap-3">
+                <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
+                Ensure you are not copying a profile link instead of a specific video link.
+              </li>
+              <li className="flex gap-3">
+                <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
+                Check if your premium plan daily limit has been reached in the Dashboard.
+              </li>
+              <li className="flex gap-3">
+                <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
+                Try opening the link in a private/incognito window to verify it is actually public.
               </li>
             </ul>
           </div>

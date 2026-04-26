@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import {
+  AlertTriangle,
   CheckCircle2,
   ChevronDown,
   Cookie,
   Globe2,
   Lock,
   MonitorSmartphone,
+  Music4,
   ShieldCheck,
   Sparkles,
   Video,
@@ -36,6 +38,54 @@ const capabilityCards = [
       'SwiftDL does not keep copies of downloaded media on the public site. Recent items are stored in your browser only for quick access.',
     icon: ShieldCheck,
   },
+  {
+    title: 'Fast and reliable extraction',
+    description:
+      'Our backend leverages yt-dlp to rapidly extract metadata and media URLs, minimizing the time you wait before downloading.',
+    icon: Sparkles,
+  },
+  {
+    title: 'Cross-device compatibility',
+    description:
+      'Whether you are on a desktop PC, a tablet, or a mobile phone, our responsive interface adapts perfectly to your screen size.',
+    icon: MonitorSmartphone,
+  },
+  {
+    title: 'High-quality audio streams',
+    description:
+      'When you need just the audio, we target the best available m4a or mp3 streams directly from the source without unnecessary transcoding.',
+    icon: Music4,
+  },
+  {
+    title: 'Secure link handling',
+    description:
+      'We use secure HTTPS connections and never store your personal identifiers alongside the URLs you process.',
+    icon: Lock,
+  },
+  {
+    title: 'Continuous updates',
+    description:
+      'Our systems are regularly updated to stay compatible with platform changes and new extraction methods.',
+    icon: CheckCircle2,
+  },
+  {
+    title: 'Transparent quota system',
+    description:
+      'Free users get a generous daily quota, and premium users can track their usage seamlessly via the dashboard.',
+    icon: AlertTriangle,
+  },
+  {
+    title: 'Global content access',
+    description:
+      'Extract media from URLs around the world, supporting international platforms and diverse content types.',
+    icon: Globe2,
+  },
+  {
+    title: 'Premium support',
+    description:
+      'Lifetime and monthly subscribers get priority access to new features and faster issue resolution.',
+    icon: ShieldCheck,
+  },
 ];
 
 const workflowSteps = [
@@ -45,9 +95,34 @@ const workflowSteps = [
       'Open a public or authorized video page on a supported platform and copy the direct share link.',
   },
   {
-    title: 'Paste and choose the format',
+    title: 'Navigate to SwiftDL',
     description:
-      'Use the main downloader above, decide whether you want video or audio, and enable Cookies Mode only if the link needs account access.',
+      'Open our web app in your browser of choice. No need to install any heavy applications or extensions.',
+  },
+  {
+    title: 'Paste the URL',
+    description:
+      'Click into the main input field and paste the link you copied earlier.',
+  },
+  {
+    title: 'Choose the format',
+    description:
+      'Select whether you want to extract the full video or just the audio track.',
+  },
+  {
+    title: 'Enable Cookies Mode (if needed)',
+    description:
+      'If the link requires an account to view, toggle Cookies Mode and ensure your session is active.',
+  },
+  {
+    title: 'Click Download',
+    description:
+      'Hit the download button to start the extraction process on our servers.',
+  },
+  {
+    title: 'Wait for processing',
+    description:
+      'Our backend will quickly fetch the necessary metadata and locate the best media streams.',
   },
   {
     title: 'Review the preview card',
@@ -55,9 +130,24 @@ const workflowSteps = [
       'SwiftDL fetches the title, thumbnail, uploader, and other metadata before you trigger the final save action.',
   },
   {
-    title: 'Download to your device',
+    title: 'Select quality (if available)',
     description:
-      'Save the file locally. If the browser previews the media instead of auto-saving, use Save video as or long-press on mobile.',
+      'Review any quality options presented and confirm your selection.',
+  },
+  {
+    title: 'Initiate local save',
+    description:
+      'Click the final save button to begin transferring the file to your device.',
+  },
+  {
+    title: 'Handle browser previews',
+    description:
+      'If your browser tries to play the file instead of saving it, use the "Save as" or long-press menu.',
+  },
+  {
+    title: 'Check your history',
+    description:
+      'Find your recently processed links in the history section for quick access later.',
   },
 ];
 
@@ -80,6 +170,42 @@ const supportedContent = [
       'Only works for media you are already authorized to view',
     ],
   },
+  {
+    platform: 'Audio-focused extraction',
+    items: [
+      'Direct stream selection prioritizing m4a and mp3 formats',
+      'Avoids unnecessary transcoding, preserving original quality',
+      'Ideal for podcasts, music references, and audio notes',
+      'Smaller file sizes for quicker downloads on mobile connections',
+    ],
+  },
+  {
+    platform: 'Archival and Review',
+    items: [
+      'Save internal company videos for offline review cycles',
+      'Creators can back up their own live streams and posts',
+      'Maintain exact metadata like uploader name and duration',
+      'Keep copies for editing without needing the original project files',
+    ],
+  },
+  {
+    platform: 'Cross-platform compatibility',
+    items: [
+      'Works consistently across iOS, Android, macOS, and Windows',
+      'No need to manage different apps for different social networks',
+      'Progressive Web App (PWA) support for an app-like experience',
+      'Consistent UI regardless of the origin of the video link',
+    ],
+  },
+  {
+    platform: 'Advanced technical handling',
+    items: [
+      'Automatic fallback to HLS streams when direct HTTP fails',
+      'User-agent spoofing to avoid basic platform blocks',
+      'Detailed error messages when a link is truly inaccessible',
+      'Regular backend updates to yt-dlp to maintain compatibility',
+    ],
+  },
 ];
 
 const trustNotes = [
@@ -100,6 +226,42 @@ const trustNotes = [
     copy:
       'The most common causes are deleted posts, temporary platform rate limits, unsupported link variants, expired cookies, or links that require fresh authentication.',
     icon: Video,
+  },
+  {
+    title: 'Data Privacy',
+    copy:
+      'We do not retain your downloaded files on our servers. Links are processed in memory and delivered directly to your browser.',
+    icon: ShieldCheck,
+  },
+  {
+    title: 'Cookie Security',
+    copy:
+      'If you use Cookies Mode, your session data is encrypted and only used for requests you explicitly authorize.',
+    icon: Cookie,
+  },
+  {
+    title: 'Fair Usage',
+    copy:
+      'To keep the service fast for everyone, we enforce rate limits. Premium plans offer higher quotas for power users.',
+    icon: Globe2,
+  },
+  {
+    title: 'Respecting Creators',
+    copy:
+      'Always respect the original creators. Downloading a video does not grant you the copyright or permission to redistribute it.',
+    icon: CheckCircle2,
+  },
+  {
+    title: 'No Hidden Installers',
+    copy:
+      'Unlike many downloader sites, SwiftDL will never ask you to install sketchy browser extensions or desktop malware.',
+    icon: MonitorSmartphone,
+  },
+  {
+    title: 'Transparent Errors',
+    copy:
+      'When something goes wrong, we try to explain exactly why, rather than failing silently or showing generic errors.',
+    icon: AlertTriangle,
   },
 ];
 
@@ -153,6 +315,106 @@ const faqs = [
     question: 'Can teams use SwiftDL internally?',
     answer:
       'Yes, many teams use tools like this for internal review, archiving approved brand assets, and offline reference. They should still respect copyright and platform terms.',
+  },
+  {
+    question: 'What format are the videos saved in?',
+    answer:
+      'We usually extract videos in MP4 format as it offers the best compatibility across mobile and desktop devices. If MP4 is not available, we may provide WEBM.',
+  },
+  {
+    question: 'What format are the audio files saved in?',
+    answer:
+      'Audio files are typically extracted in M4A or MP3 format, depending on what the platform provides natively.',
+  },
+  {
+    question: 'Is there a limit on video length?',
+    answer:
+      'There is no strict duration limit on our end, but very long videos (like multi-hour streams) may time out during extraction depending on server load.',
+  },
+  {
+    question: 'Can I download live streams?',
+    answer:
+      'Live streams generally cannot be downloaded while they are actively broadcasting. You usually need to wait until the stream has ended and processed into a VOD (Video on Demand).',
+  },
+  {
+    question: 'Why did my download result in a small text file instead of a video?',
+    answer:
+      'This usually means the media URL expired before the download completed, or the platform blocked the connection. Try fetching the link again.',
+  },
+  {
+    question: 'How do I export my cookies.txt?',
+    answer:
+      'You can use browser extensions like "Get cookies.txt LOCALLY" on Chrome or Firefox. Export them while logged into the target site.',
+  },
+  {
+    question: 'Is Cookies Mode safe?',
+    answer:
+      'Yes, your cookies are stored securely and only used to authenticate requests made on your behalf. However, you should still treat cookie exports like passwords.',
+  },
+  {
+    question: 'Can I share my account with others?',
+    answer:
+      'Premium accounts are intended for individual use. Sharing accounts may trigger security flags and result in account suspension.',
+  },
+  {
+    question: 'What happens if I reach my daily quota?',
+    answer:
+      'You will not be able to process new links until the quota resets at midnight. You can upgrade to a premium plan to increase your limits.',
+  },
+  {
+    question: 'Does the downloader work on tablets?',
+    answer:
+      'Yes, the website is fully responsive and works well on iPads and Android tablets. You can save files to your local files app.',
+  },
+  {
+    question: 'Why is there no sound in my downloaded video?',
+    answer:
+      'Some platforms serve video and audio as separate streams. In our serverless environment without ffmpeg, we select pre-merged streams, which might occasionally result in lower quality but ensures sound is present. If sound is missing, the source may not have provided a merged stream.',
+  },
+  {
+    question: 'Can I download age-restricted videos?',
+    answer:
+      'Age-restricted videos usually require login. You can only download them by using Cookies Mode with an account that meets the age requirements.',
+  },
+  {
+    question: 'How do I cancel my premium subscription?',
+    answer:
+      'You can manage your subscription from the Dashboard page when logged in. Cancellations take effect at the end of your current billing cycle.',
+  },
+  {
+    question: 'Do you offer refunds?',
+    answer:
+      'Refunds are handled on a case-by-case basis according to our Refund Policy. Generally, if the service consistently fails to work for supported public links, we will issue a refund.',
+  },
+  {
+    question: 'Is my download history synced across devices?',
+    answer:
+      'No, the "Recent downloads" section relies on your browser\'s local storage. It is not synced to your account in the cloud.',
+  },
+  {
+    question: 'Why am I getting a 403 Forbidden error?',
+    answer:
+      'A 403 error means the platform actively blocked our server from accessing the media. This can happen due to region locks or aggressive bot protection.',
+  },
+  {
+    question: 'Does SwiftDL work in incognito mode?',
+    answer:
+      'Yes, you can use the site in incognito mode. However, your download history and theme preferences will be lost when you close the window.',
+  },
+  {
+    question: 'Can I download a whole playlist at once?',
+    answer:
+      'Currently, SwiftDL only processes single video links. You will need to process each playlist item individually.',
+  },
+  {
+    question: 'What is the maximum file size I can download?',
+    answer:
+      'We do not host the files, so the limit depends on your device\'s storage and your browser\'s ability to handle large downloads.',
+  },
+  {
+    question: 'How do I update the PWA app on my phone?',
+    answer:
+      'The PWA should update automatically when you open it. If you suspect it is stuck, clear your browser cache or remove and re-add the app to your home screen.',
   },
 ];
 
