@@ -34,6 +34,46 @@ const faqs = [
     answer:
       'Yes, when the source provides a suitable audio stream. Choose the audio option before you submit the link.',
   },
+  {
+    question: 'Why is my Facebook download only 720p?',
+    answer:
+      'Facebook often restricts 1080p and higher resolutions to authenticated users on their official apps. Public APIs typically only expose up to 720p SD versions of the media.',
+  },
+  {
+    question: 'Can I download Facebook live streams?',
+    answer:
+      'You cannot download a live broadcast while it is happening. Wait for the broadcast to finish and become a regular post or Watch video before attempting to download it.',
+  },
+  {
+    question: 'How do I find the direct link on mobile?',
+    answer:
+      'Tap the "Share" button on the post or reel, then look for a "Copy Link" option. This will copy the direct URL to your clipboard.',
+  },
+  {
+    question: 'What if the link says it has expired?',
+    answer:
+      'Facebook media URLs have expiration tokens. If a download fails with an expiration error, simply refresh the page and generate a new link through our tool.',
+  },
+  {
+    question: 'Does this work for Facebook Stories?',
+    answer:
+      'Public stories can sometimes be processed if you have the exact direct link. However, because stories expire in 24 hours, they are inherently more difficult to process reliably.',
+  },
+  {
+    question: 'Will the original creator be notified?',
+    answer:
+      'No. Our system retrieves the media passively. The creator will not receive any notification that their video was downloaded.',
+  },
+  {
+    question: 'Can I download videos from Messenger?',
+    answer:
+      'No. Links from private Messenger chats are completely walled off and cannot be accessed by our systems, even with Cookies Mode.',
+  },
+  {
+    question: 'What do I do if I get a 403 Forbidden error?',
+    answer:
+      'This means Facebook blocked the request. Trying again later or using Cookies Mode with a valid session are your best options.',
+  },
 ];
 
 export default function HowToDownloadFacebookVideos() {
@@ -81,9 +121,13 @@ export default function HowToDownloadFacebookVideos() {
           </h2>
           <ol className="mt-4 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
             <li>1. Copy the direct Facebook or fb.watch link.</li>
-            <li>2. Paste it into SwiftDL and choose video or audio.</li>
-            <li>3. If the link is session-protected and you already have access, use Cookies Mode with your own cookies.txt export.</li>
-            <li>4. Review the preview card and save the media locally.</li>
+            <li>2. Open SwiftDL in your browser.</li>
+            <li>3. Paste it into the main input field.</li>
+            <li>4. Choose whether you want the full video or just the audio track.</li>
+            <li>5. If the link is session-protected and you already have access, use Cookies Mode with your own cookies.txt export.</li>
+            <li>6. Click the Download button to begin metadata extraction.</li>
+            <li>7. Wait for the server to process the URL and locate the best streams.</li>
+            <li>8. Review the preview card (checking title and duration) and save the media locally.</li>
           </ol>
         </article>
 
@@ -98,6 +142,10 @@ export default function HowToDownloadFacebookVideos() {
             <li>Public feed videos and reels</li>
             <li>Many Facebook Watch links</li>
             <li>Some replay content after live streams end</li>
+            <li>Public group videos (if not region locked)</li>
+            <li>Embedded Facebook video links from external articles</li>
+            <li>fb.gg gaming clips and highlights</li>
+            <li>Mobile (m.facebook.com) formatted links</li>
             <li>Some session-based links through Cookies Mode when already authorized</li>
           </ul>
         </article>
@@ -125,6 +173,27 @@ export default function HowToDownloadFacebookVideos() {
             If repeated attempts fail, pause for a while and retry later. Facebook sometimes throttles repeated media lookups.
           </p>
         </article>
+        <article className="feature-card">
+          <Share2 className="mb-4 h-5 w-5 text-[#2563eb]" />
+          <h2 className="text-xl font-black text-[var(--ink-900)]">Mobile links</h2>
+          <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
+            If a link starts with "m.facebook", you can paste it directly. Our backend automatically normalizes mobile URLs for extraction.
+          </p>
+        </article>
+        <article className="feature-card">
+          <AlertTriangle className="mb-4 h-5 w-5 text-[#2563eb]" />
+          <h2 className="text-xl font-black text-[var(--ink-900)]">Region locks</h2>
+          <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
+            Videos locked to specific countries might fail unless your cookie export matches an account with access to that region.
+          </p>
+        </article>
+        <article className="feature-card">
+          <PlayCircle className="mb-4 h-5 w-5 text-[#2563eb]" />
+          <h2 className="text-xl font-black text-[var(--ink-900)]">Browser previews</h2>
+          <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
+            If clicking the final button plays the video instead of downloading, right-click (or long-press) and select "Save video as".
+          </p>
+        </article>
       </section>
 
       <section className="mt-10 rounded-[32px] border border-[var(--border-soft)] bg-[var(--surface-soft)] p-6">
@@ -136,9 +205,13 @@ export default function HowToDownloadFacebookVideos() {
             </h2>
             <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
               <li>The post was deleted or is no longer public.</li>
-              <li>The copied URL was incomplete.</li>
+              <li>The copied URL was incomplete or missing characters.</li>
               <li>The content needs an authenticated session.</li>
               <li>The platform temporarily rate-limited the request.</li>
+              <li>The video is from a closed Facebook group.</li>
+              <li>The URL points to a live stream that is currently broadcasting.</li>
+              <li>Your uploaded cookies have expired and need to be refreshed.</li>
+              <li>Facebook changed their internal routing, requiring a backend update.</li>
             </ul>
           </div>
         </div>

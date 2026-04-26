@@ -2,7 +2,7 @@
 
 **Multi-platform video & audio downloader** with dark mode, cookie vault, and premium billing.
 
-![Version](https://img.shields.io/badge/version-3.0.0-brightgreen)
+![Version](https://img.shields.io/badge/version-4.0.0-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Vercel-black)
 
