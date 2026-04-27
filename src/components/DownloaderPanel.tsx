@@ -127,6 +127,7 @@ export default function DownloaderPanel({
               type="button"
               onClick={handlePaste}
               className="pill-soft gap-1.5 px-3 py-2 text-xs transition hover:bg-[var(--brand-200)]"
+              aria-label="Paste from clipboard"
             >
               <Clipboard className="h-3.5 w-3.5" />
               Paste

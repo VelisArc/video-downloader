@@ -124,15 +124,15 @@ export default function ResultCard({ videoData }: ResultCardProps) {
 
           {/* Actions */}
           <div className="mt-5 flex flex-col gap-2 sm:flex-row">
-            <button type="button" onClick={handleFinalDownload} className="btn-brand flex-1 py-3">
+            <button type="button" onClick={handleFinalDownload} className="btn-brand flex-1 py-3" aria-label="Save file to device">
               <Download className="h-4 w-4" />
               Save to device
             </button>
-            <button type="button" onClick={handleCopyLink} className="btn-outline">
+            <button type="button" onClick={handleCopyLink} className="btn-outline" aria-label="Copy direct download link">
               <Copy className="h-4 w-4" />
               Copy link
             </button>
-            <button type="button" onClick={handleShare} className="btn-outline">
+            <button type="button" onClick={handleShare} className="btn-outline" aria-label="Share this download">
               <Share2 className="h-4 w-4" />
               Share
             </button>

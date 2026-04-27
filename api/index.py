@@ -824,10 +824,10 @@ def _utc_today_key():
 def _get_allowed_origin(request_origin=None):
     allowed = (os.getenv('ALLOWED_ORIGINS', '') or '').strip()
     if not allowed:
-        return '*'
+        return 'null'  # Strict fallback if not configured
     origins = [o.strip() for o in allowed.split(',') if o.strip()]
     if not origins:
-        return '*'
+        return 'null'
     if request_origin and request_origin in origins:
         return request_origin
     return origins[0]
@@ -864,6 +864,10 @@ class handler(BaseHTTPRequestHandler):
             if route.endswith('/verify-payment'):
                 return self._handle_verify_payment(data)
             if route.endswith('/cookies'):
+                ip = self._get_client_ip()
+                if not _rate_limit_ok(ip):
+                    self.send_error_json(429, 'Too many requests. Please wait and try again.')
+                    return
                 auth_ctx = self._require_user()
                 if not auth_ctx:
                     return
@@ -1271,6 +1275,10 @@ class handler(BaseHTTPRequestHandler):
                 self.wfile.write(body)
                 return
             if route.endswith('/cookies'):
+                ip = self._get_client_ip()
+                if not _rate_limit_ok(ip):
+                    self.send_error_json(429, 'Too many requests. Please wait and try again.')
+                    return
                 decoded, err = self._verify_bearer_token()
                 if err or not decoded or not decoded.get('uid'):
                     self.send_json({
@@ -1388,6 +1396,10 @@ class handler(BaseHTTPRequestHandler):
             if not route.endswith('/cookies'):
                 self.send_error_json(404, 'Not Found')
                 return
+            ip = self._get_client_ip()
+            if not _rate_limit_ok(ip):
+                self.send_error_json(429, 'Too many requests. Please wait and try again.')
+                return
             auth_ctx = self._require_user()
             if not auth_ctx:
                 return
@@ -1432,7 +1444,13 @@ class handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def send_error_json(self, code, msg):
-        body = json.dumps({'error': msg}).encode('utf-8')
+        # Prevent leaking sensitive internal python paths or auth errors
+        safe_msg = str(msg)
+        if 'File "' in safe_msg or 'line ' in safe_msg or 'Traceback' in safe_msg:
+            logger.error(f"Suppressed internal error trace: {msg}")
+            safe_msg = "An internal server error occurred."
+
+        body = json.dumps({'error': safe_msg}).encode('utf-8')
         self.send_response(code)
         self.send_header('Content-Type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', self._cors_origin())
