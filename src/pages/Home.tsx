@@ -623,12 +623,13 @@ export default function Home() {
                       {/* Cookie list */}
                       <div className="space-y-3">
                         {isCookieVaultLoading ? (
-                          <div className="rounded-2xl p-4 text-sm" style={{ background: 'var(--surface)', color: 'var(--ink-600)' }}>
-                            <LoadingIndicator label="Loading cookies..." />
+                          <div className="space-y-3">
+                            <div className="animate-pulse rounded-2xl h-24 bg-[var(--surface)] border" style={{ borderColor: 'var(--border-soft)' }}></div>
+                            <div className="animate-pulse rounded-2xl h-24 bg-[var(--surface)] border" style={{ borderColor: 'var(--border-soft)' }}></div>
                           </div>
                         ) : savedCookies.items.length > 0 ? (
                           savedCookies.items.map((item) => (
-                            <article key={item.id} className="rounded-2xl border p-4" style={{ borderColor: 'var(--border-soft)', background: item.expired ? 'var(--surface-soft)' : 'var(--surface)' }}>
+                            <article key={item.id} className="rounded-2xl border p-4 transition-colors" style={{ borderColor: 'var(--border-soft)', background: item.expired ? 'var(--surface-soft)' : 'var(--surface)' }}>
                               <div className="flex flex-wrap items-start justify-between gap-3">
                                 <div>
                                   <div className="flex flex-wrap items-center gap-2">

@@ -73,9 +73,11 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="card p-8">
-          <LoadingIndicator label="Loading your dashboard..." />
+      <div className="section-shell max-w-5xl py-10 animate-pulse">
+        <div className="h-10 w-64 rounded-xl bg-[var(--surface-soft)] mb-8"></div>
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="card h-64 lg:col-span-1 bg-[var(--surface-soft)]"></div>
+          <div className="card h-64 lg:col-span-2 bg-[var(--surface-soft)]"></div>
         </div>
       </div>
     );
@@ -229,6 +231,7 @@ export default function Dashboard() {
                       download={`${sanitizeFilename(item.title)}.${item.ext}`}
                       className="rounded-full p-2 transition hover:bg-[var(--surface)]"
                       style={{ color: 'var(--brand-700)' }}
+                      aria-label="Download item"
                     >
                       <Download className="h-4 w-4" />
                     </a>
@@ -236,9 +239,16 @@ export default function Dashboard() {
                 ))}
               </div>
             ) : (
-              <p className="mt-4 text-sm" style={{ color: 'var(--ink-500)' }}>
-                No downloads yet. Go to the home page to download your first video.
-              </p>
+              <div className="mt-4 flex flex-col items-center rounded-xl py-12 text-center" style={{ background: 'var(--surface-soft)' }}>
+                <div className="mb-3 rounded-full bg-white p-3 shadow-sm">
+                   <Download className="h-6 w-6" style={{ color: 'var(--ink-400)' }} />
+                </div>
+                <p className="text-sm font-medium" style={{ color: 'var(--ink-600)' }}>No recent downloads</p>
+                <p className="mt-1 text-xs" style={{ color: 'var(--ink-500)' }}>Your download history will appear here.</p>
+                <Link to="/" className="mt-4 btn-brand py-2 px-5 text-xs">
+                  Start Downloading
+                </Link>
+              </div>
             )}
           </div>
         </div>
