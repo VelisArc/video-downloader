@@ -240,13 +240,15 @@ def _safe_image_url(u):
         host = (parsed.netloc or '').lower()
         allowed = (
             'cdninstagram.com',
-            'instagram.f',
-            'scontent',
             'fbcdn.net',
             'facebook.com',
             'instagram.com',
         )
-        return any(h in host for h in allowed)
+        # Check if the host ends with the allowed domain, or is exactly the allowed domain
+        for h in allowed:
+            if host == h or host.endswith('.' + h):
+                return True
+        return False
     except Exception:
         return False
 
@@ -824,10 +826,10 @@ def _utc_today_key():
 def _get_allowed_origin(request_origin=None):
     allowed = (os.getenv('ALLOWED_ORIGINS', '') or '').strip()
     if not allowed:
-        return 'null'  # Strict fallback if not configured
+        return ''
     origins = [o.strip() for o in allowed.split(',') if o.strip()]
     if not origins:
-        return 'null'
+        return ''
     if request_origin and request_origin in origins:
         return request_origin
     return origins[0]
@@ -1478,11 +1480,6 @@ class handler(BaseHTTPRequestHandler):
         if not token:
             return None, 'empty_token'
         
-        # LOCAL AUTH BYPASS
-        if token.startswith('client:') or token == 'local_token':
-            uid = token.split(':', 1)[1] if ':' in token else 'local_admin'
-            return {'uid': uid, 'email': f"{uid}@local.test"}, None
-
         if firebase_auth is None:
             return None, 'auth_lib_missing'
         if not _ensure_firebase_admin():
