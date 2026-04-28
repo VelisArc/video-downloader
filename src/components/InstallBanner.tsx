@@ -69,7 +69,7 @@ const InstallBanner = () => {
 
                 setDeferredPrompt(null);
             } catch (err) {
-                console.log('Install error:', err);
+                // Ignore error
             }
             return;
         }
