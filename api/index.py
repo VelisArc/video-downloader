@@ -237,7 +237,11 @@ def _pick_thumbnail(info):
 def _safe_image_url(u):
     try:
         parsed = urllib.parse.urlparse(u or '')
-        host = (parsed.netloc or '').lower()
+        if parsed.scheme not in ('http', 'https'):
+            return False
+        host = (parsed.hostname or '').lower()
+        if not host:
+            return False
         allowed = (
             'cdninstagram.com',
             'fbcdn.net',
@@ -841,8 +845,22 @@ class handler(BaseHTTPRequestHandler):
 
     def _is_valid_url(self, url):
         try:
+            import socket
+            import ipaddress
             parsed = urllib.parse.urlparse((url or '').strip())
-            return parsed.scheme in ('http', 'https') and bool(parsed.netloc)
+            if parsed.scheme not in ('http', 'https'):
+                return False
+            hostname = parsed.hostname
+            if not hostname:
+                return False
+            try:
+                ip = socket.gethostbyname(hostname)
+                ip_obj = ipaddress.ip_address(ip)
+                if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_link_local:
+                    return False
+            except socket.error:
+                return False
+            return True
         except Exception:
             return False
 
@@ -1262,7 +1280,7 @@ class handler(BaseHTTPRequestHandler):
                 qs = urllib.parse.urlparse(self.path).query
                 q = dict(urllib.parse.parse_qsl(qs, keep_blank_values=True))
                 src = (q.get('src') or '').strip()
-                if not src or not _safe_image_url(src):
+                if not src or not _safe_image_url(src) or not self._is_valid_url(src):
                     self.send_error_json(400, 'Invalid thumbnail URL')
                     return
                 req = urllib.request.Request(src, headers={'User-Agent': 'Mozilla/5.0'})
