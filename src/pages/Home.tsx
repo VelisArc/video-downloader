@@ -742,7 +742,7 @@ export default function Home() {
         </div>
       </main>
 
-      <div className="border-t" style={{ borderColor: 'var(--border-soft)', background: 'var(--surface-glass)' }}>
+      <div className="border-t border-[var(--border-soft)] bg-white dark:bg-[#0f111a] transition-colors duration-300">
         <HomeSeoContent />
       </div>
     </>

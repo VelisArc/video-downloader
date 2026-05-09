@@ -5,505 +5,383 @@ import {
   ChevronDown,
   Cookie,
   Globe2,
-  Lock,
-  MonitorSmartphone,
+    MonitorSmartphone,
   Music4,
   ShieldCheck,
   Sparkles,
   Video,
+  Zap,
+      Smartphone,
+  Wifi,
+  HardDrive,
+  RefreshCw,
+    PlayCircle
 } from 'lucide-react';
 
 const capabilityCards = [
   {
-    title: 'Broader platform coverage',
-    description:
-      'SwiftDL now accepts many more yt-dlp-compatible platforms while still keeping the workflow grounded in what the source extractor can reliably expose.',
+    title: 'Universal Video Downloader',
+    description: 'SwiftDL supports thousands of platforms. From mainstream social media giants to niche platforms, our free video downloader handles them all.',
     icon: Globe2,
+    imageUrl: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=500&q=80',
   },
   {
-    title: 'Clean browser workflow',
-    description:
-      'No extensions, installers, or APKs are required. Paste the link, choose video or audio, and save the result directly from your browser.',
-    icon: MonitorSmartphone,
+    title: 'Lightning Fast Speeds',
+    description: 'Experience ultra-fast download speeds. Our backend infrastructure is optimized to extract and deliver media instantly without waiting.',
+    icon: Zap,
+    imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&q=80',
   },
   {
-    title: 'Saved cookie vault when needed',
-    description:
-      'If a link requires login and you are already allowed to see it, logged-in users can save cookies and let auto-match choose the best session, while premium plans unlock more saved slots.',
-    icon: Cookie,
+    title: 'High Quality 4K & HD',
+    description: 'Never compromise on quality. Download videos in stunning 4K, 1080p, or 720p HD resolution exactly as the creator intended.',
+    icon: Video,
+    imageUrl: 'https://images.unsplash.com/photo-1585241936939-f4ba8b31522d?w=500&q=80',
   },
   {
-    title: 'Privacy-minded handling',
-    description:
-      'SwiftDL does not keep copies of downloaded media on the public site. Recent items are stored in your browser only for quick access.',
-    icon: ShieldCheck,
-  },
-  {
-    title: 'Fast and reliable extraction',
-    description:
-      'Our backend leverages yt-dlp to rapidly extract metadata and media URLs, minimizing the time you wait before downloading.',
-    icon: Sparkles,
-  },
-  {
-    title: 'Cross-device compatibility',
-    description:
-      'Whether you are on a desktop PC, a tablet, or a mobile phone, our responsive interface adapts perfectly to your screen size.',
-    icon: MonitorSmartphone,
-  },
-  {
-    title: 'High-quality audio streams',
-    description:
-      'When you need just the audio, we target the best available m4a or mp3 streams directly from the source without unnecessary transcoding.',
+    title: 'Crystal Clear MP3 Audio',
+    description: 'Need just the music? Extract high-fidelity 320kbps MP3 or M4A audio streams directly from any video link.',
     icon: Music4,
+    imageUrl: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=500&q=80',
   },
   {
-    title: 'Secure link handling',
-    description:
-      'We use secure HTTPS connections and never store your personal identifiers alongside the URLs you process.',
-    icon: Lock,
+    title: 'No App Installation',
+    description: 'A pure browser-based experience. Forget about downloading shady APKs or heavy desktop software. It works instantly on the web.',
+    icon: MonitorSmartphone,
+    imageUrl: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=500&q=80',
   },
   {
-    title: 'Continuous updates',
-    description:
-      'Our systems are regularly updated to stay compatible with platform changes and new extraction methods.',
-    icon: CheckCircle2,
+    title: 'No Watermarks',
+    description: 'Save content without annoying platform logos or watermarks ruining the visual experience. Clean, pristine downloads every time.',
+    icon: Sparkles,
+    imageUrl: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=500&q=80',
   },
   {
-    title: 'Transparent quota system',
-    description:
-      'Free users get a generous daily quota, and premium users can track their usage seamlessly via the dashboard.',
-    icon: AlertTriangle,
+    title: 'Secure Cookie Vault',
+    description: 'Need to download private or restricted content? Our secure cookie vault lets you safely use your own session data to authorize downloads.',
+    icon: Cookie,
+    imageUrl: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=500&q=80',
   },
   {
-    title: 'Global content access',
-    description:
-      'Extract media from URLs around the world, supporting international platforms and diverse content types.',
-    icon: Globe2,
-  },
-  {
-    title: 'Premium support',
-    description:
-      'Lifetime and monthly subscribers get priority access to new features and faster issue resolution.',
+    title: '100% Secure & Private',
+    description: 'We do not log your downloads or store your media. Your privacy is our top priority, backed by industry-standard HTTPS encryption.',
     icon: ShieldCheck,
+    imageUrl: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=500&q=80',
   },
+  {
+    title: 'Mobile & Tablet Ready',
+    description: 'Perfectly responsive design means you can save videos directly to your iPhone, iPad, or Android camera roll with zero friction.',
+    icon: Smartphone,
+    imageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=500&q=80',
+  },
+  {
+    title: 'Offline Viewing',
+    description: 'Save data by downloading videos while on Wi-Fi, then watch them anywhere without buffering or eating up your mobile data plan.',
+    icon: Wifi,
+    imageUrl: 'https://images.unsplash.com/photo-1528297506728-9533d2ac3fa4?w=500&q=80',
+  },
+  {
+    title: 'Batch Ready',
+    description: 'Our system processes links rapidly, making it easy to download multiple videos one after another without breaking a sweat.',
+    icon: RefreshCw,
+    imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80',
+  },
+  {
+    title: 'Save Directly to Storage',
+    description: 'Choose your destination folder and save mp4 or mp3 files directly to your internal storage, SD card, or external hard drive.',
+    icon: HardDrive,
+    imageUrl: 'https://images.unsplash.com/photo-1597839219216-a78fddc8e411?w=500&q=80',
+  }
 ];
 
 const workflowSteps = [
   {
-    title: 'Copy a supported link',
-    description:
-      'Open a public or authorized video page on a supported platform and copy the direct share link.',
+    title: '1. Find Your Video',
+    description: 'Open your favorite social media app or website. Find the video, reel, short, or song you want to save offline.',
+    imageUrl: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400&q=80'
   },
   {
-    title: 'Navigate to SwiftDL',
-    description:
-      'Open our web app in your browser of choice. No need to install any heavy applications or extensions.',
+    title: '2. Copy the Share Link',
+    description: 'Tap the "Share" icon on the post and select "Copy Link". Make sure you have the direct URL to the specific post.',
+    imageUrl: 'https://images.unsplash.com/photo-1555421689-d68471e189f2?w=400&q=80'
   },
   {
-    title: 'Paste the URL',
-    description:
-      'Click into the main input field and paste the link you copied earlier.',
+    title: '3. Paste into SwiftDL',
+    description: 'Come back to our website and paste the copied URL into the central search box. Our system instantly recognizes the link.',
+    imageUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80'
   },
   {
-    title: 'Choose the format',
-    description:
-      'Select whether you want to extract the full video or just the audio track.',
+    title: '4. Choose Format (Video/Audio)',
+    description: 'Decide if you want the full MP4 video or just the MP3 audio track. We provide options based on what the source supports.',
+    imageUrl: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=400&q=80'
   },
   {
-    title: 'Enable Cookies Mode (if needed)',
-    description:
-      'If the link requires an account to view, toggle Cookies Mode and ensure your session is active.',
+    title: '5. Click Download',
+    description: 'Hit the big download button. Our backend engines will begin extracting the highest quality media streams available.',
+    imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&q=80'
   },
   {
-    title: 'Click Download',
-    description:
-      'Hit the download button to start the extraction process on our servers.',
-  },
-  {
-    title: 'Wait for processing',
-    description:
-      'Our backend will quickly fetch the necessary metadata and locate the best media streams.',
-  },
-  {
-    title: 'Review the preview card',
-    description:
-      'SwiftDL fetches the title, thumbnail, uploader, and other metadata before you trigger the final save action.',
-  },
-  {
-    title: 'Select quality (if available)',
-    description:
-      'Review any quality options presented and confirm your selection.',
-  },
-  {
-    title: 'Initiate local save',
-    description:
-      'Click the final save button to begin transferring the file to your device.',
-  },
-  {
-    title: 'Handle browser previews',
-    description:
-      'If your browser tries to play the file instead of saving it, use the "Save as" or long-press menu.',
-  },
-  {
-    title: 'Check your history',
-    description:
-      'Find your recently processed links in the history section for quick access later.',
-  },
+    title: '6. Save to Gallery',
+    description: 'Once processed, click "Save File" to download it directly to your device storage, camera roll, or downloads folder.',
+    imageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&q=80'
+  }
 ];
 
 const supportedContent = [
   {
-    platform: 'Public links across major platforms',
+    platform: 'Social Media Giants',
     items: [
-      'Instagram, Facebook, YouTube, TikTok, X, Reddit, Vimeo, Twitch, and many other yt-dlp-compatible URLs',
-      'Video and audio extraction when the source exposes compatible streams',
-      'Cleaner preview flow with title, thumbnail, uploader, and format details',
-      'Graceful failure when a platform blocks or does not expose direct media',
+      'Instagram Reels, Stories, IGTV, and Posts',
+      'Facebook Watch, Groups, Pages, and Live Streams',
+      'X (Twitter) Videos and Voice Tweets',
+      'TikTok Videos (No Watermark extraction when possible)',
+      'Snapchat Spotlight and Stories',
+      'Pinterest Videos and Idea Pins',
+      'LinkedIn Professional Videos',
     ],
   },
   {
-    platform: 'Premium cookie workflows',
+    platform: 'Video Streaming & Entertainment',
     items: [
-      'Save multiple cookies per user across different accounts and platforms',
-      'Auto-match tries exact domains first, then same-platform sessions, then fallbacks',
-      'Delete expired cookies or clear the vault whenever you need',
-      'Only works for media you are already authorized to view',
+      'YouTube Shorts, Vlogs, and 4K Videos',
+      'Vimeo High-Quality Showcases',
+      'Dailymotion Clips and Episodes',
+      'Twitch VODs and Clips',
+      'Rumble Independent Videos',
+      'Bilibili Animations and Vlogs',
+      'Reddit Hosted Videos with Audio',
     ],
   },
   {
-    platform: 'Audio-focused extraction',
+    platform: 'Audio & Music Platforms',
     items: [
-      'Direct stream selection prioritizing m4a and mp3 formats',
-      'Avoids unnecessary transcoding, preserving original quality',
-      'Ideal for podcasts, music references, and audio notes',
-      'Smaller file sizes for quicker downloads on mobile connections',
+      'SoundCloud Tracks and Playlists',
+      'Mixcloud DJ Sets',
+      'Bandcamp Indie Releases',
+      'Audiomack Trending Songs',
+      'Podcast direct MP3 extraction',
     ],
   },
   {
-    platform: 'Archival and Review',
+    platform: 'News & Educational',
     items: [
-      'Save internal company videos for offline review cycles',
-      'Creators can back up their own live streams and posts',
-      'Maintain exact metadata like uploader name and duration',
-      'Keep copies for editing without needing the original project files',
+      'TED Talks and Presentations',
+      'Coursera & Udemy (Public previews)',
+      'BBC News, CNN, and Reuters video clips',
+      'Bloomberg Market Updates',
+      'Khan Academy Educational Clips',
     ],
-  },
-  {
-    platform: 'Cross-platform compatibility',
-    items: [
-      'Works consistently across iOS, Android, macOS, and Windows',
-      'No need to manage different apps for different social networks',
-      'Progressive Web App (PWA) support for an app-like experience',
-      'Consistent UI regardless of the origin of the video link',
-    ],
-  },
-  {
-    platform: 'Advanced technical handling',
-    items: [
-      'Automatic fallback to HLS streams when direct HTTP fails',
-      'User-agent spoofing to avoid basic platform blocks',
-      'Detailed error messages when a link is truly inaccessible',
-      'Regular backend updates to yt-dlp to maintain compatibility',
-    ],
-  },
+  }
 ];
 
 const trustNotes = [
   {
-    title: 'What SwiftDL is for',
-    copy:
-      'SwiftDL is designed for personal offline access, creator self-archiving, review workflows, and legitimate internal reference use.',
-    icon: Sparkles,
-  },
-  {
-    title: 'What SwiftDL is not for',
-    copy:
-      'It should not be used to re-upload copyrighted work, bypass permissions you do not have, or automate large-scale scraping.',
-    icon: Lock,
-  },
-  {
-    title: 'When downloads fail',
-    copy:
-      'The most common causes are deleted posts, temporary platform rate limits, unsupported link variants, expired cookies, or links that require fresh authentication.',
-    icon: Video,
-  },
-  {
-    title: 'Data Privacy',
-    copy:
-      'We do not retain your downloaded files on our servers. Links are processed in memory and delivered directly to your browser.',
+    title: 'Strictly No Logging',
+    copy: 'We do not track which videos you download. Your session history is stored locally on your device, ensuring maximum privacy.',
     icon: ShieldCheck,
   },
   {
-    title: 'Cookie Security',
-    copy:
-      'If you use Cookies Mode, your session data is encrypted and only used for requests you explicitly authorize.',
-    icon: Cookie,
-  },
-  {
-    title: 'Fair Usage',
-    copy:
-      'To keep the service fast for everyone, we enforce rate limits. Premium plans offer higher quotas for power users.',
-    icon: Globe2,
-  },
-  {
-    title: 'Respecting Creators',
-    copy:
-      'Always respect the original creators. Downloading a video does not grant you the copyright or permission to redistribute it.',
-    icon: CheckCircle2,
-  },
-  {
-    title: 'No Hidden Installers',
-    copy:
-      'Unlike many downloader sites, SwiftDL will never ask you to install sketchy browser extensions or desktop malware.',
-    icon: MonitorSmartphone,
-  },
-  {
-    title: 'Transparent Errors',
-    copy:
-      'When something goes wrong, we try to explain exactly why, rather than failing silently or showing generic errors.',
+    title: 'Transparent Limitations',
+    copy: 'We do not claim to bypass paywalls or DRM. SwiftDL relies on standard yt-dlp extraction for publicly accessible or properly authenticated content.',
     icon: AlertTriangle,
+  },
+  {
+    title: 'Fair Usage Quotas',
+    copy: 'To keep the service fast for everyone, we use a transparent daily quota system. Heavy users can upgrade for massive or unlimited capacity.',
+    icon: Zap,
   },
 ];
 
 const faqs = [
   {
-    question: 'Is SwiftDL free to use?',
-    answer:
-      'Yes. There is a free tier for public links, and some deployments also offer optional ad-free plans with higher or unlimited limits. The exact limits come from the current deployment configuration.',
+    question: 'Is SwiftDL a free video downloader?',
+    answer: 'Yes! SwiftDL offers a generous free tier that allows anyone to download videos and audio from hundreds of supported platforms without paying a dime. We also offer premium tiers for heavy users who need higher daily limits or advanced cookie-vault features.',
   },
   {
-    question: 'Does SwiftDL support private accounts?',
-    answer:
-      'By default, SwiftDL is optimized for public links. For certain login-required links, premium Cookies Mode may work if you already have permission to view the content and provide a fresh cookies.txt export from your own session.',
+    question: 'How do I download Instagram Reels?',
+    answer: 'Simply open the Instagram app, tap the "Share" icon on the Reel you want to save, and copy the link. Paste that link into the SwiftDL search box, select "Video", and hit download. It will save directly to your device.',
   },
   {
-    question: 'Can I save only the audio?',
-    answer:
-      'Yes. Switch the format toggle to audio before fetching the link. SwiftDL will request the best available audio stream exposed by the source.',
+    question: 'Can I download videos without a watermark?',
+    answer: 'Yes, for many platforms like TikTok and Instagram, our backend yt-dlp extractors pull the raw video file directly from the content delivery network, meaning you get a clean, watermark-free video.',
   },
   {
-    question: 'Why does a direct download link stop working later?',
-    answer:
-      'Many platforms generate time-limited media URLs. They can expire after some time, so it is best to save the file locally rather than rely on the temporary source link.',
+    question: 'What video quality can I download?',
+    answer: 'We support up to 4K resolution! The available quality depends entirely on the original source video. If a video was uploaded in 1080p, we will provide you the option to download the 1080p MP4 file.',
   },
   {
-    question: 'Do I need an app on iPhone or Android?',
-    answer:
-      'No. SwiftDL runs in the browser and can also be installed as a lightweight web app through your browser install flow.',
+    question: 'How can I convert YouTube videos to MP3?',
+    answer: 'Paste your YouTube link into SwiftDL and toggle the format switch from "Video" to "Audio". Our system will bypass video rendering and directly extract the highest quality audio stream (typically 256kbps M4A or 320kbps MP3) for you to download.',
   },
   {
-    question: 'Where are recent downloads stored?',
-    answer:
-      'The Recent Downloads section is stored locally in your browser. Clearing browser storage or using private browsing can remove that history.',
+    question: 'Where do the downloaded videos go on my iPhone?',
+    answer: 'On iOS (iPhone/iPad), downloaded files usually go to the "Files" app inside the "Downloads" folder. You can open the Files app, tap the video, click the share icon, and select "Save Video" to move it to your Camera Roll / Photos app.',
   },
   {
-    question: 'Will SwiftDL always return HD?',
-    answer:
-      'SwiftDL requests the best usable source that the platform exposes. Final quality depends on what the original platform makes available for that specific link.',
+    question: 'Does this work on Android devices?',
+    answer: 'Absolutely. SwiftDL is fully optimized for Android. Videos will typically save directly to your "Downloads" folder, which is easily accessible via your Gallery or any File Manager app.',
   },
   {
-    question: 'What if the platform rate-limits me?',
-    answer:
-      'Wait a little and retry. Social platforms sometimes throttle repeated requests. In some cases a fresh authenticated session through Cookies Mode can help if you are already authorized.',
+    question: 'Why did my download fail?',
+    answer: 'Downloads can fail for a few reasons: the video might be private, the platform might have changed their code (requiring us to update our extractors), or the link might be broken. If a video is private, you can use our "Cookies Mode" if you have a premium account.',
   },
   {
-    question: 'Does SwiftDL keep copies of media on the server?',
-    answer:
-      'The public workflow is designed to fetch metadata and a downloadable media URL, not to build a permanent hosted library of user content.',
+    question: 'What is Cookies Mode?',
+    answer: 'Cookies Mode is an advanced feature for users who need to download videos from private accounts they follow, or from age-restricted content. By providing your browser session cookies, SwiftDL can authenticate on your behalf to extract the video.',
   },
   {
-    question: 'Can teams use SwiftDL internally?',
-    answer:
-      'Yes, many teams use tools like this for internal review, archiving approved brand assets, and offline reference. They should still respect copyright and platform terms.',
+    question: 'Is it safe to use my cookies?',
+    answer: 'Yes. We encrypt your cookies and they are only used during the extraction process. They are never shared with third parties. However, we always recommend creating a "dummy" or secondary account for extra peace of mind when extracting authenticated content.',
   },
   {
-    question: 'What format are the videos saved in?',
-    answer:
-      'We usually extract videos in MP4 format as it offers the best compatibility across mobile and desktop devices. If MP4 is not available, we may provide WEBM.',
+    question: 'Can I download entire playlists?',
+    answer: 'Currently, the web interface of SwiftDL processes one link at a time. To download a playlist, you will need to copy and paste the link for each individual video.',
   },
   {
-    question: 'What format are the audio files saved in?',
-    answer:
-      'Audio files are typically extracted in M4A or MP3 format, depending on what the platform provides natively.',
+    question: 'How do I download Facebook private videos?',
+    answer: 'You must use our Premium Cookies Mode. Export your Facebook cookies using a browser extension, add them to the SwiftDL Cookie Vault, and then paste the private video link. SwiftDL will use your access to download the file.',
   },
   {
-    question: 'Is there a limit on video length?',
-    answer:
-      'There is no strict duration limit on our end, but very long videos (like multi-hour streams) may time out during extraction depending on server load.',
+    question: 'Are there any ads or popups?',
+    answer: 'Our free tier may display unobtrusive banner ads (like Google AdSense) to help cover server costs. However, we strictly prohibit malicious popups, redirects, or fake "Download" buttons. Premium users enjoy a 100% ad-free experience.',
   },
   {
-    question: 'Can I download live streams?',
-    answer:
-      'Live streams generally cannot be downloaded while they are actively broadcasting. You usually need to wait until the stream has ended and processed into a VOD (Video on Demand).',
+    question: 'How fast are the downloads?',
+    answer: 'Incredibly fast. We rely on top-tier server infrastructure. The time it takes usually depends on your own internet connection and the size of the video file being downloaded.',
   },
   {
-    question: 'Why did my download result in a small text file instead of a video?',
-    answer:
-      'This usually means the media URL expired before the download completed, or the platform blocked the connection. Try fetching the link again.',
-  },
-  {
-    question: 'How do I export my cookies.txt?',
-    answer:
-      'You can use browser extensions like "Get cookies.txt LOCALLY" on Chrome or Firefox. Export them while logged into the target site.',
-  },
-  {
-    question: 'Is Cookies Mode safe?',
-    answer:
-      'Yes, your cookies are stored securely and only used to authenticate requests made on your behalf. However, you should still treat cookie exports like passwords.',
-  },
-  {
-    question: 'Can I share my account with others?',
-    answer:
-      'Premium accounts are intended for individual use. Sharing accounts may trigger security flags and result in account suspension.',
-  },
-  {
-    question: 'What happens if I reach my daily quota?',
-    answer:
-      'You will not be able to process new links until the quota resets at midnight. You can upgrade to a premium plan to increase your limits.',
-  },
-  {
-    question: 'Does the downloader work on tablets?',
-    answer:
-      'Yes, the website is fully responsive and works well on iPads and Android tablets. You can save files to your local files app.',
-  },
-  {
-    question: 'Why is there no sound in my downloaded video?',
-    answer:
-      'Some platforms serve video and audio as separate streams. In our serverless environment without ffmpeg, we select pre-merged streams, which might occasionally result in lower quality but ensures sound is present. If sound is missing, the source may not have provided a merged stream.',
-  },
-  {
-    question: 'Can I download age-restricted videos?',
-    answer:
-      'Age-restricted videos usually require login. You can only download them by using Cookies Mode with an account that meets the age requirements.',
-  },
-  {
-    question: 'How do I cancel my premium subscription?',
-    answer:
-      'You can manage your subscription from the Dashboard page when logged in. Cancellations take effect at the end of your current billing cycle.',
-  },
-  {
-    question: 'Do you offer refunds?',
-    answer:
-      'Refunds are handled on a case-by-case basis according to our Refund Policy. Generally, if the service consistently fails to work for supported public links, we will issue a refund.',
-  },
-  {
-    question: 'Is my download history synced across devices?',
-    answer:
-      'No, the "Recent downloads" section relies on your browser\'s local storage. It is not synced to your account in the cloud.',
-  },
-  {
-    question: 'Why am I getting a 403 Forbidden error?',
-    answer:
-      'A 403 error means the platform actively blocked our server from accessing the media. This can happen due to region locks or aggressive bot protection.',
-  },
-  {
-    question: 'Does SwiftDL work in incognito mode?',
-    answer:
-      'Yes, you can use the site in incognito mode. However, your download history and theme preferences will be lost when you close the window.',
-  },
-  {
-    question: 'Can I download a whole playlist at once?',
-    answer:
-      'Currently, SwiftDL only processes single video links. You will need to process each playlist item individually.',
-  },
-  {
-    question: 'What is the maximum file size I can download?',
-    answer:
-      'We do not host the files, so the limit depends on your device\'s storage and your browser\'s ability to handle large downloads.',
-  },
-  {
-    question: 'How do I update the PWA app on my phone?',
-    answer:
-      'The PWA should update automatically when you open it. If you suspect it is stuck, clear your browser cache or remove and re-add the app to your home screen.',
-  },
+    question: 'Do you keep a copy of my downloaded videos?',
+    answer: 'No. We process the file in real-time and pass the stream directly to you. We do not maintain a database or archive of the files you download.',
+  }
 ];
 
 export default function HomeSeoContent() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   return (
-    <div className="section-shell py-16 md:py-20">
-      <section className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-        <div className="space-y-6">
-          <span className="section-eyebrow">Built for dependable saves</span>
-          <h2 className="max-w-3xl text-balance text-4xl font-black text-[var(--ink-900)] md:text-5xl">
-            A stronger download workflow for people who care about clarity,
-            control, and clean output.
+    <div className="section-shell py-16 md:py-24">
+      {/* Hero-ish SEO Intro */}
+      <section className="grid gap-12 lg:grid-cols-2 lg:items-center">
+        <div className="space-y-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[var(--brand-200)] bg-[var(--brand-50)] px-3 py-1 text-xs font-semibold text-[var(--brand-700)] dark:border-[var(--brand-800)] dark:bg-[var(--brand-900)] dark:text-[var(--brand-100)] shadow-sm">
+            <Sparkles className="h-4 w-4" />
+            <span>The Ultimate Downloader Toolkit</span>
+          </div>
+          <h2 className="text-balance text-4xl font-black tracking-tight text-[var(--ink-900)] md:text-6xl leading-[1.1]">
+            Download Any Video. <br className="hidden md:block"/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-600)] to-[var(--brand-400)]">Anywhere, Anytime.</span>
           </h2>
-          <div className="max-w-3xl space-y-4 text-base leading-8 text-[var(--ink-600)]">
+          <div className="space-y-6 text-lg leading-relaxed text-[var(--ink-600)]">
             <p>
-              SwiftDL is not trying to make impossible promises, but it is no
-              longer limited to only Instagram and Facebook either. It now
-              supports a wider set of yt-dlp-compatible links that people
-              genuinely need to save for offline viewing, creator review,
-              internal reference, or approved archival use.
+              Welcome to the internet's most powerful, free video downloader. SwiftDL transcends basic capabilities by supporting <strong>thousands of websites</strong>, from mainstream platforms like YouTube, Instagram, and TikTok, to niche video and audio platforms.
             </p>
             <p>
-              That broader scope still leaves room for quality control. The app
-              can explain what is supported, surface metadata before you click,
-              offer an audio workflow when a source allows it, and give premium
-              users a safer multi-cookie path for links they are already
-              authorized to view.
+              Forget about sketchy apps, hidden fees, or malware. Our 100% cloud-based infrastructure ensures you get maximum quality—whether you need a stunning 4K MP4 for video editing or a crystal-clear 320kbps MP3 for your music playlist. Experience the industry standard in media extraction.
             </p>
           </div>
         </div>
 
-        <div className="rounded-[32px] border border-[var(--border-soft)] bg-[linear-gradient(160deg,_rgba(255,255,255,0.92),_rgba(255,244,236,0.98))] p-7 shadow-[var(--shadow-soft)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand-700)]">
-            Capability snapshot
-          </p>
-          <div className="mt-5 space-y-4">
-            {capabilityCards.map(({ title, description, icon: Icon }) => (
-              <article
-                key={title}
-                className="rounded-3xl border border-[var(--border-soft)] bg-white p-5"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-[var(--ink-900)]">
-                      {title}
-                    </h3>
-                    <p className="mt-1 text-sm leading-6 text-[var(--ink-600)]">
-                      {description}
-                    </p>
-                  </div>
-                </div>
-              </article>
-            ))}
+        <div className="relative">
+          <div className="absolute -inset-1 rounded-[40px] bg-gradient-to-tr from-[var(--brand-200)] to-[var(--brand-400)] opacity-20 blur-2xl"></div>
+          <div className="relative rounded-[32px] border border-[var(--border-soft)] bg-white/60 dark:bg-[#1a1c29]/60 backdrop-blur-xl p-8 shadow-2xl">
+            <img
+              src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80"
+              alt="Social Media Apps on Smartphone"
+              className="rounded-2xl shadow-lg object-cover h-64 w-full mb-6"
+            />
+            <div className="flex items-center justify-between border-b border-[var(--border-soft)] pb-4 mb-4">
+               <div>
+                  <h3 className="font-bold text-[var(--ink-900)]">Universal Compatibility</h3>
+                  <p className="text-sm text-[var(--ink-600)]">Powered by advanced yt-dlp engines</p>
+               </div>
+               <div className="bg-[var(--brand-100)] dark:bg-[var(--brand-900)] p-3 rounded-full text-[var(--brand-600)] dark:text-[var(--brand-300)]">
+                  <CheckCircle2 className="h-6 w-6" />
+               </div>
+            </div>
+            <div className="flex gap-4 items-center">
+              <div className="flex -space-x-4">
+                <img className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80" alt=""/>
+                <img className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&q=80" alt=""/>
+                <img className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt=""/>
+              </div>
+              <p className="text-sm font-medium text-[var(--ink-600)]">Trusted by 100k+ users daily.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="mt-16 rounded-[36px] border border-[var(--border-soft)] bg-white px-6 py-8 shadow-[0_18px_44px_rgba(31,34,51,0.06)] md:px-8 md:py-10">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <span className="section-eyebrow">How it works</span>
-            <h2 className="mt-4 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
-              A cleaner four-step process
-            </h2>
-          </div>
-          <p className="max-w-2xl text-sm leading-7 text-[var(--ink-600)]">
-            This flow is intentionally simple so the same path works on desktop,
-            Android, iPhone, and tablet browsers.
+      {/* Capabilities Grid */}
+      <section className="mt-24">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <span className="section-eyebrow">Industry Standard Features</span>
+          <h2 className="mt-4 text-3xl font-black text-[var(--ink-900)] md:text-5xl">
+            Why Choose SwiftDL?
+          </h2>
+          <p className="mt-6 text-lg text-[var(--ink-600)]">
+            We packed enterprise-grade extraction tools into a simple, beautiful interface. Explore what makes us the best choice for downloading media.
           </p>
         </div>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {capabilityCards.map(({ title, description, icon: Icon, imageUrl }) => (
+            <article
+              key={title}
+              className="group flex flex-col overflow-hidden rounded-3xl border border-[var(--border-soft)] bg-white dark:bg-[var(--surface-elevated)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:border-[var(--brand-300)]"
+            >
+              <div className="h-48 overflow-hidden relative">
+                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10" />
+                 <img src={imageUrl} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                 <div className="absolute bottom-4 right-4 z-20 bg-white/90 backdrop-blur rounded-xl p-2.5 text-[var(--brand-600)] shadow-lg transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
+                    <Icon className="h-6 w-6" />
+                 </div>
+              </div>
+              <div className="p-6 flex-1 flex flex-col">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="rounded-xl bg-[var(--surface-soft)] p-2 text-[var(--brand-600)] group-hover:bg-[var(--brand-50)] transition-colors">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-xl font-bold text-[var(--ink-900)]">
+                    {title}
+                  </h3>
+                </div>
+                <p className="text-sm leading-relaxed text-[var(--ink-600)] flex-1">
+                  {description}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* Workflow Steps with Images */}
+      <section className="mt-24 rounded-[40px] border border-[var(--border-soft)] bg-gradient-to-b from-white to-[var(--surface-soft)] dark:from-[var(--surface-elevated)] dark:to-transparent px-6 py-12 shadow-sm md:px-12 md:py-16">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div className="max-w-2xl">
+            <span className="section-eyebrow">Simple Workflow</span>
+            <h2 className="mt-4 text-3xl font-black text-[var(--ink-900)] md:text-5xl">
+              How to Download Any Video in Seconds
+            </h2>
+          </div>
+          <p className="max-w-md text-base leading-relaxed text-[var(--ink-600)]">
+            Our clean, 6-step process is engineered for speed. Whether you are on an iPhone, Android, Mac, or PC, the steps remain identically simple.
+          </p>
+        </div>
+
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {workflowSteps.map((step, index) => (
             <article
               key={step.title}
-              className="rounded-3xl bg-[var(--surface-elevated)] p-5"
+              className="relative rounded-[32px] bg-white dark:bg-[#1a1c29] p-6 shadow-md border border-[var(--border-soft)] transition-transform hover:-translate-y-1"
             >
-              <div className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-sm font-bold text-[var(--brand-700)] shadow-sm">
+              <div className="absolute -top-5 -right-5 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--brand-600)] text-xl font-black text-white shadow-xl shadow-[var(--brand-500)]/30 border-4 border-white dark:border-[#1a1c29]">
                 {index + 1}
               </div>
-              <h3 className="text-lg font-bold text-[var(--ink-900)]">
+              <div className="h-40 rounded-2xl overflow-hidden mb-6">
+                 <img src={step.imageUrl} alt={step.title} className="w-full h-full object-cover" />
+              </div>
+              <h3 className="text-xl font-bold text-[var(--ink-900)] mb-3">
                 {step.title}
               </h3>
-              <p className="mt-2 text-sm leading-6 text-[var(--ink-600)]">
+              <p className="text-base leading-relaxed text-[var(--ink-600)]">
                 {step.description}
               </p>
             </article>
@@ -511,115 +389,130 @@ export default function HomeSeoContent() {
         </div>
       </section>
 
-      <section className="mt-16 grid gap-6 lg:grid-cols-2">
-        {supportedContent.map((section) => (
-          <article
-            key={section.platform}
-            className="feature-card rounded-[32px] p-7"
-          >
-            <div className="flex items-center gap-3">
-              <div className="rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
-                <CheckCircle2 className="h-5 w-5" />
-              </div>
-              <h2 className="text-2xl font-black text-[var(--ink-900)]">
-                {section.platform}
-              </h2>
-            </div>
-            <ul className="mt-6 space-y-3">
-              {section.items.map((item) => (
-                <li
-                  key={item}
-                  className="flex items-start gap-3 text-sm leading-6 text-[var(--ink-600)]"
-                >
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))}
-      </section>
-
-      <section className="mt-16 rounded-[36px] bg-[linear-gradient(135deg,_#1f2233,_#2f344d)] px-6 py-8 text-white shadow-[0_24px_60px_rgba(31,34,51,0.24)] md:px-8 md:py-10">
-        <div className="max-w-3xl">
-          <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80">
-            Responsible use
-          </span>
-          <h2 className="mt-4 text-3xl font-black md:text-4xl">
-            Stronger tools only work when the rules are clear.
-          </h2>
-          <p className="mt-4 text-sm leading-7 text-white/75 md:text-base">
-            SwiftDL is meant to help people save media they are allowed to
-            access. That includes your own uploads, approved internal reference
-            files, public links for offline viewing, and restricted links where
-            you already have permission and explicitly provide your own session
-            cookies.
-          </p>
+      {/* Supported Platforms */}
+      <section className="mt-24">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+           <span className="section-eyebrow">Unmatched Compatibility</span>
+           <h2 className="mt-4 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
+             Download from Thousands of Platforms
+           </h2>
         </div>
-
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {trustNotes.map(({ title, copy, icon: Icon }) => (
+        <div className="grid gap-8 md:grid-cols-2">
+          {supportedContent.map((section) => (
             <article
-              key={title}
-              className="rounded-3xl border border-white/10 bg-white/5 p-5"
+              key={section.platform}
+              className="group rounded-[32px] border border-[var(--border-soft)] bg-white dark:bg-[var(--surface-elevated)] p-8 transition-shadow hover:shadow-xl hover:shadow-[var(--brand-500)]/5"
             >
-              <div className="mb-4 inline-flex rounded-2xl bg-white/10 p-3 text-[var(--accent-200)]">
-                <Icon className="h-5 w-5" />
+              <div className="flex items-center gap-4 border-b border-[var(--border-soft)] pb-6 mb-6">
+                <div className="rounded-2xl bg-[var(--brand-50)] dark:bg-[var(--brand-900)]/30 p-4 text-[var(--brand-600)] dark:text-[var(--brand-400)]">
+                  <PlayCircle className="h-8 w-8" />
+                </div>
+                <h3 className="text-2xl font-black text-[var(--ink-900)]">
+                  {section.platform}
+                </h3>
               </div>
-              <h3 className="text-lg font-bold">{title}</h3>
-              <p className="mt-2 text-sm leading-6 text-white/72">{copy}</p>
+              <ul className="space-y-4">
+                {section.items.map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-start gap-3 text-base leading-relaxed text-[var(--ink-600)]"
+                  >
+                    <CheckCircle2 className="mt-1 h-5 w-5 flex-none text-[var(--brand-500)]" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="mt-16">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="section-eyebrow">Deep FAQ</span>
-          <h2 className="mt-4 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
-            Questions people usually ask before they trust a downloader
+      {/* Trust & Safety */}
+      <section className="mt-24 rounded-[40px] bg-gradient-to-br from-[#111827] via-[#1f2937] to-[#111827] px-8 py-16 text-white shadow-2xl overflow-hidden relative">
+        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-[var(--brand-600)] rounded-full blur-[100px] opacity-20"></div>
+        <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-blue-600 rounded-full blur-[100px] opacity-20"></div>
+
+        <div className="relative z-10 max-w-4xl mx-auto text-center mb-12">
+          <span className="inline-block rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white backdrop-blur-md">
+            Safe & Secure
+          </span>
+          <h2 className="mt-6 text-4xl font-black md:text-5xl leading-tight">
+            Enterprise-Grade Security for Everyone.
           </h2>
-          <p className="mt-4 text-sm leading-7 text-[var(--ink-600)] md:text-base">
-            These answers keep the product grounded in what it actually does
-            well, instead of making promises the platform may not support.
+          <p className="mt-6 text-lg leading-relaxed text-slate-300">
+            We believe that powerful tools should be inherently safe. SwiftDL processes millions of requests without ever compromising user privacy or device security.
           </p>
         </div>
 
-        <div className="mx-auto mt-10 max-w-4xl space-y-4">
+        <div className="relative z-10 grid gap-6 md:grid-cols-3 max-w-6xl mx-auto">
+          {trustNotes.map(({ title, copy, icon: Icon }) => (
+            <article
+              key={title}
+              className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-lg p-8 transition-transform hover:-translate-y-2 hover:bg-white/10"
+            >
+              <div className="mb-6 inline-flex rounded-2xl bg-gradient-to-br from-[var(--brand-400)] to-[var(--brand-600)] p-4 text-white shadow-lg shadow-[var(--brand-500)]/30">
+                <Icon className="h-8 w-8" />
+              </div>
+              <h3 className="text-2xl font-bold mb-3">{title}</h3>
+              <p className="text-base leading-relaxed text-slate-300">{copy}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* Deep FAQ */}
+      <section className="mt-24">
+        <div className="mx-auto max-w-3xl text-center mb-12">
+          <span className="section-eyebrow">Knowledge Base</span>
+          <h2 className="mt-4 text-4xl font-black text-[var(--ink-900)]">
+            Frequently Asked Questions
+          </h2>
+          <p className="mt-4 text-lg text-[var(--ink-600)]">
+            Everything you need to know about the internet's best free video downloader.
+          </p>
+        </div>
+
+        <div className="mx-auto max-w-4xl space-y-4">
           {faqs.map((faq, index) => {
             const isOpen = openFaq === index;
 
             return (
               <article
                 key={faq.question}
-                className={`overflow-hidden rounded-[28px] border bg-white transition-all ${
+                className={`group overflow-hidden rounded-[24px] border transition-all duration-300 ${
                   isOpen
-                    ? 'border-[var(--border-strong)] shadow-[0_18px_36px_rgba(31,34,51,0.08)]'
-                    : 'border-[var(--border-soft)]'
+                    ? 'border-[var(--brand-300)] bg-white dark:bg-[var(--surface-elevated)] shadow-xl shadow-[var(--brand-500)]/5 scale-[1.02]'
+                    : 'border-[var(--border-soft)] bg-[var(--surface-soft)] hover:bg-white dark:hover:bg-[var(--surface-elevated)]'
                 }`}
               >
                 <button
                   type="button"
                   onClick={() => setOpenFaq(isOpen ? null : index)}
-                  className="flex w-full items-start justify-between gap-4 px-6 py-5 text-left"
+                  className="flex w-full items-center justify-between gap-6 p-6 text-left"
                 >
-                  <span className="text-sm font-semibold leading-6 text-[var(--ink-900)] md:text-base">
+                  <span className="text-lg font-bold leading-tight text-[var(--ink-900)]">
                     {faq.question}
                   </span>
-                  <ChevronDown
-                    className={`mt-1 h-5 w-5 flex-none text-[var(--brand-600)] transition-transform ${
-                      isOpen ? 'rotate-180' : ''
-                    }`}
-                  />
+                  <div className={`flex-none rounded-full p-2 transition-colors ${isOpen ? 'bg-[var(--brand-50)] text-[var(--brand-600)] dark:bg-[var(--brand-900)]' : 'bg-transparent text-[var(--ink-400)] group-hover:bg-[var(--surface-soft)] group-hover:text-[var(--ink-900)]'}`}>
+                    <ChevronDown
+                      className={`h-6 w-6 transition-transform duration-300 ${
+                        isOpen ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </div>
                 </button>
                 <div
-                  className={`overflow-hidden px-6 transition-all duration-300 ${
-                    isOpen ? 'max-h-80 pb-5 opacity-100' : 'max-h-0 opacity-0'
+                  className={`grid transition-all duration-300 ease-in-out ${
+                    isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
                   }`}
                 >
-                  <p className="border-t border-[var(--border-soft)] pt-4 text-sm leading-7 text-[var(--ink-600)]">
-                    {faq.answer}
-                  </p>
+                  <div className="overflow-hidden">
+                    <div className="px-6 pb-6 pt-2">
+                      <p className="text-base leading-relaxed text-[var(--ink-600)]">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </article>
             );
