@@ -525,18 +525,25 @@ class handler(BaseHTTPRequestHandler):
                 return
 
             url_for_extract = url.split('#', 1)[0].strip()
+            platform = _detect_platform_from_host(urllib.parse.urlparse(url_for_extract).netloc or '')
             
             if not _inflight_try_acquire():
                 self.send_error_json(429, 'Server is busy. Please retry in a few seconds.')
                 return
             info = None
             try:
+                video_format = 'best[vcodec!=none][acodec!=none][ext=mp4]/best[vcodec!=none][acodec!=none][ext=webm]/best[vcodec!=none][acodec!=none]/best'
+                if platform == 'youtube':
+                    # YouTube web clients may expose only SABR formats without direct URLs.
+                    # Prefer progressive formats from Android/TV clients so browsers can save one file.
+                    video_format = '18/22/' + video_format
+
                 opts = {
                     'quiet': True,
                     'no_warnings': True,
                     'format': ('bestaudio[ext=m4a]/bestaudio[ext=mp3]/bestaudio/best[acodec!=none]'
                                if download_type == 'audio'
-                               else 'best[vcodec!=none][acodec!=none][ext=mp4]/best[vcodec!=none][acodec!=none][ext=webm]/best[vcodec!=none][acodec!=none]/best'),
+                               else video_format),
                     'socket_timeout': 30,
                     'retries': 10,
                     'fragment_retries': 10,
@@ -548,6 +555,9 @@ class handler(BaseHTTPRequestHandler):
                         'Accept-Language': 'en-US,en;q=0.9',
                     },
                     'extractor_args': {
+                        'youtube': {
+                            'player_client': ['android', 'tv_embedded', 'web'],
+                        },
                         'instagram': {
                             'skip': ['dash'],
                         }
@@ -653,7 +663,7 @@ class handler(BaseHTTPRequestHandler):
                 'downloadUrl': video_url,
                 'ext': file_ext,
                 'type': download_type,
-                'platform': _detect_platform_from_host(urllib.parse.urlparse(url_for_extract).netloc or ''),
+                'platform': platform,
                 'uploader': info.get('uploader', 'Unknown Author'),
                 'duration': duration_string,
                 'view_count': view_count_str,
@@ -720,7 +730,7 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         try:
             route = (self.path or '').split('?', 1)[0]
-            if route == '/' or route == '':
+            if route in ('', '/', '/api', '/api/'):
                 self.send_json({
                     'service': 'SwiftDL API',
                     'ok': True,
