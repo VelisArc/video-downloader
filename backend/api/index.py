@@ -80,6 +80,10 @@ def _int_env(name, default):
     except Exception:
         return default
 
+def _positive_int_env(name, default):
+    value = _int_env(name, default)
+    return value if value > 0 else default
+
 def _rate_limit_ok(ip):
     limit = _int_env('RATE_LIMIT_PER_MIN', 30)
     if limit <= 0:
@@ -1090,8 +1094,8 @@ class handler(BaseHTTPRequestHandler):
                     'lifetimeDisplay': _format_money_safe(lifetime_amount, currency),
                     'guestDailyLimit': _int_env('GUEST_DAILY_LIMIT', 1),
                     'userDailyLimit': _int_env('USER_DAILY_LIMIT', 3),
-                    'monthlyDailyLimit': _int_env('MONTHLY_DAILY_LIMIT', 75),
-                    'lifetimeDailyLimit': _int_env('LIFETIME_DAILY_LIMIT', 150),
+                    'monthlyDailyLimit': _positive_int_env('MONTHLY_DAILY_LIMIT', 75),
+                    'lifetimeDailyLimit': _positive_int_env('LIFETIME_DAILY_LIMIT', 150),
                     'youtubeCookiesConfigured': bool(youtube_cookie_env),
                     'youtubeCookieSource': youtube_cookie_env,
                     'youtubeProxyConfigured': bool(youtube_proxy_env),
@@ -1239,9 +1243,9 @@ class handler(BaseHTTPRequestHandler):
     def _daily_limit_for_entitlement(self, entitlement, uid):
         plan = (entitlement or {}).get('plan') or ('user' if uid else 'guest')
         if plan == 'lifetime':
-            return _int_env('LIFETIME_DAILY_LIMIT', 150)
+            return _positive_int_env('LIFETIME_DAILY_LIMIT', 150)
         if plan == 'monthly':
-            return _int_env('MONTHLY_DAILY_LIMIT', 75)
+            return _positive_int_env('MONTHLY_DAILY_LIMIT', 75)
         if uid:
             return _int_env('USER_DAILY_LIMIT', 3)
         return _int_env('GUEST_DAILY_LIMIT', 1)
