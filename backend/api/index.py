@@ -200,6 +200,48 @@ def _cache_set(cache_key, code, payload):
     except Exception:
         return
 
+def _is_http_url(value):
+    return (value or '').strip().lower().startswith(('http://', 'https://'))
+
+def _is_playlist_stream(ext, protocol, url=''):
+    haystack = f"{ext or ''} {protocol or ''} {url or ''}".lower()
+    return 'm3u8' in haystack or 'manifest' in haystack
+
+def _has_media_codec(fmt, key):
+    codec = (fmt.get(key) or '').strip().lower()
+    return codec not in ('', 'none')
+
+def _select_direct_download(info, download_type):
+    if not isinstance(info, dict):
+        return '', 'mp4' if download_type == 'video' else 'm4a'
+
+    preferred_ext = 'mp4' if download_type == 'video' else 'm4a'
+    direct_url = (info.get('url') or '').strip()
+    direct_ext = info.get('ext', preferred_ext)
+    direct_protocol = str(info.get('protocol', ''))
+    if _is_http_url(direct_url) and not _is_playlist_stream(direct_ext, direct_protocol, direct_url):
+        return direct_url, direct_ext
+
+    formats = info.get('formats') or []
+    for fmt in reversed(formats):
+        candidate_url = (fmt.get('url') or '').strip()
+        if not _is_http_url(candidate_url):
+            continue
+
+        candidate_ext = fmt.get('ext', preferred_ext)
+        candidate_protocol = str(fmt.get('protocol', ''))
+        if _is_playlist_stream(candidate_ext, candidate_protocol, candidate_url):
+            continue
+
+        has_audio = _has_media_codec(fmt, 'acodec')
+        has_video = _has_media_codec(fmt, 'vcodec')
+        if download_type == 'audio' and has_audio:
+            return candidate_url, candidate_ext
+        if download_type == 'video' and has_audio and has_video:
+            return candidate_url, candidate_ext
+
+    return '', preferred_ext
+
 def _pick_thumbnail(info):
     if not isinstance(info, dict):
         return ''
@@ -532,90 +574,85 @@ class handler(BaseHTTPRequestHandler):
                 return
             info = None
             try:
-                video_format = 'best[vcodec!=none][acodec!=none][ext=mp4]/best[vcodec!=none][acodec!=none][ext=webm]/best[vcodec!=none][acodec!=none]/best'
-                if platform == 'youtube':
-                    # YouTube web clients may expose only SABR formats without direct URLs.
-                    # Prefer progressive formats from Android/TV clients so browsers can save one file.
-                    video_format = '18/22/' + video_format
-
-                opts = {
-                    'quiet': True,
-                    'no_warnings': True,
-                    'format': ('bestaudio[ext=m4a]/bestaudio[ext=mp3]/bestaudio/best[acodec!=none]'
-                               if download_type == 'audio'
-                               else video_format),
-                    'socket_timeout': 30,
-                    'retries': 10,
-                    'fragment_retries': 10,
-                    'nocheckcertificate': True,
-                    'user_agent': _random_user_agent(),
-                    'cachedir': os.path.join(TMP_DIR, 'yt-dlp-cache'),
-                    'http_headers': {
-                        'Accept': '*/*',
-                        'Accept-Language': 'en-US,en;q=0.9',
-                    },
-                    'extractor_args': {
-                        'youtube': {
-                            'player_client': ['android', 'tv_embedded', 'web'],
-                        },
+                def build_opts(youtube_clients=None):
+                    video_format = 'best[vcodec!=none][acodec!=none][ext=mp4]/best[vcodec!=none][acodec!=none][ext=webm]/best[vcodec!=none][acodec!=none]/best'
+                    extractor_args = {
                         'instagram': {
                             'skip': ['dash'],
                         }
-                    },
-                    'geo_bypass': True,
-                    'geo_bypass_country': 'US',
-                    'sleep_interval': 1,
-                    'max_sleep_interval': 3,
-                    'ignore_no_formats_error': True,
-                }
+                    }
+                    if platform == 'youtube':
+                        # YouTube web clients may expose only storyboard/SABR entries without direct URLs.
+                        # Progressive Android/TV formats give browsers a single saveable MP4 file.
+                        video_format = '18/22/' + video_format
+                        extractor_args['youtube'] = {
+                            'player_client': youtube_clients or [
+                                'android',
+                                'android_music',
+                                'android_creator',
+                                'android_testsuite',
+                                'tv_embedded',
+                                'web',
+                            ],
+                        }
+
+                    return {
+                        'quiet': True,
+                        'no_warnings': True,
+                        'format': ('bestaudio[ext=m4a]/bestaudio[ext=mp3]/bestaudio/best[acodec!=none]'
+                                   if download_type == 'audio'
+                                   else video_format),
+                        'socket_timeout': 30,
+                        'retries': 10,
+                        'fragment_retries': 10,
+                        'nocheckcertificate': True,
+                        'user_agent': _random_user_agent(),
+                        'cachedir': os.path.join(TMP_DIR, 'yt-dlp-cache'),
+                        'http_headers': {
+                            'Accept': '*/*',
+                            'Accept-Language': 'en-US,en;q=0.9',
+                        },
+                        'extractor_args': extractor_args,
+                        'geo_bypass': True,
+                        'geo_bypass_country': 'US',
+                        'sleep_interval': 1,
+                        'max_sleep_interval': 3,
+                        'ignore_no_formats_error': True,
+                    }
+
+                opts = build_opts()
                 if 'instagram.com' in (url_for_extract or ''):
                     opts['http_headers']['Referer'] = 'https://www.instagram.com/'
                 if 'facebook.com' in (url_for_extract or '') or 'fb.watch' in (url_for_extract or ''):
                     opts['http_headers']['Referer'] = 'https://www.facebook.com/'
                 with yt_dlp.YoutubeDL(opts) as ydl:
                     info = ydl.extract_info(url_for_extract, download=False)
+
+                video_url, file_ext = _select_direct_download(info, download_type)
+                if not video_url and platform == 'youtube':
+                    for youtube_client in (
+                        'android',
+                        'android_music',
+                        'android_creator',
+                        'android_testsuite',
+                        'tv_embedded',
+                    ):
+                        try:
+                            retry_opts = build_opts([youtube_client])
+                            with yt_dlp.YoutubeDL(retry_opts) as ydl:
+                                retry_info = ydl.extract_info(url_for_extract, download=False)
+                        except Exception as retry_error:
+                            logger.warning(f"YouTube retry failed for client={youtube_client}: {retry_error}")
+                            continue
+                        retry_url, retry_ext = _select_direct_download(retry_info, download_type)
+                        if retry_url:
+                            info = retry_info
+                            video_url = retry_url
+                            file_ext = retry_ext
+                            logger.info(f"YouTube direct URL recovered with client={youtube_client}")
+                            break
             finally:
                 _inflight_release()
-
-            video_url = info.get('url')
-            file_ext = info.get('ext', 'mp4') if download_type == 'video' else info.get('ext', 'm4a')
-            protocol = str(info.get('protocol', ''))
-
-            original_url = video_url
-            original_ext = file_ext
-
-            is_playlist = 'm3u8' in file_ext or 'm3u8' in protocol
-
-            if not video_url or is_playlist:
-                found_better = False
-                formats = info.get('formats', [])
-
-                for f in reversed(formats):
-                    f_protocol = str(f.get('protocol', ''))
-                    is_direct_link = 'http' in f_protocol
-                    
-                    if not is_direct_link:
-                        continue
-
-                    has_audio = f.get('acodec') != 'none'
-                    has_video = f.get('vcodec') != 'none'
-
-                    if download_type == 'audio':
-                        if has_audio:
-                            video_url = f['url']
-                            file_ext = f.get('ext', 'm4a')
-                            found_better = True
-                            break
-                    else:
-                        if has_audio and has_video:
-                            video_url = f['url']
-                            file_ext = f.get('ext', 'mp4')
-                            found_better = True
-                            break
-
-                if not found_better and original_url:
-                    video_url = original_url
-                    file_ext = original_ext
 
             if not video_url:
                 msg = 'Direct link not found.'
