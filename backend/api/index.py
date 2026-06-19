@@ -438,14 +438,15 @@ def _detect_platform_from_host(host):
 
 def _get_allowed_origin(request_origin=None):
     allowed = (os.getenv('ALLOWED_ORIGINS', '') or '').strip()
-    if not allowed:
-        return ''
-    origins = [o.strip() for o in allowed.split(',') if o.strip()]
-    if not origins:
-        return ''
-    if request_origin and request_origin in origins:
+    if allowed:
+        origins = [o.strip() for o in allowed.split(',') if o.strip()]
+        if origins:
+            if request_origin and request_origin in origins:
+                return request_origin
+            return origins[0]
+    if request_origin:
         return request_origin
-    return origins[0]
+    return '*'
 
 class handler(BaseHTTPRequestHandler):
     
