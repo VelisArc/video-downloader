@@ -202,61 +202,51 @@ def application(environ, start_response):
         start_response('200 OK', headers)
         return [b'']
 
-    # API routes
-    if path.startswith('/api'):
-        handler = _WSGIHandler(environ, start_response)
+    # All routes go through handler
+    handler = _WSGIHandler(environ, start_response)
 
-        try:
-            if method == 'GET':
-                handler.do_GET()
-            elif method == 'POST':
-                handler.do_POST()
-            elif method == 'DELETE':
-                handler.do_DELETE()
-            else:
-                start_response('405 Method Not Allowed', [('Content-Type', 'text/plain')])
-                return [b'Method Not Allowed']
+    try:
+        if method == 'GET':
+            handler.do_GET()
+        elif method == 'POST':
+            handler.do_POST()
+        elif method == 'DELETE':
+            handler.do_DELETE()
+        else:
+            start_response('405 Method Not Allowed', [('Content-Type', 'text/plain')])
+            return [b'Method Not Allowed']
 
-        except Exception as e:
-            logger.error(f"Handler error: {e}", exc_info=True)
-            start_response('500 Internal Server Error', [
-                ('Content-Type', 'application/json'),
-                ('Access-Control-Allow-Origin', handler._cors_origin()),
-            ])
-            return [json.dumps({'error': 'Internal server error'}).encode('utf-8')]
+    except Exception as e:
+        logger.error(f"Handler error: {e}", exc_info=True)
+        start_response('500 Internal Server Error', [
+            ('Content-Type', 'application/json'),
+            ('Access-Control-Allow-Origin', handler._cors_origin()),
+        ])
+        return [json.dumps({'error': 'Internal server error'}).encode('utf-8')]
 
-        # Build response
-        status_code = handler._status or 200
-        reason = 'OK' if status_code == 200 else ('Error' if status_code >= 400 else 'Unknown')
-        status_str = f"{status_code} {reason}"
+    # Build response
+    status_code = handler._status or 200
+    reason = 'OK' if status_code == 200 else ('Error' if status_code >= 400 else 'Unknown')
+    status_str = f"{status_code} {reason}"
 
-        body = handler._response_body.getvalue()
-        if not body:
-            body = b''
+    body = handler._response_body.getvalue()
+    if not body:
+        body = b''
 
-        # Ensure Content-Length and CORS are set
-        final_headers = []
-        has_content_length = False
-        has_cors = False
-        for k, v in handler._response_headers:
-            final_headers.append((k, v))
-            if k.lower() == 'content-length':
-                has_content_length = True
-            if k.lower() == 'access-control-allow-origin':
-                has_cors = True
+    final_headers = []
+    has_content_length = False
+    has_cors = False
+    for k, v in handler._response_headers:
+        final_headers.append((k, v))
+        if k.lower() == 'content-length':
+            has_content_length = True
+        if k.lower() == 'access-control-allow-origin':
+            has_cors = True
 
-        if not has_content_length:
-            final_headers.append(('Content-Length', str(len(body))))
-        if not has_cors:
-            final_headers.append(('Access-Control-Allow-Origin', handler._cors_origin()))
+    if not has_content_length:
+        final_headers.append(('Content-Length', str(len(body))))
+    if not has_cors:
+        final_headers.append(('Access-Control-Allow-Origin', handler._cors_origin()))
 
-        start_response(status_str, final_headers)
-        return [body]
-
-    # Health check
-    if path == '/health':
-        start_response('200 OK', [('Content-Type', 'application/json')])
-        return [json.dumps({'ok': True, 'ts': int(time.time())}).encode('utf-8')]
-
-    # Static files
-    return _serve_static(environ, start_response)
+    start_response(status_str, final_headers)
+    return [body]
