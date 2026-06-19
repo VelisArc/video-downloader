@@ -32,7 +32,7 @@ const principles = [
 
 export default function AboutUs() {
   return (
-    <div className="section-shell max-w-5xl py-10">
+    <div className="section-shell max-w-5xl py-8">
       <Helmet>
         <title>About | {siteConfig.name}</title>
         <meta
@@ -44,7 +44,7 @@ export default function AboutUs() {
 
       <div className="mx-auto max-w-3xl text-center">
         <span className="section-eyebrow">About SwiftDL</span>
-        <h1 className="mt-4 text-4xl font-black text-[var(--ink-900)] md:text-5xl">
+        <h1 className="mt-4 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
           A cleaner download workflow with broader coverage and honest limits
         </h1>
         <p className="mt-4 text-base leading-8 text-[var(--ink-600)]">
@@ -54,7 +54,7 @@ export default function AboutUs() {
         </p>
       </div>
 
-      <section className="mt-10 rounded-[36px] border border-[var(--border-soft)] bg-white p-6 shadow-[0_18px_40px_rgba(31,34,51,0.05)] md:p-8">
+      <section className="mt-8 rounded-2xl border border-[var(--border-soft)] bg-white p-6 shadow-[0_18px_40px_rgba(31,34,51,0.05)] md:p-8">
         <h2 className="text-3xl font-black text-[var(--ink-900)]">What we optimize for</h2>
         <div className="mt-5 space-y-4 text-sm leading-7 text-[var(--ink-600)]">
           <p>
@@ -70,19 +70,19 @@ export default function AboutUs() {
         </div>
       </section>
 
-      <section className="mt-10 grid gap-4 md:grid-cols-2">
+      <section className="mt-8 grid gap-4 md:grid-cols-2">
         {principles.map(({ title, description, icon: Icon }) => (
           <article key={title} className="feature-card">
             <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
               <Icon className="h-5 w-5" />
             </div>
-            <h2 className="text-2xl font-black text-[var(--ink-900)]">{title}</h2>
+            <h2 className="text-xl font-black text-[var(--ink-900)]">{title}</h2>
             <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">{description}</p>
           </article>
         ))}
       </section>
 
-      <section className="mt-10 rounded-[36px] border border-[var(--border-soft)] bg-[var(--surface-soft)] p-6 md:p-8">
+      <section className="mt-8 rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-soft)] p-5 md:p-6">
         <h2 className="text-3xl font-black text-[var(--ink-900)]">Responsible use</h2>
         <ul className="mt-5 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
           <li className="flex gap-3">
@@ -100,7 +100,7 @@ export default function AboutUs() {
         </ul>
       </section>
 
-      <div className="mt-10 flex flex-wrap gap-3">
+      <div className="mt-8 flex flex-wrap gap-3">
         <Link
           to="/contact-us"
           className="rounded-full bg-[var(--ink-900)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--ink-700)]"

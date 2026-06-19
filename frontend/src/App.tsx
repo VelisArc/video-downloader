@@ -46,8 +46,8 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 
 function PageLoader() {
   return (
-    <div className="flex min-h-[60vh] items-center justify-center">
-      <div className="glass-panel flex items-center justify-center rounded-3xl px-7 py-5">
+    <div className="flex min-h-[50vh] items-center justify-center">
+      <div className="glass-panel flex items-center justify-center rounded-2xl px-5 py-4">
         <LoadingIndicator label="Loading..." />
       </div>
     </div>
@@ -113,7 +113,7 @@ function Navbar() {
   };
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 ${
+    `rounded-full px-3 py-1.5 text-[13px] font-semibold transition-all duration-200 ${
       isActive
         ? 'bg-[var(--surface-soft)] text-[var(--brand-700)]'
         : 'text-[var(--ink-600)] hover:bg-[var(--surface-soft)] hover:text-[var(--brand-700)]'
@@ -140,20 +140,20 @@ function Navbar() {
         }}
       >
         <div className="section-shell">
-          <div className="flex items-center justify-between py-4">
+          <div className="flex items-center justify-between py-3">
             <Link
               to="/"
-              className="flex items-center gap-3"
+              className="flex items-center gap-2.5"
               onClick={() => setIsMenuOpen(false)}
             >
-              <div className="rounded-2xl bg-[linear-gradient(135deg,_#d84853,_#f49c4d)] p-3 text-white shadow-lg">
-                <Download className="h-5 w-5" />
+              <div className="rounded-xl bg-[linear-gradient(135deg,_#d84853,_#f49c4d)] p-2 text-white shadow-lg">
+                <Download className="h-4 w-4" />
               </div>
               <div>
-                <p className="text-lg font-black" style={{ color: 'var(--ink-900)' }}>
+                <p className="text-base font-black" style={{ color: 'var(--ink-900)' }}>
                   {siteConfig.name}
                 </p>
-                <p className="text-[11px] uppercase tracking-[0.16em]" style={{ color: 'var(--ink-500)' }}>
+                <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'var(--ink-500)' }}>
                   Browser downloader
                 </p>
               </div>
@@ -187,15 +187,15 @@ function Navbar() {
                       <img
                         src={user.photoURL}
                         alt={user.displayName || 'User'}
-                        className="h-9 w-9 rounded-full border-2 shadow-sm transition-transform hover:scale-105"
+                        className="h-8 w-8 rounded-full border-2 shadow-sm transition-transform hover:scale-105"
                         style={{ borderColor: 'var(--surface-soft)' }}
                       />
                     ) : (
                       <span
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-full"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-full"
                         style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}
                       >
-                        <User className="h-4 w-4" />
+                        <User className="h-3.5 w-3.5" />
                       </span>
                     )}
                   </Link>
@@ -225,12 +225,12 @@ function Navbar() {
             </div>
 
             {/* Mobile menu toggle */}
-            <div className="flex items-center gap-2 lg:hidden">
+            <div className="flex items-center gap-1.5 lg:hidden">
               <ThemeToggle />
               <button
                 type="button"
                 onClick={() => setIsMenuOpen((value) => !value)}
-                className="rounded-2xl border p-3 lg:hidden"
+                className="rounded-xl border p-2 lg:hidden"
                 style={{
                   borderColor: 'var(--border-soft)',
                   background: 'var(--surface)',
@@ -245,9 +245,9 @@ function Navbar() {
 
           {/* Mobile menu */}
           {isMenuOpen && (
-            <div className="pb-4 lg:hidden animate-fade-in">
+            <div className="pb-3 lg:hidden animate-fade-in">
               <div
-                className="rounded-3xl border p-4 shadow-lg"
+                className="rounded-2xl border p-3 shadow-lg"
                 style={{
                   borderColor: 'var(--border-soft)',
                   background: 'var(--surface)',
@@ -326,20 +326,20 @@ function Navbar() {
           onClick={() => setShowInstallHelp(false)}
         >
           <div
-            className="w-full max-w-sm animate-scale-up rounded-3xl p-6 shadow-2xl"
+            className="w-full max-w-xs animate-scale-up rounded-2xl p-5 shadow-2xl"
             style={{ background: 'var(--surface)' }}
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="mx-auto inline-flex rounded-2xl p-3" style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}>
-              <Download className="h-6 w-6" />
+            <div className="mx-auto inline-flex rounded-xl p-2" style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}>
+              <Download className="h-5 w-5" />
             </div>
-            <h3 className="mt-4 text-center text-2xl font-black" style={{ color: 'var(--ink-900)' }}>
+            <h3 className="mt-3 text-center text-xl font-black" style={{ color: 'var(--ink-900)' }}>
               Install {siteConfig.name}
             </h3>
-            <p className="mt-3 text-center text-sm leading-7" style={{ color: 'var(--ink-600)' }}>
+            <p className="mt-2 text-center text-xs leading-6" style={{ color: 'var(--ink-600)' }}>
               Add the app to your device for quicker access.
             </p>
-            <div className="mt-5 rounded-2xl p-4 text-sm leading-7" style={{ background: 'var(--surface-soft)', color: 'var(--ink-600)' }}>
+            <div className="mt-4 rounded-xl p-3 text-xs leading-6" style={{ background: 'var(--surface-soft)', color: 'var(--ink-600)' }}>
               {isIOS ? (
                 <ol className="space-y-2">
                   <li>1. Tap <strong>Share</strong> in Safari.</li>
@@ -373,17 +373,17 @@ function Navbar() {
           onClick={() => { if (!isLoggingOut) setShowLogoutConfirm(false); }}
         >
           <div
-            className="w-full max-w-sm animate-scale-up rounded-3xl p-6 shadow-2xl"
+            className="w-full max-w-xs animate-scale-up rounded-2xl p-5 shadow-2xl"
             style={{ background: 'var(--surface)' }}
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="mx-auto inline-flex rounded-2xl p-3" style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}>
-              <LogOut className="h-6 w-6" />
+            <div className="mx-auto inline-flex rounded-xl p-2" style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}>
+              <LogOut className="h-5 w-5" />
             </div>
-            <h3 className="mt-4 text-center text-2xl font-black" style={{ color: 'var(--ink-900)' }}>
+            <h3 className="mt-3 text-center text-xl font-black" style={{ color: 'var(--ink-900)' }}>
               Confirm logout
             </h3>
-            <p className="mt-3 text-center text-sm leading-7" style={{ color: 'var(--ink-600)' }}>
+            <p className="mt-2 text-center text-xs leading-6" style={{ color: 'var(--ink-600)' }}>
               Are you sure you want to logout?
             </p>
             <div className="mt-6 flex gap-2">
@@ -477,32 +477,32 @@ function AppShell() {
         </main>
 
         <footer
-          className="border-t py-10"
+          className="border-t py-7"
           style={{
             borderColor: 'var(--border-soft)',
             background: 'var(--surface-glass)',
           }}
         >
           <div className="section-shell">
-            <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr]">
+            <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr]">
               <div>
-                <div className="flex items-center gap-3">
-                  <div className="rounded-2xl bg-[linear-gradient(135deg,_#d84853,_#f49c4d)] p-3 text-white shadow-lg">
-                    <Download className="h-4 w-4" />
+                <div className="flex items-center gap-2.5">
+                  <div className="rounded-xl bg-[linear-gradient(135deg,_#d84853,_#f49c4d)] p-2 text-white shadow-lg">
+                    <Download className="h-3.5 w-3.5" />
                   </div>
                   <div>
-                    <p className="text-lg font-black" style={{ color: 'var(--ink-900)' }}>
+                    <p className="text-base font-black" style={{ color: 'var(--ink-900)' }}>
                       {siteConfig.name}
                     </p>
-                    <p className="text-xs" style={{ color: 'var(--ink-500)' }}>
+                    <p className="text-[11px]" style={{ color: 'var(--ink-500)' }}>
                       Multi-platform video downloader
                     </p>
                   </div>
                 </div>
-                <p className="mt-4 max-w-sm text-sm leading-7" style={{ color: 'var(--ink-600)' }}>
+                <p className="mt-3 max-w-sm text-xs leading-6" style={{ color: 'var(--ink-600)' }}>
                   Download videos and audio from many major platforms with a clean browser workflow.
                 </p>
-                <p className="mt-4 text-sm" style={{ color: 'var(--ink-600)' }}>
+                <p className="mt-3 text-xs" style={{ color: 'var(--ink-600)' }}>
                   Support:{' '}
                   <a
                     href={siteConfig.supportMailto}
@@ -516,10 +516,10 @@ function AppShell() {
 
               {footerGroups.map((group) => (
                 <div key={group.title}>
-                  <h2 className="text-sm font-black uppercase tracking-[0.16em]" style={{ color: 'var(--ink-900)' }}>
+                  <h2 className="text-xs font-black uppercase tracking-[0.16em]" style={{ color: 'var(--ink-900)' }}>
                     {group.title}
                   </h2>
-                  <ul className="mt-4 space-y-3 text-sm">
+                  <ul className="mt-3 space-y-2 text-xs">
                     {group.links.map((item) => (
                       <li key={item.to}>
                         <Link
@@ -536,7 +536,7 @@ function AppShell() {
               ))}
             </div>
             <div
-              className="mt-8 border-t pt-6 text-sm"
+              className="mt-6 border-t pt-4 text-xs"
               style={{ borderColor: 'var(--border-soft)', color: 'var(--ink-500)' }}
             >
               © 2026 {siteConfig.name}. All rights reserved.

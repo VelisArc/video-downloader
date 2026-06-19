@@ -32,55 +32,55 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[60vh] px-4">
+    <div className="flex items-center justify-center min-h-[50vh] px-4 py-8">
       <Helmet>
         <title>Register - SwiftDL</title>
         <meta name="robots" content="noindex, nofollow" />
         <link rel="canonical" href="https://swiftdownlod.online/register" />
       </Helmet>
-      <div className="w-full max-w-sm bg-white rounded-xl shadow-md border border-gray-100 p-6">
-        <h2 className="text-lg font-bold text-center mb-5 text-gray-900">Register for SwiftDL</h2>
-        <form onSubmit={handleRegister} className="space-y-4">
+      <div className="w-full max-w-xs card p-5">
+        <h2 className="text-base font-bold text-center mb-4" style={{ color: 'var(--ink-900)' }}>Register for SwiftDL</h2>
+        <form onSubmit={handleRegister} className="space-y-3">
           <div>
-            <label className="block text-gray-600 text-xs mb-1">Email Address</label>
+            <label className="block text-[11px] mb-1" style={{ color: 'var(--ink-600)' }}>Email Address</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-200 focus:border-pink-400 bg-gray-50"
+              className="input-field"
             />
           </div>
           <div>
-            <label className="block text-gray-600 text-xs mb-1">Password</label>
+            <label className="block text-[11px] mb-1" style={{ color: 'var(--ink-600)' }}>Password</label>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-200 focus:border-pink-400 bg-gray-50"
+              className="input-field"
             />
           </div>
           <div>
-            <label className="block text-gray-600 text-xs mb-1">Confirm Password</label>
+            <label className="block text-[11px] mb-1" style={{ color: 'var(--ink-600)' }}>Confirm Password</label>
             <input
               type="password"
               required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-200 focus:border-pink-400 bg-gray-50"
+              className="input-field"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="inline-flex w-full items-center justify-center rounded-lg bg-pink-500 py-2 text-sm font-semibold text-white transition hover:bg-pink-600 disabled:opacity-50"
+            className="btn-brand w-full"
           >
             {loading ? <LoadingIndicator label="Creating account..." compact tone="light" /> : 'Register'}
           </button>
         </form>
-        <div className="mt-4 text-center text-xs text-gray-500">
-          Already have an account? <Link to="/login" className="text-pink-500 hover:underline">Login</Link>
+        <div className="mt-3 text-center text-[11px]" style={{ color: 'var(--ink-500)' }}>
+          Already have an account? <Link to="/login" className="hover:underline" style={{ color: 'var(--brand-700)' }}>Login</Link>
         </div>
       </div>
     </div>

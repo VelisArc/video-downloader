@@ -157,31 +157,31 @@ export default function Home() {
         <meta property="og:image" content={siteUrl('/logo.png')} />
       </Helmet>
 
-      <main className="pb-6 pt-8 md:pb-10 md:pt-10">
+      <main className="pb-5 pt-6 md:pb-8 md:pt-8">
         <div className="section-shell">
           {/* Hero Section */}
-          <section className="relative overflow-hidden rounded-[var(--radius-2xl)] p-8 md:p-12 lg:p-16" style={{ background: 'var(--gradient-brand)' }}>
+          <section className="relative overflow-hidden rounded-[var(--radius-xl)] p-6 md:p-10 lg:p-12" style={{ background: 'var(--gradient-brand)' }}>
             <div className="absolute inset-0 opacity-10">
-              <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-white blur-3xl" />
-              <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white blur-3xl" />
+              <div className="absolute -top-16 -right-16 h-48 w-48 rounded-full bg-white blur-3xl" />
+              <div className="absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-white blur-3xl" />
             </div>
             <div className="relative z-10 mx-auto max-w-3xl text-center">
-              <span className="inline-block rounded-full bg-white/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-white/90">
+              <span className="inline-block rounded-full bg-white/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/90">
                 Browser-first downloader
               </span>
-              <h1 className="mt-6 text-balance text-4xl font-black leading-tight text-white md:text-6xl">
+              <h1 className="mt-4 text-balance text-3xl font-black leading-tight text-white md:text-5xl">
                 Download from{' '}
                 <span className="text-white/80">
                   any major platform
                 </span>
               </h1>
-              <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-white/80 md:text-lg">
+              <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-white/80 md:text-base">
                 Paste a link, choose format, download. Works with YouTube, Instagram, Facebook, TikTok, and many more.
               </p>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-1.5">
                 {platformHighlights.map((hl) => (
-                  <span key={hl} className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3.5 py-2 text-xs font-medium text-white shadow-sm backdrop-blur-sm">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-white/70" />
+                  <span key={hl} className="inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1.5 text-[11px] font-medium text-white shadow-sm backdrop-blur-sm">
+                    <CheckCircle2 className="h-3 w-3 text-white/70" />
                     {hl}
                   </span>
                 ))}
@@ -190,8 +190,8 @@ export default function Home() {
           </section>
 
           {/* Downloader Section */}
-          <section className="relative -mt-8 z-20 mx-auto max-w-4xl">
-            <div className="rounded-[var(--radius-2xl)] border p-5 shadow-xl backdrop-blur-xl md:p-7" style={{ background: 'var(--glass-bg)', borderColor: 'var(--border-soft)' }}>
+          <section className="relative -mt-7 z-20 mx-auto max-w-4xl">
+            <div className="rounded-[var(--radius-xl)] border p-4 shadow-xl backdrop-blur-xl md:p-5" style={{ background: 'var(--glass-bg)', borderColor: 'var(--border-soft)' }}>
               <DownloaderPanel
                 url={url}
                 setUrl={setUrl}
@@ -205,15 +205,15 @@ export default function Home() {
           </section>
 
           {/* Features */}
-          <section className="mt-20">
-            <div className="grid gap-6 md:grid-cols-3">
+          <section className="mt-14">
+            <div className="grid gap-4 md:grid-cols-3">
               {features.map(({ title, description, icon: Icon }) => (
                 <article key={title} className="feature-card">
-                  <div className="mb-4 inline-flex rounded-2xl p-3" style={{ background: 'var(--surface-soft)', color: 'var(--brand-600)' }}>
-                    <Icon className="h-5 w-5" />
+                  <div className="mb-3 inline-flex rounded-xl p-2.5" style={{ background: 'var(--surface-soft)', color: 'var(--brand-600)' }}>
+                    <Icon className="h-4 w-4" />
                   </div>
-                  <h2 className="text-lg font-bold" style={{ color: 'var(--ink-900)' }}>{title}</h2>
-                  <p className="mt-2 text-sm leading-6" style={{ color: 'var(--ink-600)' }}>{description}</p>
+                  <h2 className="text-base font-bold" style={{ color: 'var(--ink-900)' }}>{title}</h2>
+                  <p className="mt-1.5 text-xs leading-5" style={{ color: 'var(--ink-600)' }}>{description}</p>
                 </article>
               ))}
             </div>
@@ -221,46 +221,46 @@ export default function Home() {
 
           {/* Download History */}
           {history.length > 0 && (
-            <section className="mt-16">
-              <div className="flex flex-wrap items-center justify-between gap-3">
+            <section className="mt-12">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <span className="section-eyebrow">Browser history</span>
-                  <h2 className="mt-3 text-3xl font-black" style={{ color: 'var(--ink-900)' }}>Recent downloads</h2>
+                  <h2 className="mt-2 text-2xl font-black" style={{ color: 'var(--ink-900)' }}>Recent downloads</h2>
                 </div>
                 <button
                   type="button"
                   onClick={() => { setHistory([]); localStorage.removeItem('downloadHistory'); toast.success('History cleared'); }}
                   className="btn-outline"
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-3.5 w-3.5" />
                   Clear history
                 </button>
               </div>
-              <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3 stagger-children">
+              <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3 stagger-children">
                 {history.map((item) => (
                   <article key={item.id} className="feature-card overflow-hidden p-0">
                     {item.thumbnail ? (
-                      <img src={item.thumbnail} alt={item.title} className="h-40 w-full object-cover" />
+                      <img src={item.thumbnail} alt={item.title} className="h-32 w-full object-cover" />
                     ) : (
-                      <div className="flex h-40 items-center justify-center" style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}>
-                        <Video className="h-7 w-7" />
+                      <div className="flex h-32 items-center justify-center" style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}>
+                        <Video className="h-6 w-6" />
                       </div>
                     )}
-                    <div className="space-y-4 p-5">
+                    <div className="space-y-3 p-4">
                       <div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-1.5">
                           <span className="pill-soft">{item.ext.toUpperCase()}</span>
                           {item.platform && <span className="pill-soft">{formatPlatformLabel(item.platform)}</span>}
                         </div>
-                        <h3 className="mt-2 line-clamp-2 text-lg font-black" style={{ color: 'var(--ink-900)' }}>{item.title}</h3>
-                        <p className="mt-2 text-xs" style={{ color: 'var(--ink-500)' }}>Saved on {item.date}</p>
+                        <h3 className="mt-1.5 line-clamp-2 text-sm font-black" style={{ color: 'var(--ink-900)' }}>{item.title}</h3>
+                        <p className="mt-1 text-[11px]" style={{ color: 'var(--ink-500)' }}>Saved on {item.date}</p>
                       </div>
                       <button
                         type="button"
                         onClick={() => handleFinalDownload(item.downloadUrl, item.title, item.ext)}
                         className="btn-dark w-full"
                       >
-                        <Download className="h-4 w-4" />
+                        <Download className="h-3.5 w-3.5" />
                         Download again
                       </button>
                     </div>

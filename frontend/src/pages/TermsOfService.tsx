@@ -5,7 +5,7 @@ import { siteConfig, siteUrl } from '../lib/site';
 
 export default function TermsOfService() {
   return (
-    <div className="section-shell max-w-5xl py-10">
+    <div className="section-shell max-w-5xl py-8">
       <Helmet>
         <title>Terms of Service | {siteConfig.name}</title>
         <meta
@@ -19,7 +19,7 @@ export default function TermsOfService() {
         <div className="mx-auto inline-flex rounded-[28px] bg-[var(--surface-soft)] p-4 text-[var(--brand-600)]">
           <Scale className="h-7 w-7" />
         </div>
-        <h1 className="mt-5 text-4xl font-black text-[var(--ink-900)] md:text-5xl">
+        <h1 className="mt-5 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
           Terms of Service
         </h1>
         <p className="mt-4 text-base leading-8 text-[var(--ink-600)]">
@@ -28,7 +28,7 @@ export default function TermsOfService() {
         </p>
       </div>
 
-      <div className="mt-8 rounded-[32px] border border-yellow-200 bg-yellow-50 p-5 text-sm leading-7 text-yellow-900">
+      <div className="mt-8 rounded-2xl border border-yellow-200 bg-yellow-50 p-4 text-sm leading-7 text-yellow-900">
         <div className="flex items-start gap-3">
           <AlertTriangle className="mt-1 h-5 w-5 flex-none" />
           <p>
@@ -38,9 +38,9 @@ export default function TermsOfService() {
         </div>
       </div>
 
-      <div className="mt-10 space-y-8 text-sm text-[var(--ink-600)]">
+      <div className="mt-8 space-y-6 text-sm text-[var(--ink-600)]">
         <section className="feature-card">
-          <h2 className="text-2xl font-black text-[var(--ink-900)]">
+          <h2 className="text-xl font-black text-[var(--ink-900)]">
             1. Service description
           </h2>
           <p className="mt-4 leading-7">
@@ -55,7 +55,7 @@ export default function TermsOfService() {
           <article className="feature-card">
             <div className="flex items-center gap-3">
               <CheckCircle2 className="h-5 w-5 text-[var(--brand-600)]" />
-              <h2 className="text-2xl font-black text-[var(--ink-900)]">
+              <h2 className="text-xl font-black text-[var(--ink-900)]">
                 Permitted use
               </h2>
             </div>
@@ -70,7 +70,7 @@ export default function TermsOfService() {
           <article className="feature-card">
             <div className="flex items-center gap-3">
               <XCircle className="h-5 w-5 text-[var(--brand-600)]" />
-              <h2 className="text-2xl font-black text-[var(--ink-900)]">
+              <h2 className="text-xl font-black text-[var(--ink-900)]">
                 Prohibited use
               </h2>
             </div>
@@ -84,7 +84,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="feature-card">
-          <h2 className="text-2xl font-black text-[var(--ink-900)]">
+          <h2 className="text-xl font-black text-[var(--ink-900)]">
             3. User responsibility
           </h2>
           <div className="mt-4 space-y-4 leading-7">
@@ -101,7 +101,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="feature-card">
-          <h2 className="text-2xl font-black text-[var(--ink-900)]">
+          <h2 className="text-xl font-black text-[var(--ink-900)]">
             4. Availability and limitations
           </h2>
           <div className="mt-4 space-y-4 leading-7">
@@ -119,7 +119,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="feature-card">
-          <h2 className="text-2xl font-black text-[var(--ink-900)]">
+          <h2 className="text-xl font-black text-[var(--ink-900)]">
             5. Copyright and notices
           </h2>
           <p className="mt-4 leading-7">

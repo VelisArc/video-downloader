@@ -95,7 +95,7 @@ export default function HowToDownloadInstagramReels() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   return (
-    <div className="section-shell max-w-5xl py-10">
+    <div className="section-shell max-w-5xl py-8">
       <Helmet>
         <title>Instagram Download Guide | {siteConfig.name}</title>
         <meta
@@ -105,12 +105,12 @@ export default function HowToDownloadInstagramReels() {
         <link rel="canonical" href={siteUrl('/how-to-download-instagram-reels')} />
       </Helmet>
 
-      <section className="rounded-[36px] border border-[var(--border-soft)] bg-[linear-gradient(135deg,_#fff5f1,_#ffffff)] p-6 shadow-[0_20px_48px_rgba(31,34,51,0.06)] md:p-8">
+      <section className="rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,_#fff5f1,_#ffffff)] p-5 shadow-[0_20px_48px_rgba(31,34,51,0.06)] md:p-6">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mx-auto inline-flex rounded-[28px] bg-[linear-gradient(135deg,_#f05f6b,_#f49c4d)] p-4 text-white shadow-lg">
+          <div className="mx-auto inline-flex rounded-2xl bg-[linear-gradient(135deg,_#f05f6b,_#f49c4d)] p-3 text-white shadow-lg">
             <Instagram className="h-8 w-8" />
           </div>
-          <h1 className="mt-5 text-4xl font-black text-[var(--ink-900)] md:text-5xl">
+          <h1 className="mt-5 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
             How to download Instagram reels and post media
           </h1>
           <p className="mt-4 text-base leading-8 text-[var(--ink-600)]">
@@ -119,22 +119,22 @@ export default function HowToDownloadInstagramReels() {
           </p>
           <Link
             to="/"
-            className="mt-6 inline-flex rounded-full bg-[var(--brand-600)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--brand-700)]"
+            className="mt-4 inline-flex rounded-full bg-[var(--brand-600)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--brand-700)]"
           >
             Open downloader
           </Link>
         </div>
       </section>
 
-      <section className="mt-10 grid gap-6 lg:grid-cols-[1fr_0.92fr]">
-        <article className="rounded-[32px] border border-[var(--border-soft)] bg-white p-6 shadow-[0_16px_40px_rgba(31,34,51,0.05)]">
+      <section className="mt-8 grid gap-5 lg:grid-cols-[1fr_0.92fr]">
+        <article className="rounded-2xl border border-[var(--border-soft)] bg-white p-5 shadow-[0_16px_40px_rgba(31,34,51,0.05)]">
           <span className="section-eyebrow">Step by step</span>
-          <h2 className="mt-4 text-3xl font-black text-[var(--ink-900)]">
+          <h2 className="mt-4 text-2xl font-black text-[var(--ink-900)]">
             The simple workflow
           </h2>
-          <div className="mt-6 space-y-4">
+          <div className="mt-4 space-y-3">
             {steps.map((step, index) => (
-              <div key={step} className="flex gap-4 rounded-[24px] bg-[var(--surface-soft)] p-4">
+              <div key={step} className="flex gap-3 rounded-[24px] bg-[var(--surface-soft)] p-3">
                 <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-white text-sm font-bold text-[var(--brand-700)] shadow-sm">
                   {index + 1}
                 </div>
@@ -149,7 +149,7 @@ export default function HowToDownloadInstagramReels() {
             <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
               <Music4 className="h-5 w-5" />
             </div>
-            <h2 className="text-2xl font-black text-[var(--ink-900)]">
+            <h2 className="text-xl font-black text-[var(--ink-900)]">
               Audio extraction
             </h2>
             <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
@@ -163,7 +163,7 @@ export default function HowToDownloadInstagramReels() {
             <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
               <Lock className="h-5 w-5" />
             </div>
-            <h2 className="text-2xl font-black text-[var(--ink-900)]">
+            <h2 className="text-xl font-black text-[var(--ink-900)]">
               Session-protected links
             </h2>
             <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
@@ -177,7 +177,7 @@ export default function HowToDownloadInstagramReels() {
             <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
               <Smartphone className="h-5 w-5" />
             </div>
-            <h2 className="text-2xl font-black text-[var(--ink-900)]">
+            <h2 className="text-xl font-black text-[var(--ink-900)]">
               Mobile behavior
             </h2>
             <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
@@ -191,7 +191,7 @@ export default function HowToDownloadInstagramReels() {
             <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
               <Lock className="h-5 w-5" />
             </div>
-            <h2 className="text-2xl font-black text-[var(--ink-900)]">
+            <h2 className="text-xl font-black text-[var(--ink-900)]">
               Watermark free
             </h2>
             <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
@@ -203,7 +203,7 @@ export default function HowToDownloadInstagramReels() {
             <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
               <Music4 className="h-5 w-5" />
             </div>
-            <h2 className="text-2xl font-black text-[var(--ink-900)]">
+            <h2 className="text-xl font-black text-[var(--ink-900)]">
               Carousel Posts
             </h2>
             <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
@@ -215,7 +215,7 @@ export default function HowToDownloadInstagramReels() {
             <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
               <Smartphone className="h-5 w-5" />
             </div>
-            <h2 className="text-2xl font-black text-[var(--ink-900)]">
+            <h2 className="text-xl font-black text-[var(--ink-900)]">
               Story Expiration
             </h2>
             <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
@@ -225,11 +225,11 @@ export default function HowToDownloadInstagramReels() {
         </div>
       </section>
 
-      <section className="mt-10 rounded-[32px] border border-[var(--border-soft)] bg-[var(--surface-soft)] p-6">
-        <div className="flex items-start gap-4">
+      <section className="mt-8 rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-soft)] p-5">
+        <div className="flex items-start gap-3">
           <AlertCircle className="mt-1 h-6 w-6 flex-none text-[var(--brand-700)]" />
           <div>
-            <h2 className="text-2xl font-black text-[var(--ink-900)]">
+            <h2 className="text-xl font-black text-[var(--ink-900)]">
               Troubleshooting tips
             </h2>
             <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
@@ -266,20 +266,20 @@ export default function HowToDownloadInstagramReels() {
         </div>
       </section>
 
-      <section className="mt-10">
-        <h2 className="text-3xl font-black text-[var(--ink-900)]">
+      <section className="mt-8">
+        <h2 className="text-2xl font-black text-[var(--ink-900)]">
           Common questions
         </h2>
-        <div className="mt-6 space-y-4">
+        <div className="mt-4 space-y-3">
           {faqs.map((faq, index) => (
             <article
               key={faq.question}
-              className="overflow-hidden rounded-[28px] border border-[var(--border-soft)] bg-white"
+              className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-white"
             >
               <button
                 type="button"
                 onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                className="flex w-full items-start justify-between gap-4 px-6 py-5 text-left"
+                className="flex w-full items-start justify-between gap-3 px-5 py-4 text-left"
               >
                 <span className="text-sm font-semibold leading-6 text-[var(--ink-900)]">
                   {faq.question}
@@ -292,7 +292,7 @@ export default function HowToDownloadInstagramReels() {
               </button>
               <div
                 className={`overflow-hidden px-6 transition-all ${
-                  openFaq === index ? 'max-h-60 pb-5 opacity-100' : 'max-h-0 opacity-0'
+                  openFaq === index ? 'max-h-40 pb-5 opacity-100' : 'max-h-0 opacity-0'
                 }`}
               >
                 <p className="border-t border-[var(--border-soft)] pt-4 text-sm leading-7 text-[var(--ink-600)]">

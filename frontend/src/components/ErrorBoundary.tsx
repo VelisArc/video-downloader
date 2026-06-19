@@ -1,4 +1,3 @@
-
 import { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
@@ -27,20 +26,20 @@ class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-          <div className="bg-white p-8 rounded-lg shadow-xl max-w-lg w-full">
-            <h1 className="text-2xl font-bold text-red-600 mb-4">Something went wrong</h1>
-            <p className="text-gray-600 mb-4">
+        <div className="min-h-[50vh] flex items-center justify-center p-4">
+          <div className="card p-6 max-w-sm w-full text-center">
+            <h1 className="text-lg font-black" style={{ color: 'var(--brand-700)' }}>Something went wrong</h1>
+            <p className="mt-2 text-xs" style={{ color: 'var(--ink-600)' }}>
               We're sorry, but the application encountered an unexpected error.
             </p>
             {this.state.error && (
-              <div className="bg-gray-100 p-4 rounded text-sm overflow-auto max-h-48 mb-4 border border-gray-200">
-                <code className="text-red-500">{this.state.error.message}</code>
+              <div className="mt-3 rounded-xl p-3 text-xs overflow-auto max-h-32" style={{ background: 'var(--surface-soft)', color: 'var(--brand-600)' }}>
+                <code>{this.state.error.message}</code>
               </div>
             )}
             <button
               onClick={() => window.location.reload()}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors w-full"
+              className="btn-brand mt-4 w-full"
             >
               Reload Page
             </button>

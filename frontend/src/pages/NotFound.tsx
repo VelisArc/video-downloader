@@ -5,7 +5,7 @@ import { siteConfig, siteUrl } from '../lib/site';
 
 export default function NotFound() {
   return (
-    <main className="mx-auto flex min-h-[70vh] max-w-3xl flex-col items-center justify-center px-4 py-16 text-center">
+    <main className="mx-auto flex min-h-[50vh] max-w-3xl flex-col items-center justify-center px-4 py-10 text-center">
       <Helmet>
         <title>Page Not Found | {siteConfig.name}</title>
         <meta
@@ -18,7 +18,7 @@ export default function NotFound() {
       <span className="mb-5 inline-flex rounded-full border border-[var(--border-strong)] bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)] shadow-sm">
         404
       </span>
-      <h1 className="max-w-2xl text-4xl font-black tracking-tight text-[var(--ink-900)] md:text-5xl">
+      <h1 className="max-w-2xl text-3xl font-black tracking-tight text-[var(--ink-900)] md:text-4xl">
         This page is not available.
       </h1>
       <p className="mt-4 max-w-xl text-base leading-7 text-[var(--ink-600)]">

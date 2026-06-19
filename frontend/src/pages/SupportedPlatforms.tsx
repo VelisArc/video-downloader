@@ -53,7 +53,7 @@ const platformData = [
 
 export default function SupportedPlatforms() {
   return (
-    <div className="section-shell max-w-6xl py-10">
+    <div className="section-shell max-w-6xl py-8">
       <Helmet>
         <title>Supported Platforms | {siteConfig.name}</title>
         <meta
@@ -65,10 +65,10 @@ export default function SupportedPlatforms() {
 
       <div className="mx-auto max-w-3xl text-center">
         <span className="section-eyebrow">Platform coverage</span>
-        <h1 className="mt-4 text-4xl font-black text-[var(--ink-900)] md:text-5xl">
+        <h1 className="mt-4 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
           Supported today
         </h1>
-        <p className="mt-4 text-base leading-8 text-[var(--ink-600)]">
+        <p className="mt-3 text-base leading-8 text-[var(--ink-600)]">
           SwiftDL is no longer locked to only Instagram and Facebook. It now
           handles a wider set of yt-dlp-compatible platforms while still being
           honest that final compatibility depends on the exact URL, platform
@@ -77,19 +77,19 @@ export default function SupportedPlatforms() {
         </p>
       </div>
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-3">
+      <div className="mt-8 grid gap-6 lg:grid-cols-3">
         {platformData.map(({ title, accent, icon: Icon, copy, points, to, cta }) => (
           <article
             key={title}
-            className="overflow-hidden rounded-[36px] border border-[var(--border-soft)] bg-white shadow-[0_18px_40px_rgba(31,34,51,0.05)]"
+            className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-white shadow-[0_18px_40px_rgba(31,34,51,0.05)]"
           >
-            <div className={`bg-gradient-to-r ${accent} px-6 py-6 text-white`}>
+            <div className={`bg-gradient-to-r ${accent} px-5 py-4 text-white`}>
               <div className="inline-flex rounded-[24px] bg-white/15 p-3">
                 <Icon className="h-7 w-7" />
               </div>
-              <h2 className="mt-4 text-3xl font-black">{title}</h2>
+              <h2 className="mt-3 text-2xl font-black">{title}</h2>
             </div>
-            <div className="space-y-5 p-6">
+            <div className="space-y-3 p-5">
               <p className="text-sm leading-7 text-[var(--ink-600)]">{copy}</p>
               <ul className="space-y-3 text-sm leading-7 text-[var(--ink-600)]">
                 {points.map((point) => (
@@ -111,7 +111,7 @@ export default function SupportedPlatforms() {
         ))}
       </div>
 
-      <section className="mt-10 grid gap-4 md:grid-cols-3">
+      <section className="mt-8 grid gap-4 md:grid-cols-3">
         <article className="feature-card">
           <Video className="mb-4 h-5 w-5 text-[var(--brand-600)]" />
           <h2 className="text-xl font-black text-[var(--ink-900)]">Public media first</h2>

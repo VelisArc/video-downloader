@@ -22,7 +22,7 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-      className="relative rounded-full border p-2.5 transition-all duration-300 hover:border-[var(--brand-400)]"
+      className="relative rounded-full border p-2 transition-all duration-300 hover:border-[var(--brand-400)]"
       style={{
         borderColor: 'var(--border-soft)',
         background: 'var(--surface)',

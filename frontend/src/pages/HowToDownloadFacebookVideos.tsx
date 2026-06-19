@@ -80,7 +80,7 @@ export default function HowToDownloadFacebookVideos() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   return (
-    <div className="section-shell max-w-5xl py-10">
+    <div className="section-shell max-w-5xl py-8">
       <Helmet>
         <title>Facebook Download Guide | {siteConfig.name}</title>
         <meta
@@ -90,12 +90,12 @@ export default function HowToDownloadFacebookVideos() {
         <link rel="canonical" href={siteUrl('/how-to-download-facebook-videos')} />
       </Helmet>
 
-      <section className="rounded-[36px] border border-[var(--border-soft)] bg-[linear-gradient(135deg,_#eef5ff,_#ffffff)] p-6 shadow-[0_20px_48px_rgba(31,34,51,0.06)] md:p-8">
+      <section className="rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,_#eef5ff,_#ffffff)] p-5 shadow-[0_20px_48px_rgba(31,34,51,0.06)] md:p-6">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mx-auto inline-flex rounded-[28px] bg-[linear-gradient(135deg,_#2563eb,_#38bdf8)] p-4 text-white shadow-lg">
+          <div className="mx-auto inline-flex rounded-2xl bg-[linear-gradient(135deg,_#2563eb,_#38bdf8)] p-3 text-white shadow-lg">
             <Share2 className="h-8 w-8" />
           </div>
-          <h1 className="mt-5 text-4xl font-black text-[var(--ink-900)] md:text-5xl">
+          <h1 className="mt-5 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
             How to download Facebook videos and reels
           </h1>
           <p className="mt-4 text-base leading-8 text-[var(--ink-600)]">
@@ -104,19 +104,19 @@ export default function HowToDownloadFacebookVideos() {
           </p>
           <Link
             to="/"
-            className="mt-6 inline-flex rounded-full bg-[#2563eb] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1d4ed8]"
+            className="mt-4 inline-flex rounded-full bg-[#2563eb] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1d4ed8]"
           >
             Open downloader
           </Link>
         </div>
       </section>
 
-      <section className="mt-10 grid gap-6 lg:grid-cols-2">
+      <section className="mt-8 grid gap-5 lg:grid-cols-2">
         <article className="feature-card">
           <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[#2563eb]">
             <Download className="h-5 w-5" />
           </div>
-          <h2 className="text-2xl font-black text-[var(--ink-900)]">
+          <h2 className="text-xl font-black text-[var(--ink-900)]">
             Basic workflow
           </h2>
           <ol className="mt-4 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
@@ -135,7 +135,7 @@ export default function HowToDownloadFacebookVideos() {
           <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[#2563eb]">
             <PlayCircle className="h-5 w-5" />
           </div>
-          <h2 className="text-2xl font-black text-[var(--ink-900)]">
+          <h2 className="text-xl font-black text-[var(--ink-900)]">
             Good link types
           </h2>
           <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
@@ -151,7 +151,7 @@ export default function HowToDownloadFacebookVideos() {
         </article>
       </section>
 
-      <section className="mt-10 grid gap-6 md:grid-cols-3">
+      <section className="mt-8 grid gap-5 md:grid-cols-3">
         <article className="feature-card">
           <Monitor className="mb-4 h-5 w-5 text-[#2563eb]" />
           <h2 className="text-xl font-black text-[var(--ink-900)]">Desktop tips</h2>
@@ -196,11 +196,11 @@ export default function HowToDownloadFacebookVideos() {
         </article>
       </section>
 
-      <section className="mt-10 rounded-[32px] border border-[var(--border-soft)] bg-[var(--surface-soft)] p-6">
-        <div className="flex items-start gap-4">
+      <section className="mt-8 rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-soft)] p-5">
+        <div className="flex items-start gap-3">
           <AlertTriangle className="mt-1 h-6 w-6 flex-none text-[#2563eb]" />
           <div>
-            <h2 className="text-2xl font-black text-[var(--ink-900)]">
+        <h2 className="text-2xl font-black text-[var(--ink-900)]">
               Common failure causes
             </h2>
             <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
@@ -217,20 +217,20 @@ export default function HowToDownloadFacebookVideos() {
         </div>
       </section>
 
-      <section className="mt-10">
-        <h2 className="text-3xl font-black text-[var(--ink-900)]">
+      <section className="mt-8">
+        <h2 className="text-2xl font-black text-[var(--ink-900)]">
           Common questions
         </h2>
-        <div className="mt-6 space-y-4">
+        <div className="mt-4 space-y-3">
           {faqs.map((faq, index) => (
             <article
               key={faq.question}
-              className="overflow-hidden rounded-[28px] border border-[var(--border-soft)] bg-white"
+              className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-white"
             >
               <button
                 type="button"
                 onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                className="flex w-full items-start justify-between gap-4 px-6 py-5 text-left"
+                className="flex w-full items-start justify-between gap-3 px-5 py-4 text-left"
               >
                 <span className="text-sm font-semibold leading-6 text-[var(--ink-900)]">
                   {faq.question}
@@ -243,7 +243,7 @@ export default function HowToDownloadFacebookVideos() {
               </button>
               <div
                 className={`overflow-hidden px-6 transition-all ${
-                  openFaq === index ? 'max-h-60 pb-5 opacity-100' : 'max-h-0 opacity-0'
+                  openFaq === index ? 'max-h-40 pb-5 opacity-100' : 'max-h-0 opacity-0'
                 }`}
               >
                 <p className="border-t border-[var(--border-soft)] pt-4 text-sm leading-7 text-[var(--ink-600)]">

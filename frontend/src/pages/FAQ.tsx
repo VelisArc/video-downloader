@@ -170,7 +170,7 @@ export default function FAQ() {
   });
 
   return (
-    <div className="section-shell max-w-5xl py-10">
+    <div className="section-shell max-w-5xl py-8">
       <Helmet>
         <title>FAQ | {siteConfig.name}</title>
         <meta
@@ -182,7 +182,7 @@ export default function FAQ() {
 
       <div className="mx-auto max-w-3xl text-center">
         <span className="section-eyebrow">Help center</span>
-        <h1 className="mt-4 text-4xl font-black text-[var(--ink-900)] md:text-5xl">
+        <h1 className="mt-4 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
           Frequently asked questions
         </h1>
         <p className="mt-4 text-base leading-8 text-[var(--ink-600)]">
@@ -191,7 +191,7 @@ export default function FAQ() {
         </p>
       </div>
 
-      <div className="mx-auto mt-8 max-w-4xl rounded-[32px] border border-[var(--border-soft)] bg-white p-5 shadow-[0_18px_40px_rgba(31,34,51,0.06)]">
+      <div className="mx-auto mt-6 max-w-3xl rounded-2xl border border-[var(--border-soft)] bg-white p-4 shadow-[0_18px_40px_rgba(31,34,51,0.06)]">
         <div className="relative">
           <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ink-500)]" />
           <input
@@ -227,33 +227,33 @@ export default function FAQ() {
         </div>
       </div>
 
-      <div className="mx-auto mt-8 max-w-4xl space-y-4">
+      <div className="mx-auto mt-6 max-w-3xl space-y-4">
         {filteredFaqs.length > 0 ? (
           filteredFaqs.map((faq) => (
             <details
               key={faq.id}
-              className="group overflow-hidden rounded-[28px] border border-[var(--border-soft)] bg-white shadow-[0_12px_28px_rgba(31,34,51,0.04)] open:border-[var(--border-strong)]"
+              className="group overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-white shadow-[0_12px_28px_rgba(31,34,51,0.04)] open:border-[var(--border-strong)]"
             >
-              <summary className="flex cursor-pointer list-none items-start justify-between gap-4 px-6 py-5 text-left">
+              <summary className="flex cursor-pointer list-none items-start justify-between gap-4 px-5 py-4 text-left">
                 <span className="text-sm font-semibold leading-6 text-[var(--ink-900)] md:text-base">
                   {faq.question}
                 </span>
                 <ChevronDown className="mt-1 h-5 w-5 flex-none text-[var(--brand-600)] transition group-open:rotate-180" />
               </summary>
-              <p className="border-t border-[var(--border-soft)] px-6 py-5 text-sm leading-7 text-[var(--ink-600)]">
+              <p className="border-t border-[var(--border-soft)] px-5 py-4 text-sm leading-7 text-[var(--ink-600)]">
                 {faq.answer}
               </p>
             </details>
           ))
         ) : (
-          <div className="rounded-[28px] border border-[var(--border-soft)] bg-white px-6 py-10 text-center text-sm text-[var(--ink-500)]">
+          <div className="rounded-2xl border border-[var(--border-soft)] bg-white px-6 py-10 text-center text-sm text-[var(--ink-500)]">
             No questions matched your search. Try a broader keyword.
           </div>
         )}
       </div>
 
-      <div className="mx-auto mt-10 max-w-4xl rounded-[32px] border border-[var(--border-soft)] bg-[var(--surface-soft)] p-6 text-center">
-        <h2 className="text-2xl font-black text-[var(--ink-900)]">
+      <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-soft)] p-6 text-center">
+        <h2 className="text-xl font-black text-[var(--ink-900)]">
           Still need help?
         </h2>
         <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">

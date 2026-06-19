@@ -13,7 +13,7 @@ const helpTopics = [
 
 export default function ContactUs() {
   return (
-    <div className="section-shell max-w-4xl py-10">
+    <div className="section-shell max-w-4xl py-8">
       <Helmet>
         <title>Contact | {siteConfig.name}</title>
         <meta
@@ -24,10 +24,10 @@ export default function ContactUs() {
       </Helmet>
 
       <div className="mx-auto max-w-3xl text-center">
-        <div className="mx-auto inline-flex rounded-[28px] bg-[var(--surface-soft)] p-4 text-[var(--brand-600)]">
+        <div className="mx-auto inline-flex rounded-xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
           <MessageCircle className="h-7 w-7" />
         </div>
-        <h1 className="mt-5 text-4xl font-black text-[var(--ink-900)] md:text-5xl">
+        <h1 className="mt-3 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
           Contact support
         </h1>
         <p className="mt-4 text-base leading-8 text-[var(--ink-600)]">
@@ -38,7 +38,7 @@ export default function ContactUs() {
 
       <section className="mt-10 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
         <article className="feature-card">
-          <h2 className="text-2xl font-black text-[var(--ink-900)]">Reach us</h2>
+          <h2 className="text-xl font-black text-[var(--ink-900)]">Reach us</h2>
           <div className="mt-5 space-y-5 text-sm leading-7 text-[var(--ink-600)]">
             <div className="flex gap-3">
               <Mail className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
@@ -69,7 +69,7 @@ export default function ContactUs() {
         </article>
 
         <article className="feature-card">
-          <h2 className="text-2xl font-black text-[var(--ink-900)]">
+          <h2 className="text-xl font-black text-[var(--ink-900)]">
             Helpful context to include
           </h2>
           <ul className="mt-5 space-y-3 text-sm leading-7 text-[var(--ink-600)]">

@@ -190,7 +190,7 @@ export default function PricingPolicy() {
   }, [config, loadRazorpay, user]);
 
   return (
-    <div className="section-shell max-w-6xl py-10">
+    <div className="section-shell max-w-6xl py-8">
       <Helmet>
         <title>Pricing | {siteConfig.name}</title>
         <meta
@@ -202,7 +202,7 @@ export default function PricingPolicy() {
 
       <div className="mx-auto max-w-3xl text-center">
         <span className="section-eyebrow">Pricing</span>
-        <h1 className="mt-4 text-4xl font-black text-[var(--ink-900)] md:text-5xl">
+        <h1 className="mt-4 text-3xl font-black text-[var(--ink-900)] md:text-3xl">
           Free tier plus optional ad-free plans
         </h1>
         <p className="mt-4 text-base leading-8 text-[var(--ink-600)]">
@@ -212,13 +212,13 @@ export default function PricingPolicy() {
         </p>
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-3">
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <article className="feature-card">
-          <Sparkles className="mb-4 h-5 w-5 text-[var(--brand-600)]" />
-          <h2 className="text-2xl font-black text-[var(--ink-900)]">Free</h2>
+          <Sparkles className="mb-3 h-5 w-5 text-[var(--brand-600)]" />
+          <h2 className="text-xl font-black text-[var(--ink-900)]">Free</h2>
           <p className="mt-2 text-sm text-[var(--ink-500)]">Best for most casual use</p>
-          <div className="mt-5 text-4xl font-black text-[var(--ink-900)]">$0</div>
-          <ul className="mt-5 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
+          <div className="mt-3 text-3xl font-black text-[var(--ink-900)]">$0</div>
+          <ul className="mt-3 space-y-2 text-sm leading-7 text-[var(--ink-600)]">
             <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />Guest limit: {config.guestDailyLimit}/day</li>
             <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />Logged-in limit: {config.userDailyLimit}/day</li>
             <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />No required app install</li>
@@ -227,11 +227,11 @@ export default function PricingPolicy() {
         </article>
 
         <article className="feature-card border-[var(--border-strong)]">
-          <CreditCard className="mb-4 h-5 w-5 text-[var(--brand-600)]" />
-          <h2 className="text-2xl font-black text-[var(--ink-900)]">Monthly</h2>
+          <CreditCard className="mb-3 h-5 w-5 text-[var(--brand-600)]" />
+          <h2 className="text-xl font-black text-[var(--ink-900)]">Monthly</h2>
           <p className="mt-2 text-sm text-[var(--ink-500)]">Ad-free plan</p>
-          <div className="mt-5 text-4xl font-black text-[var(--ink-900)]">{config.monthlyDisplay}</div>
-          <ul className="mt-5 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
+          <div className="mt-3 text-3xl font-black text-[var(--ink-900)]">{config.monthlyDisplay}</div>
+          <ul className="mt-3 space-y-2 text-sm leading-7 text-[var(--ink-600)]">
             <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />Daily limit: {config.monthlyDailyLimit <= 0 ? 'Unlimited' : `${config.monthlyDailyLimit}/day`}</li>
             <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />No ads while active</li>
             <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />Login required to purchase</li>
@@ -242,11 +242,11 @@ export default function PricingPolicy() {
         </article>
 
         <article className="feature-card">
-          <ShieldCheck className="mb-4 h-5 w-5 text-[var(--brand-600)]" />
-          <h2 className="text-2xl font-black text-[var(--ink-900)]">Lifetime</h2>
+          <ShieldCheck className="mb-3 h-5 w-5 text-[var(--brand-600)]" />
+          <h2 className="text-xl font-black text-[var(--ink-900)]">Lifetime</h2>
           <p className="mt-2 text-sm text-[var(--ink-500)]">One-time ad-free access</p>
-          <div className="mt-5 text-4xl font-black text-[var(--ink-900)]">{config.lifetimeDisplay}</div>
-          <ul className="mt-5 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
+          <div className="mt-3 text-3xl font-black text-[var(--ink-900)]">{config.lifetimeDisplay}</div>
+          <ul className="mt-3 space-y-2 text-sm leading-7 text-[var(--ink-600)]">
             <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />Daily limit: {config.lifetimeDailyLimit <= 0 ? 'Unlimited' : `${config.lifetimeDailyLimit}/day`}</li>
             <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />No recurring charge</li>
             <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />Login required to purchase</li>
@@ -257,9 +257,9 @@ export default function PricingPolicy() {
         </article>
       </div>
 
-      <section className="mt-10 rounded-[36px] border border-[var(--border-soft)] bg-[var(--surface-soft)] p-6 md:p-8">
+      <section className="mt-8 rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-soft)] p-5 md:p-6">
         <h2 className="text-3xl font-black text-[var(--ink-900)]">Billing notes</h2>
-        <ul className="mt-5 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
+        <ul className="mt-3 space-y-2 text-sm leading-7 text-[var(--ink-600)]">
           <li>Payments are handled by Razorpay when payment configuration is enabled on this deployment.</li>
           <li>SwiftDL does not position free use and paid plans as the same thing. Paid plans are optional add-ons, not hidden conversions.</li>
           <li>If a deployment is missing server-side billing configuration, checkout buttons will stay limited and the site will remain on the free workflow.</li>
