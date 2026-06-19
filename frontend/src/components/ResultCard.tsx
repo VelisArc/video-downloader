@@ -4,43 +4,79 @@ import type { DownloadHistoryItem } from '../lib/downloads';
 import { copyText, sanitizeFilename } from '../lib/downloads';
 import { siteConfig } from '../lib/site';
 
-function fmt(p?: string | null) {
-  const n = (p || '').trim(); if (!n || n === 'generic') return 'Auto-detected';
-  return n.split(/[-_.]/g).filter(Boolean).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+function fmt(platform?: string | null) {
+  const name = (platform || '').trim();
+  if (!name || name === 'generic') return 'Auto-detected';
+  return name.split(/[-_.]/g).filter(Boolean).map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
 }
 
-interface Props { videoData: DownloadHistoryItem; }
+interface Props {
+  videoData: DownloadHistoryItem;
+}
 
 export default function ResultCard({ videoData }: Props) {
-  const dl = () => {
-    const a = document.createElement('a'); a.href = videoData.downloadUrl; a.target = '_blank'; a.download = `${sanitizeFilename(videoData.title)}.${videoData.ext || 'mp4'}`; a.click(); a.remove(); toast.success('Download started');
+  const download = () => {
+    const anchor = document.createElement('a');
+    anchor.href = videoData.downloadUrl;
+    anchor.target = '_blank';
+    anchor.download = `${sanitizeFilename(videoData.title)}.${videoData.ext || 'mp4'}`;
+    anchor.click();
+    anchor.remove();
+    toast.success('Download started');
   };
-  const copy = async () => { await copyText(videoData.downloadUrl); toast.success('Link copied'); };
+
+  const copy = async () => {
+    await copyText(videoData.downloadUrl);
+    toast.success('Link copied');
+  };
+
   const share = async () => {
-    if (navigator.share) { try { await navigator.share({ title: `${siteConfig.name} download`, text: videoData.title, url: videoData.downloadUrl }); toast.success('Shared'); return; } catch {} }
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: `${siteConfig.name} download`, text: videoData.title, url: videoData.downloadUrl });
+        toast.success('Shared');
+        return;
+      } catch {
+        // Fall back to copying below.
+      }
+    }
     await copy();
   };
 
   return (
-    <article className="animate-fade-up mt-3 rounded-xl border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
-      <div className="flex flex-col sm:flex-row gap-3 p-3">
-        <div className="w-full sm:w-32 shrink-0 rounded-lg overflow-hidden">
-          {videoData.thumbnail ? <img src={videoData.thumbnail} alt="" className="w-full h-28 object-cover" /> : (
-            <div className="flex items-center justify-center h-28" style={{ background: 'var(--brand-50)', color: 'var(--brand-600)' }}><Video className="h-7 w-7" /></div>
+    <article className="animate-fade-up mt-4 overflow-hidden rounded-lg border" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
+      <div className="grid gap-4 p-3 sm:grid-cols-[156px_1fr] sm:p-4">
+        <div className="overflow-hidden rounded-md border" style={{ borderColor: 'var(--border)' }}>
+          {videoData.thumbnail ? (
+            <img src={videoData.thumbnail} alt="" className="h-40 w-full object-cover sm:h-full" />
+          ) : (
+            <div className="flex h-40 items-center justify-center" style={{ background: 'var(--brand-50)', color: 'var(--brand-700)' }}>
+              <Video className="h-8 w-8" />
+            </div>
           )}
         </div>
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap gap-1 text-[10px]">
-            {videoData.platform && <span className="pill"><Sparkles className="h-3 w-3" />{fmt(videoData.platform)}</span>}
-            {videoData.uploader && <span className="pill"><User className="h-3 w-3" />{videoData.uploader}</span>}
-            {videoData.duration && videoData.duration !== 'Unknown' && <span className="pill"><Clock3 className="h-3 w-3" />{videoData.duration}</span>}
-            {videoData.view_count && videoData.view_count !== 'N/A' && <span className="pill"><Eye className="h-3 w-3" />{videoData.view_count}</span>}
+
+        <div className="min-w-0">
+          <div className="flex flex-wrap gap-1.5">
+            <span className="pill"><Sparkles className="h-3.5 w-3.5" />{videoData.ext.toUpperCase()}</span>
+            {videoData.platform && <span className="pill">{fmt(videoData.platform)}</span>}
+            {videoData.uploader && <span className="pill"><User className="h-3.5 w-3.5" />{videoData.uploader}</span>}
+            {videoData.duration && videoData.duration !== 'Unknown' && <span className="pill"><Clock3 className="h-3.5 w-3.5" />{videoData.duration}</span>}
+            {videoData.view_count && videoData.view_count !== 'N/A' && <span className="pill"><Eye className="h-3.5 w-3.5" />{videoData.view_count}</span>}
           </div>
-          <h3 className="mt-1.5 text-sm font-bold line-clamp-2" style={{ color: 'var(--ink-900)' }}>{videoData.title}</h3>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            <button onClick={dl} className="btn-primary flex-1 text-xs py-2"><Download className="h-3.5 w-3.5" /> Save to device</button>
-            <button onClick={copy} className="btn-ghost text-xs"><Copy className="h-3.5 w-3.5" /> Copy</button>
-            <button onClick={share} className="btn-ghost text-xs"><Share2 className="h-3.5 w-3.5" /> Share</button>
+
+          <h3 className="mt-3 line-clamp-2 text-base font-extrabold">{videoData.title}</h3>
+
+          <div className="mt-4 grid gap-2 sm:grid-cols-[1fr_auto_auto]">
+            <button onClick={download} className="btn-primary w-full">
+              <Download className="h-4 w-4" /> Save to device
+            </button>
+            <button onClick={copy} className="btn-outline">
+              <Copy className="h-4 w-4" /> Copy
+            </button>
+            <button onClick={share} className="btn-outline">
+              <Share2 className="h-4 w-4" /> Share
+            </button>
           </div>
         </div>
       </div>

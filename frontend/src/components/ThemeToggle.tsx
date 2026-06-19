@@ -16,11 +16,15 @@ export default function ThemeToggle() {
   }, [theme]);
 
   return (
-    <button onClick={() => setTheme(p => p === 'dark' ? 'light' : 'dark')}
-      className="relative rounded-md border p-2 transition-colors hover:bg-[var(--surface-soft)]"
-      style={{ borderColor: 'var(--border)', color: 'var(--ink-600)' }}>
-      <Sun className={`h-4 w-4 transition-all ${theme === 'light' ? 'scale-100 opacity-100' : 'scale-0 opacity-0 absolute inset-0'}`} />
-      <Moon className={`h-4 w-4 transition-all ${theme === 'dark' ? 'scale-100 opacity-100' : 'scale-0 opacity-0 absolute inset-0'}`} />
+    <button
+      onClick={() => setTheme(p => p === 'dark' ? 'light' : 'dark')}
+      className="relative flex h-10 w-10 items-center justify-center rounded-md border transition-colors hover:bg-[var(--surface-soft)]"
+      style={{ borderColor: 'var(--border)', color: 'var(--ink-600)', background: 'var(--surface)' }}
+      aria-label="Toggle theme"
+      title="Toggle theme"
+    >
+      <Sun className={`absolute h-4 w-4 transition-all ${theme === 'light' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`} />
+      <Moon className={`absolute h-4 w-4 transition-all ${theme === 'dark' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`} />
     </button>
   );
 }

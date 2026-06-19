@@ -1,182 +1,160 @@
 import { useState } from 'react';
-import { AlertTriangle, CheckCircle2, ChevronDown, Globe2, MonitorSmartphone, Music4, ShieldCheck, Sparkles, Video, Zap, Smartphone, Wifi, HardDrive, RefreshCw, PlayCircle } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ChevronDown, Globe2, Music4, PlayCircle, RefreshCw, ShieldCheck, Smartphone, Sparkles, Video, Zap } from 'lucide-react';
 
 const capabilities = [
-  { title: 'Universal Video Downloader', desc: 'SwiftDL supports thousands of platforms. From mainstream social media giants to niche platforms, our free video downloader handles them all.', icon: Globe2 },
-  { title: 'Lightning Fast Speeds', desc: 'Experience ultra-fast download speeds. Our backend infrastructure is optimized to extract and deliver media instantly without waiting.', icon: Zap },
-  { title: 'High Quality 4K & HD', desc: 'Never compromise on quality. Download videos in stunning 4K, 1080p, or 720p HD resolution exactly as the creator intended.', icon: Video },
-  { title: 'Crystal Clear MP3 Audio', desc: 'Need just the music? Extract high-fidelity 320kbps MP3 or M4A audio streams directly from any video link.', icon: Music4 },
-  { title: 'No App Installation', desc: 'A pure browser-based experience. Forget about downloading shady APKs or heavy desktop software. It works instantly on the web.', icon: MonitorSmartphone },
-  { title: 'No Watermarks', desc: 'Save content without annoying platform logos or watermarks ruining the visual experience.', icon: Sparkles },
-  { title: '100% Secure & Private', desc: 'We do not log your downloads or store your media. Your privacy is our top priority.', icon: ShieldCheck },
-  { title: 'Mobile & Tablet Ready', desc: 'Perfectly responsive design means you can save videos directly to your iPhone, iPad, or Android device.', icon: Smartphone },
-  { title: 'Offline Viewing', desc: 'Save data by downloading videos while on Wi-Fi, then watch them anywhere without buffering.', icon: Wifi },
-  { title: 'Batch Ready', desc: 'Our system processes links rapidly, making it easy to download multiple videos one after another.', icon: RefreshCw },
-  { title: 'Save Directly to Storage', desc: 'Choose your destination folder and save mp4 or mp3 files directly to your device.', icon: HardDrive },
+  { title: 'Broad platform coverage', desc: 'SwiftDL accepts many yt-dlp-compatible public links across social, video, and audio sites.', icon: Globe2 },
+  { title: 'Video and audio modes', desc: 'Keep the original media flow simple by choosing a video or audio output before processing.', icon: Video },
+  { title: 'Mobile-ready saves', desc: 'The responsive interface keeps the same controls available on desktop, tablet, and phone.', icon: Smartphone },
+  { title: 'Clear result actions', desc: 'Download, copy, or share the prepared file link from one focused result state.', icon: Sparkles },
+  { title: 'Local browser history', desc: 'Recent items are stored on your device, giving you quick repeat access without account friction.', icon: RefreshCw },
+  { title: 'Transparent limits', desc: 'Private, expired, restricted, or DRM-protected content can fail depending on the source platform.', icon: AlertTriangle },
 ];
 
 const steps = [
-  { title: 'Find Your Video', desc: 'Open your favorite social media app or website. Find the video, reel, or song you want to save.' },
-  { title: 'Copy the Share Link', desc: 'Tap the "Share" icon on the post and select "Copy Link".' },
-  { title: 'Paste into SwiftDL', desc: 'Come back to our website and paste the copied URL into the search box.' },
-  { title: 'Choose Format', desc: 'Decide if you want the full MP4 video or just the MP3 audio track.' },
-  { title: 'Click Download', desc: 'Hit the download button. Our backend extracts the highest quality media streams.' },
-  { title: 'Save to Gallery', desc: 'Click "Save File" to download it directly to your device storage.' },
+  { title: 'Copy', desc: 'Use the public share link from the source platform.' },
+  { title: 'Choose', desc: 'Select video or audio before the request is processed.' },
+  { title: 'Save', desc: 'Use the result actions to download, copy, or share.' },
 ];
 
 const platforms = [
-  { name: 'Social Media Giants', items: ['Instagram Reels, Stories, IGTV', 'Facebook Watch, Groups, Pages', 'X (Twitter) Videos', 'TikTok Videos', 'Snapchat Spotlight', 'Pinterest Videos', 'LinkedIn Videos'] },
-  { name: 'Video Streaming', items: ['YouTube Shorts & 4K', 'Vimeo Showcases', 'Dailymotion Episodes', 'Twitch VODs & Clips', 'Rumble Videos', 'Bilibili Vlogs', 'Reddit Videos'] },
-  { name: 'Audio & Music', items: ['SoundCloud Tracks', 'Mixcloud DJ Sets', 'Bandcamp Releases', 'Audiomack Songs', 'Podcast MP3 extraction'] },
-  { name: 'News & Educational', items: ['TED Talks', 'BBC, CNN clips', 'Bloomberg Updates', 'Khan Academy'] },
+  { name: 'Social', items: ['Instagram Reels and posts', 'Facebook Watch and reels', 'TikTok public videos', 'X public video posts'] },
+  { name: 'Video', items: ['YouTube public links', 'Vimeo videos', 'Dailymotion links', 'Reddit hosted media'] },
+  { name: 'Audio', items: ['SoundCloud tracks', 'Podcast-compatible pages', 'Music clips where streams are exposed', 'Audio extraction from supported videos'] },
 ];
 
 const trust = [
-  { title: 'Strictly No Logging', desc: 'We do not track which videos you download. Your session history is stored locally on your device.', icon: ShieldCheck },
-  { title: 'Transparent Limitations', desc: 'We do not claim to bypass paywalls or DRM. SwiftDL relies on standard yt-dlp extraction for public content.', icon: AlertTriangle },
-  { title: 'Fair Usage Quotas', desc: 'To keep the service fast for everyone, we use a transparent daily quota system.', icon: Zap },
+  { title: 'Public content first', desc: 'The service is designed for media you already have permission to access.', icon: ShieldCheck },
+  { title: 'No local history sync', desc: 'Browser history stays in local storage on the current device.', icon: RefreshCw },
+  { title: 'Source-aware failures', desc: 'Some platforms change frequently, so unsupported links fail with a clear message.', icon: Zap },
 ];
 
 const faqData = [
-  { q: 'Is SwiftDL a free video downloader?', a: 'Yes! SwiftDL offers a generous free tier for downloading from hundreds of platforms. Premium tiers are available for higher daily limits.' },
-  { q: 'How do I download Instagram Reels?', a: 'Open Instagram, tap Share on the Reel, copy the link. Paste into SwiftDL, select Video, and hit download.' },
-  { q: 'Can I download videos without a watermark?', a: 'Yes - for many platforms, our backend extracts the raw video file directly from the CDN without watermarks.' },
-  { q: 'What video quality can I download?', a: 'We support up to 4K resolution depending on the original source video.' },
-  { q: 'How can I convert YouTube videos to MP3?', a: 'Paste your YouTube link and toggle from Video to Audio. Our system extracts the highest quality audio stream.' },
-  { q: 'Does this work on mobile?', a: 'Absolutely. SwiftDL is fully optimized for iPhone, iPad, and Android.' },
-  { q: 'Why did my download fail?', a: 'Downloads can fail if the video is private, the link is broken, or the platform changed their code. Public links work best.' },
-  { q: 'Are there any ads?', a: 'Our free tier may display unobtrusive banner ads. Premium users enjoy a 100% ad-free experience.' },
+  { q: 'Is SwiftDL free to use?', a: 'Yes. SwiftDL includes a free browser workflow. Premium plans can increase limits and remove ads when billing is configured.' },
+  { q: 'Can I download Instagram Reels?', a: 'Public Instagram Reels and post videos can work when the source exposes a compatible stream.' },
+  { q: 'Does SwiftDL convert video to audio?', a: 'Yes. Select Audio before processing the link to request an audio output where available.' },
+  { q: 'Why did a link fail?', a: 'The video may be private, removed, expired, protected by DRM, or affected by platform changes.' },
+  { q: 'Does it work on mobile?', a: 'Yes. The interface is responsive and can also be installed as a browser PWA on supported devices.' },
+  { q: 'Where is history stored?', a: 'Recent download history is stored in your browser local storage on this device.' },
 ];
 
 export default function HomeSeoContent() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <div className="shell py-10 md:py-14">
-      {/* SEO Intro */}
-      <section className="grid gap-8 lg:grid-cols-2 lg:items-center mb-14">
+    <div className="border-t" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
+      <section className="shell-wide grid gap-10 py-14 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
         <div>
-          <span className="tag"><Sparkles className="h-3 w-3" /> The Ultimate Downloader</span>
-          <h2 className="text-3xl md:text-4xl font-bold mt-4 leading-tight" style={{ color: 'var(--ink-900)' }}>
-            Download Any Video.{' '}<span style={{ color: 'var(--brand-600)' }}>Anywhere, Anytime.</span>
-          </h2>
-          <p className="mt-3 text-sm leading-relaxed" style={{ color: 'var(--ink-600)' }}>
-            The internet's most powerful, free video downloader. Supports <strong>thousands of websites</strong> - from YouTube and Instagram to niche platforms. 100% cloud-based, no malware, no hidden fees.
+          <span className="tag"><Sparkles className="h-4 w-4" /> Download workflow</span>
+          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">A focused interface for public media links.</h2>
+          <p className="mt-4 max-w-xl text-base leading-7" style={{ color: 'var(--ink-600)' }}>
+            SwiftDL brings link input, format choice, extraction status, result actions, and recent downloads into one consistent browser experience.
           </p>
-        </div>
-        <div className="card" style={{ padding: 0 }}>
-          <div className="p-5">
-            <div className="flex items-center gap-3 border-b pb-3 mb-3" style={{ borderColor: 'var(--border)' }}>
-              <div className="rounded-lg p-2" style={{ background: 'var(--brand-50)', color: 'var(--brand-600)' }}><CheckCircle2 className="h-5 w-5" /></div>
-              <div><h3 className="font-bold text-sm" style={{ color: 'var(--ink-900)' }}>Universal Compatibility</h3><p className="text-[11px]" style={{ color: 'var(--ink-600)' }}>Powered by advanced yt-dlp engines</p></div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex -space-x-2">
-                {[1, 2, 3].map(i => <div key={i} className="w-7 h-7 rounded-full flex items-center justify-center border-2" style={{ background: 'var(--brand-100)', borderColor: 'var(--surface)', color: 'var(--brand-600)' }}><Sparkles className="h-3 w-3" /></div>)}
+          <div className="mt-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+            {steps.map((step, index) => (
+              <div key={step.title} className="flex gap-3 rounded-lg border p-4" style={{ borderColor: 'var(--border)', background: 'var(--surface-soft)' }}>
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-sm font-extrabold text-white" style={{ background: 'var(--brand-600)' }}>{index + 1}</span>
+                <div>
+                  <h3 className="text-sm font-bold">{step.title}</h3>
+                  <p className="mt-1 text-sm leading-6" style={{ color: 'var(--ink-600)' }}>{step.desc}</p>
+                </div>
               </div>
-              <p className="text-[11px] font-medium" style={{ color: 'var(--ink-600)' }}>Trusted by 100k+ users daily.</p>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          {capabilities.map(capability => (
+            <article key={capability.title} className="card card-hover">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-md" style={{ background: 'var(--brand-50)', color: 'var(--brand-700)' }}>
+                <capability.icon className="h-5 w-5" />
+              </div>
+              <h3 className="text-base font-bold">{capability.title}</h3>
+              <p className="mt-2 text-sm leading-6" style={{ color: 'var(--ink-600)' }}>{capability.desc}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="border-y" style={{ borderColor: 'var(--border)', background: 'var(--canvas)' }}>
+        <div className="shell-wide py-14">
+          <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <span className="tag"><PlayCircle className="h-4 w-4" /> Compatibility</span>
+              <h2 className="mt-3 text-2xl font-extrabold sm:text-3xl">Common source categories</h2>
             </div>
+            <p className="max-w-xl text-sm leading-6" style={{ color: 'var(--ink-600)' }}>
+              Results depend on the exact URL, platform restrictions, and whether the media stream is publicly available.
+            </p>
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-3">
+            {platforms.map(group => (
+              <article key={group.name} className="card">
+                <div className="mb-4 flex items-center gap-3 border-b pb-4" style={{ borderColor: 'var(--border)' }}>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-md" style={{ background: 'var(--brand-50)', color: 'var(--brand-700)' }}>
+                    {group.name === 'Audio' ? <Music4 className="h-5 w-5" /> : <Globe2 className="h-5 w-5" />}
+                  </div>
+                  <h3 className="text-lg font-bold">{group.name}</h3>
+                </div>
+                <ul className="space-y-2">
+                  {group.items.map(item => (
+                    <li key={item} className="flex items-start gap-2 text-sm leading-6" style={{ color: 'var(--ink-600)' }}>
+                      <CheckCircle2 className="mt-1 h-4 w-4 shrink-0" style={{ color: 'var(--brand-600)' }} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Capabilities */}
-      <section className="mb-14">
-        <div className="text-center max-w-2xl mx-auto mb-8">
-          <span className="tag">Features</span>
-          <h2 className="text-2xl md:text-3xl font-bold mt-3" style={{ color: 'var(--ink-900)' }}>Why Choose SwiftDL?</h2>
-          <p className="mt-2 text-sm" style={{ color: 'var(--ink-600)' }}>Enterprise-grade extraction tools in a clean, simple interface.</p>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {capabilities.map(c => (
-            <article key={c.title} className="card card-hover">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="rounded-md p-1.5" style={{ background: 'var(--brand-50)', color: 'var(--brand-600)' }}><c.icon className="h-4 w-4" /></div>
-                <h3 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>{c.title}</h3>
-              </div>
-              <p className="text-[11px] leading-relaxed" style={{ color: 'var(--ink-600)' }}>{c.desc}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* Workflow */}
-      <section className="mb-14 rounded-xl border p-6 md:p-8" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
-        <div className="max-w-2xl mb-6">
-          <span className="tag">Simple Workflow</span>
-          <h2 className="text-2xl font-bold mt-3" style={{ color: 'var(--ink-900)' }}>How to Download Any Video</h2>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {steps.map((s, i) => (
-            <article key={s.title} className="card-hover" style={{ padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border)' }}>
-              <div className="flex items-center gap-2.5 mb-1.5">
-                <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white" style={{ background: 'var(--brand-600)' }}>{i + 1}</div>
-                <h3 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>{s.title}</h3>
-              </div>
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--ink-600)' }}>{s.desc}</p>
-            </article>
-          ))}
+      <section className="shell-wide py-14">
+        <div className="rounded-lg p-6 sm:p-8" style={{ background: 'var(--ink-heavy)' }}>
+          <div className="mb-8 max-w-2xl">
+            <span className="inline-flex items-center gap-2 rounded-md border px-2.5 py-1 text-xs font-semibold" style={{ borderColor: 'rgba(255,255,255,0.18)', color: '#a7fff3' }}>
+              <ShieldCheck className="h-4 w-4" /> Trust model
+            </span>
+            <h2 className="mt-4 text-2xl font-extrabold text-white sm:text-3xl">Responsible downloading, clear boundaries.</h2>
+            <p className="mt-3 text-sm leading-6" style={{ color: 'rgba(255,255,255,0.68)' }}>
+              SwiftDL is built around honest outcomes: public links work best, protected content is not bypassed, and the UI keeps failures understandable.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {trust.map(item => (
+              <article key={item.title} className="rounded-lg border p-5" style={{ borderColor: 'rgba(255,255,255,0.14)', background: 'rgba(255,255,255,0.07)' }}>
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-md" style={{ background: 'rgba(94,234,212,0.14)', color: '#a7fff3' }}>
+                  <item.icon className="h-5 w-5" />
+                </div>
+                <h3 className="text-base font-bold text-white">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6" style={{ color: 'rgba(255,255,255,0.66)' }}>{item.desc}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Platforms */}
-      <section className="mb-14">
-        <div className="text-center max-w-2xl mx-auto mb-8">
-          <span className="tag">Compatibility</span>
-          <h2 className="text-2xl font-bold mt-3" style={{ color: 'var(--ink-900)' }}>Download from Thousands of Platforms</h2>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          {platforms.map(g => (
-            <article key={g.name} className="card card-hover">
-              <div className="flex items-center gap-2.5 border-b pb-3 mb-3" style={{ borderColor: 'var(--border)' }}>
-                <div className="rounded-md p-1.5" style={{ background: 'var(--brand-50)', color: 'var(--brand-600)' }}><PlayCircle className="h-4 w-4" /></div>
-                <h3 className="font-bold" style={{ color: 'var(--ink-900)' }}>{g.name}</h3>
-              </div>
-              <ul className="space-y-1.5">
-                {g.items.map(item => <li key={item} className="flex items-start gap-2 text-xs" style={{ color: 'var(--ink-600)' }}><CheckCircle2 className="h-3 w-3 mt-0.5 shrink-0" style={{ color: 'var(--brand-500)' }} />{item}</li>)}
-              </ul>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* Trust */}
-      <section className="mb-14 rounded-xl p-8" style={{ background: 'var(--ink-heavy)' }}>
-        <div className="text-center max-w-2xl mx-auto mb-8">
-          <span className="inline-block rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-wider" style={{ borderColor: 'rgba(255,255,255,0.12)', color: 'var(--brand-400)' }}>Safe & Secure</span>
-          <h2 className="text-2xl font-bold mt-4 text-white">Enterprise-Grade Security for Everyone.</h2>
-          <p className="mt-2 text-sm" style={{ color: 'var(--ink-500)' }}>SwiftDL processes millions of requests without compromising user privacy.</p>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3 max-w-4xl mx-auto">
-          {trust.map(t => (
-            <article key={t.title} className="rounded-xl p-5" style={{ border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)' }}>
-              <div className="inline-flex rounded-lg p-2 mb-3" style={{ background: 'var(--brand-600)', color: 'white' }}><t.icon className="h-4 w-4" /></div>
-              <h3 className="text-sm font-bold text-white mb-1">{t.title}</h3>
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--ink-500)' }}>{t.desc}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section>
-        <div className="text-center max-w-3xl mx-auto mb-8">
+      <section className="shell py-14">
+        <div className="mx-auto mb-7 max-w-2xl text-center">
           <span className="tag">FAQ</span>
-          <h2 className="text-2xl font-bold mt-3" style={{ color: 'var(--ink-900)' }}>Frequently Asked Questions</h2>
+          <h2 className="mt-3 text-2xl font-extrabold sm:text-3xl">Frequently asked questions</h2>
         </div>
-        <div className="max-w-3xl mx-auto space-y-2">
-          {faqData.map((f, i) => {
-            const isOpen = open === i;
+        <div className="mx-auto max-w-3xl space-y-2">
+          {faqData.map((faq, index) => {
+            const isOpen = open === index;
             return (
-              <article key={f.q} className="card" style={{ padding: 0, overflow: 'hidden' }}>
-                <button onClick={() => setOpen(isOpen ? null : i)} className="flex w-full items-center justify-between gap-4 p-4 text-left">
-                  <span className="text-sm font-semibold leading-snug" style={{ color: 'var(--ink-900)' }}>{f.q}</span>
-                  <div className="shrink-0 rounded-md p-1" style={{ background: isOpen ? 'var(--brand-50)' : 'transparent', color: isOpen ? 'var(--brand-600)' : 'var(--ink-400)' }}>
+              <article key={faq.q} className="rounded-lg border" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
+                <button onClick={() => setOpen(isOpen ? null : index)} className="flex w-full items-center justify-between gap-4 p-4 text-left">
+                  <span className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>{faq.q}</span>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md" style={{ background: isOpen ? 'var(--brand-50)' : 'var(--surface-soft)', color: isOpen ? 'var(--brand-700)' : 'var(--ink-500)' }}>
                     <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-                  </div>
+                  </span>
                 </button>
                 <div className={`grid transition-all duration-200 ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-                  <div className="overflow-hidden px-4 pb-4"><p className="text-xs leading-relaxed" style={{ color: 'var(--ink-600)' }}>{f.a}</p></div>
+                  <div className="overflow-hidden px-4 pb-4">
+                    <p className="text-sm leading-6" style={{ color: 'var(--ink-600)' }}>{faq.a}</p>
+                  </div>
                 </div>
               </article>
             );
