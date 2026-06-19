@@ -151,46 +151,46 @@ export default function Home() {
         <meta property="og:image" content={siteUrl('/logo.png')} />
       </Helmet>
 
-      <main style={{ paddingBottom: '2rem', paddingTop: '1.5rem' }}>
+      <main style={{ paddingBottom: '2.5rem', paddingTop: '2rem' }}>
         <div className="section-shell">
           {/* Hero Section */}
           <section
-            className="relative overflow-hidden"
             style={{
+              position: 'relative',
+              overflow: 'hidden',
               borderRadius: 'var(--radius-2xl)',
               background: 'var(--gradient-brand)',
-              padding: '2.5rem 1.5rem',
+              padding: '3rem 2rem',
             }}
           >
-            {/* Mesh overlay */}
             <div
-              className="absolute inset-0"
               style={{
+                position: 'absolute',
+                inset: 0,
                 background: 'var(--gradient-mesh)',
                 opacity: 0.4,
               }}
             />
-            {/* Decorative orbs */}
-            <div className="absolute inset-0" style={{ opacity: 0.08 }}>
+            <div style={{ position: 'absolute', inset: 0, opacity: 0.08 }}>
               <div
-                className="absolute"
                 style={{
+                  position: 'absolute',
                   top: '-4rem',
                   right: '-4rem',
-                  width: '14rem',
-                  height: '14rem',
+                  width: '16rem',
+                  height: '16rem',
                   borderRadius: '50%',
                   background: 'white',
                   filter: 'blur(80px)',
                 }}
               />
               <div
-                className="absolute"
                 style={{
+                  position: 'absolute',
                   bottom: '-4rem',
                   left: '-4rem',
-                  width: '14rem',
-                  height: '14rem',
+                  width: '16rem',
+                  height: '16rem',
                   borderRadius: '50%',
                   background: 'white',
                   filter: 'blur(80px)',
@@ -198,15 +198,15 @@ export default function Home() {
               />
             </div>
 
-            <div className="relative z-10 mx-auto" style={{ maxWidth: '48rem', textAlign: 'center' }}>
+            <div style={{ position: 'relative', zIndex: 10, maxWidth: '56rem', margin: '0 auto', textAlign: 'center' }}>
               <span
                 style={{
                   display: 'inline-block',
                   borderRadius: 'var(--radius-full)',
                   background: 'rgba(255,255,255,0.18)',
                   backdropFilter: 'blur(8px)',
-                  padding: '0.375rem 0.875rem',
-                  fontSize: '11px',
+                  padding: '0.4rem 1rem',
+                  fontSize: '12px',
                   fontWeight: 600,
                   textTransform: 'uppercase',
                   letterSpacing: '0.16em',
@@ -219,8 +219,8 @@ export default function Home() {
               <h1
                 className="text-balance"
                 style={{
-                  marginTop: '1.25rem',
-                  fontSize: 'clamp(1.875rem, 4vw, 3rem)',
+                  marginTop: '1.5rem',
+                  fontSize: 'clamp(2rem, 5vw, 3.5rem)',
                   fontWeight: 900,
                   lineHeight: 1.1,
                   color: 'white',
@@ -233,11 +233,10 @@ export default function Home() {
               </h1>
 
               <p
-                className="mx-auto"
                 style={{
-                  marginTop: '0.875rem',
-                  maxWidth: '36rem',
-                  fontSize: '0.9rem',
+                  margin: '1rem auto 0',
+                  maxWidth: '40rem',
+                  fontSize: '1rem',
                   lineHeight: 1.7,
                   color: 'rgba(255,255,255,0.78)',
                 }}
@@ -246,20 +245,27 @@ export default function Home() {
               </p>
 
               <div
-                className="flex flex-wrap items-center justify-center"
-                style={{ marginTop: '1.25rem', gap: '0.5rem' }}
+                style={{
+                  marginTop: '1.5rem',
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                }}
               >
                 {platformHighlights.map((hl) => (
                   <span
                     key={hl}
-                    className="inline-flex items-center gap-1"
                     style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.375rem',
                       borderRadius: 'var(--radius-full)',
                       background: 'rgba(255,255,255,0.12)',
                       backdropFilter: 'blur(8px)',
                       border: '1px solid rgba(255,255,255,0.15)',
-                      padding: '0.375rem 0.75rem',
-                      fontSize: '11px',
+                      padding: '0.4rem 0.875rem',
+                      fontSize: '12px',
                       fontWeight: 500,
                       color: 'white',
                     }}
@@ -272,12 +278,13 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Downloader Section — overlapping hero */}
+          {/* Downloader Section */}
           <section
-            className="relative z-20 mx-auto"
             style={{
-              marginTop: '-2.5rem',
-              maxWidth: '48rem',
+              position: 'relative',
+              zIndex: 20,
+              margin: '-3rem auto 0',
+              maxWidth: '52rem',
             }}
           >
             <div
@@ -287,7 +294,7 @@ export default function Home() {
                 border: '1px solid var(--border-soft)',
                 boxShadow: 'var(--shadow-xl)',
                 backdropFilter: 'blur(24px) saturate(1.5)',
-                padding: '1.25rem',
+                padding: '1.5rem',
               }}
             >
               <DownloaderPanel
@@ -303,8 +310,8 @@ export default function Home() {
           </section>
 
           {/* Features */}
-          <section style={{ marginTop: '3.5rem' }}>
-            <div className="grid gap-4 md:grid-cols-3">
+          <section style={{ marginTop: '4rem' }}>
+            <div className="grid gap-5 md:grid-cols-3">
               {features.map(({ title, description, icon: Icon }) => (
                 <article key={title} className="feature-card">
                   <div
@@ -317,12 +324,12 @@ export default function Home() {
                       color: 'var(--brand-700)',
                     }}
                   >
-                    <Icon style={{ width: 16, height: 16 }} />
+                    <Icon style={{ width: 18, height: 18 }} />
                   </div>
-                  <h2 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--ink-900)' }}>
+                  <h2 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--ink-900)' }}>
                     {title}
                   </h2>
-                  <p style={{ marginTop: '0.375rem', fontSize: '0.8rem', lineHeight: 1.6, color: 'var(--ink-600)' }}>
+                  <p style={{ marginTop: '0.375rem', fontSize: '0.85rem', lineHeight: 1.6, color: 'var(--ink-600)' }}>
                     {description}
                   </p>
                 </article>
@@ -332,7 +339,7 @@ export default function Home() {
 
           {/* Download History */}
           {history.length > 0 && (
-            <section style={{ marginTop: '3rem' }}>
+            <section style={{ marginTop: '3.5rem' }}>
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <span className="section-eyebrow">Browser history</span>
@@ -351,7 +358,7 @@ export default function Home() {
                 </button>
               </div>
 
-              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3 stagger-children" style={{ marginTop: '1rem' }}>
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 stagger-children" style={{ marginTop: '1.25rem' }}>
                 {history.map((item) => (
                   <article
                     key={item.id}
@@ -364,7 +371,7 @@ export default function Home() {
                         alt={item.title}
                         style={{
                           width: '100%',
-                          height: '7.5rem',
+                          height: '8rem',
                           objectFit: 'cover',
                         }}
                       />
@@ -374,7 +381,7 @@ export default function Home() {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          height: '7.5rem',
+                          height: '8rem',
                           background: 'var(--surface-soft)',
                           color: 'var(--brand-700)',
                         }}
@@ -395,7 +402,7 @@ export default function Home() {
                           className="line-clamp-2"
                           style={{
                             marginTop: '0.5rem',
-                            fontSize: '0.85rem',
+                            fontSize: '0.9rem',
                             fontWeight: 700,
                             color: 'var(--ink-900)',
                           }}
