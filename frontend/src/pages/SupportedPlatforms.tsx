@@ -6,7 +6,7 @@ import { siteConfig, siteUrl } from '../lib/site';
 const data = [
   { title: 'Instagram', icon: Instagram, copy: 'Strong for reels, post videos, and other supported Instagram media.', points: ['Public reels and post videos', 'Many post and carousel links', 'Audio extraction when available'], to: '/how-to-download-instagram-reels', cta: 'Read Instagram guide', color: 'linear-gradient(135deg, #e1306c, #f77737)' },
   { title: 'Facebook', icon: Facebook, copy: 'Strong for feed videos, Watch links, reels, and other supported Facebook URLs.', points: ['Feed videos, reels, and Watch', 'Replay after live streams', 'Audio extraction when available'], to: '/how-to-download-facebook-videos', cta: 'Read Facebook guide', color: 'var(--brand-600)' },
-  { title: 'Broader coverage', icon: Globe2, copy: 'SwiftDL now accepts many other yt-dlp-compatible links including YouTube, TikTok, X, and more.', points: ['YouTube, TikTok, X, Reddit, Vimeo', 'Results depend on URL format', 'Unsupported URLs fail gracefully'], to: '/faq', cta: 'Compatibility notes', color: 'var(--ink-heavy)' },
+  { title: 'Broader coverage', icon: Globe2, copy: 'SwiftDL accepts many yt-dlp-compatible public links including TikTok, X, Reddit, Vimeo, and more.', points: ['TikTok, X, Reddit, Vimeo, Dailymotion', 'Results depend on URL format', 'Unsupported URLs fail gracefully'], to: '/faq', cta: 'Compatibility notes', color: 'var(--ink-heavy)' },
 ];
 
 export default function SupportedPlatforms() {

@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 import { siteConfig, siteUrl } from '../lib/site';
 
 const faqs = [
-  { q: 'What is SwiftDL?', a: 'SwiftDL is a browser-based video and audio downloader that works with thousands of platforms including YouTube, Instagram, Facebook, and TikTok. Paste a link, choose your format, and download.' },
+  { q: 'What is SwiftDL?', a: 'SwiftDL is a browser-based video and audio downloader that works with thousands of platforms including Instagram, Facebook, TikTok, X, Vimeo, Reddit, and other compatible public sources. Paste a link, choose your format, and download.' },
   { q: 'Is SwiftDL free?', a: 'Yes! SwiftDL offers a free tier with a daily limit. Premium plans are available for users who need higher or unlimited limits.' },
   { q: 'How do I download a video?', a: 'Copy the URL of the video you want, paste it into the downloader on our homepage, select Video or Audio, then click Download.' },
-  { q: 'What platforms does SwiftDL support?', a: 'SwiftDL supports YouTube, Instagram, Facebook, TikTok, X/Twitter, Vimeo, Dailymotion, Twitch, SoundCloud, and many more yt-dlp-compatible platforms.' },
+  { q: 'What platforms does SwiftDL support?', a: 'SwiftDL supports Instagram, Facebook, TikTok, X/Twitter, Vimeo, Dailymotion, Twitch, SoundCloud, Reddit, and many more yt-dlp-compatible platforms.' },
   { q: 'Can I download audio only?', a: 'Yes. Toggle the selector to Audio mode before downloading. We extract the highest quality MP3 or M4A stream available.' },
   { q: 'What is the daily download limit?', a: 'Guest users get 1 download per day. Logged-in free users get 3 per day. Premium users get unlimited downloads.' },
   { q: 'How do I increase my daily limit?', a: 'Sign in with Google to get 3 downloads/day, or upgrade to a Monthly or Lifetime premium plan for unlimited downloads.' },

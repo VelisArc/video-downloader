@@ -525,6 +525,111 @@ def _utc_now():
 def _utc_today_key():
     return _utc_now().strftime('%Y-%m-%d')
 
+def _to_utc_datetime(value):
+    if not value:
+        return None
+    try:
+        if hasattr(value, 'to_datetime'):
+            value = value.to_datetime()
+        elif isinstance(value, (int, float)):
+            value = datetime.datetime.fromtimestamp(int(value), datetime.timezone.utc)
+        elif isinstance(value, str):
+            raw = value.strip()
+            if not raw:
+                return None
+            value = datetime.datetime.fromisoformat(raw.replace('Z', '+00:00'))
+        if isinstance(value, datetime.datetime):
+            if value.tzinfo is None:
+                return value.replace(tzinfo=datetime.timezone.utc)
+            return value.astimezone(datetime.timezone.utc)
+    except Exception:
+        return None
+    return None
+
+def _iso_datetime(value):
+    dt = _to_utc_datetime(value)
+    if not dt:
+        return None
+    return dt.isoformat().replace('+00:00', 'Z')
+
+def _subscription_period_from_entity(entity):
+    entity = entity or {}
+    now = _utc_now()
+    period_start = (
+        _to_utc_datetime(entity.get('current_start'))
+        or _to_utc_datetime(entity.get('start_at'))
+        or _to_utc_datetime(entity.get('created_at'))
+        or now
+    )
+    period_end = (
+        _to_utc_datetime(entity.get('current_end'))
+        or _to_utc_datetime(entity.get('charge_at'))
+        or _to_utc_datetime(entity.get('end_at'))
+    )
+    if not period_end or period_end <= period_start:
+        period_end = now + datetime.timedelta(days=31)
+    return period_start, period_end
+
+def _normalize_entitlement(data, uid):
+    if not uid:
+        return {'plan': 'guest', 'unlimited': False, 'premiumStatus': 'guest'}
+
+    data = data or {}
+    raw_plan = (data.get('plan') or 'user').lower()
+    premium_plan = data.get('premiumPlan') or (raw_plan if raw_plan in ('monthly', 'lifetime') else None)
+    purchased_at = data.get('purchasedAt') or data.get('activatedAt') or data.get('createdAt')
+    base = {
+        'plan': 'user',
+        'unlimited': False,
+        'premiumPlan': premium_plan,
+        'premiumStatus': data.get('premiumStatus') or 'inactive',
+        'purchasedAt': _iso_datetime(purchased_at),
+        'activatedAt': _iso_datetime(data.get('activatedAt')),
+        'renewedAt': _iso_datetime(data.get('renewedAt')),
+        'expiresAt': _iso_datetime(data.get('expiresAt')),
+        'renewsAt': _iso_datetime(data.get('renewsAt') or data.get('expiresAt')),
+        'updatedAt': _iso_datetime(data.get('updatedAt')),
+        'paymentId': data.get('paymentId'),
+        'orderId': data.get('orderId'),
+        'subscriptionId': data.get('subscriptionId'),
+        'cancelAtPeriodEnd': bool(data.get('cancelAtPeriodEnd')),
+    }
+
+    if raw_plan == 'lifetime':
+        base.update({
+            'plan': 'lifetime',
+            'unlimited': True,
+            'premiumPlan': 'lifetime',
+            'premiumStatus': data.get('premiumStatus') or 'active',
+            'expiresAt': None,
+            'renewsAt': None,
+        })
+        return base
+
+    if raw_plan == 'monthly':
+        expires_at = _to_utc_datetime(data.get('expiresAt'))
+        if expires_at and expires_at > _utc_now():
+            base.update({
+                'plan': 'monthly',
+                'unlimited': True,
+                'premiumPlan': 'monthly',
+                'premiumStatus': data.get('premiumStatus') or 'active',
+                'expiresAt': _iso_datetime(expires_at),
+                'renewsAt': _iso_datetime(data.get('renewsAt') or expires_at),
+            })
+        else:
+            base.update({
+                'plan': 'user',
+                'unlimited': False,
+                'premiumPlan': 'monthly',
+                'premiumStatus': 'expired',
+                'expiresAt': _iso_datetime(expires_at),
+                'renewsAt': None,
+            })
+        return base
+
+    return base
+
 def _detect_platform_from_host(host):
     normalized = (host or '').strip().lower()
     if not normalized:
@@ -615,20 +720,37 @@ class handler(BaseHTTPRequestHandler):
 
             normalized_url = _normalize_media_url(url)
             cache_key = f"{download_type}:{normalized_url}"
+
+            auth_ctx = self._get_auth_context()
+            uid = auth_ctx.get('uid') if auth_ctx else None
+            entitlement = self._get_entitlement(uid)
+            is_unlimited = bool(entitlement.get('unlimited'))
+            limit = self._daily_limit_for_entitlement(entitlement, uid)
+            quota_allowed, quota_remaining = self._quota_status(uid, limit)
+            if not quota_allowed:
+                self.send_error_json(429, 'Daily download limit reached. Please login or upgrade to Premium.')
+                return
+            remaining = quota_remaining
+
             cached = _cache_get(cache_key)
             if cached:
                 code, payload = cached
                 if int(code) == 200:
-                    self.send_json(payload)
+                    allowed, remaining = self._reserve_quota(uid, limit)
+                    if not allowed:
+                        self.send_error_json(429, 'Daily download limit reached. Please login or upgrade to Premium.')
+                        return
+                    cached_payload = dict(payload or {})
+                    cached_payload['quota'] = {
+                        'plan': entitlement.get('plan', 'free'),
+                        'unlimited': is_unlimited,
+                        'dailyLimit': limit,
+                        'remaining': remaining
+                    }
+                    self.send_json(cached_payload)
                 else:
                     self.send_error_json(int(code), str(payload))
                 return
-
-            auth_ctx = self._get_auth_context()
-            entitlement = self._get_entitlement(auth_ctx.get('uid') if auth_ctx else None)
-            is_unlimited = bool(entitlement.get('unlimited'))
-            limit = self._daily_limit_for_entitlement(entitlement, auth_ctx.get('uid') if auth_ctx else None)
-            remaining = None
 
             url_for_extract = url.split('#', 1)[0].strip()
             platform = _detect_platform_from_host(urllib.parse.urlparse(url_for_extract).netloc or '')
@@ -746,7 +868,7 @@ class handler(BaseHTTPRequestHandler):
                 self.send_error_json(500, msg)
                 return
 
-            allowed, remaining = self._reserve_quota(auth_ctx.get('uid') if auth_ctx else None, limit)
+            allowed, remaining = self._reserve_quota(uid, limit)
             if not allowed:
                 self.send_error_json(429, 'Daily download limit reached. Please login or upgrade to Premium.')
                 return
@@ -934,11 +1056,26 @@ class handler(BaseHTTPRequestHandler):
                 auth_configured = bool(firebase_auth is not None and _ensure_firebase_admin())
                 ent = self._get_entitlement(auth_ctx.get('uid') if auth_ctx else None)
                 daily_limit = self._daily_limit_for_entitlement(ent, auth_ctx.get('uid') if auth_ctx else None)
+                uid = auth_ctx.get('uid') if auth_ctx else None
+                _, remaining = self._quota_status(uid, daily_limit)
                 self.send_json({
-                    'uid': auth_ctx.get('uid') if auth_ctx else None,
+                    'uid': uid,
                     'plan': ent.get('plan', 'guest'),
                     'unlimited': bool(ent.get('unlimited')),
+                    'premiumPlan': ent.get('premiumPlan'),
+                    'premiumStatus': ent.get('premiumStatus'),
+                    'purchasedAt': ent.get('purchasedAt'),
+                    'activatedAt': ent.get('activatedAt'),
+                    'renewedAt': ent.get('renewedAt'),
+                    'expiresAt': ent.get('expiresAt'),
+                    'renewsAt': ent.get('renewsAt'),
+                    'updatedAt': ent.get('updatedAt'),
+                    'paymentId': ent.get('paymentId'),
+                    'orderId': ent.get('orderId'),
+                    'subscriptionId': ent.get('subscriptionId'),
+                    'cancelAtPeriodEnd': bool(ent.get('cancelAtPeriodEnd')),
                     'dailyLimit': daily_limit,
+                    'remaining': remaining,
                     'authConfigured': auth_configured,
                     'authError': err if err not in (None, 'missing', 'invalid_header', 'empty_token') else None
                 })
@@ -1031,33 +1168,18 @@ class handler(BaseHTTPRequestHandler):
 
     def _get_entitlement(self, uid):
         if not uid:
-            return {'plan': 'guest', 'unlimited': False}
+            return _normalize_entitlement({}, None)
         fs = _get_firestore_client()
         if not fs:
-            return {'plan': 'user', 'unlimited': False}
+            return _normalize_entitlement({'plan': 'user'}, uid)
         try:
             doc = fs.collection('entitlements').document(uid).get()
             if not doc.exists:
-                return {'plan': 'user', 'unlimited': False}
-            data = doc.to_dict() or {}
-            plan = data.get('plan', 'user')
-            if plan == 'lifetime':
-                return {'plan': 'lifetime', 'unlimited': True}
-            if plan == 'monthly':
-                expires_at = data.get('expiresAt')
-                if expires_at:
-                    try:
-                        exp_dt = expires_at
-                        if hasattr(expires_at, 'to_datetime'):
-                            exp_dt = expires_at.to_datetime()
-                        if exp_dt > _utc_now().replace(tzinfo=None) if exp_dt.tzinfo is None else exp_dt > _utc_now():
-                            return {'plan': 'monthly', 'unlimited': True}
-                    except Exception:
-                        pass
-                return {'plan': 'user', 'unlimited': False}
-            return {'plan': plan, 'unlimited': False}
-        except Exception:
-            return {'plan': 'user', 'unlimited': False}
+                return _normalize_entitlement({'plan': 'user'}, uid)
+            return _normalize_entitlement(doc.to_dict() or {}, uid)
+        except Exception as e:
+            logger.error(f"Failed to load entitlement for uid={uid}: {e}")
+            return _normalize_entitlement({'plan': 'user'}, uid)
 
     def _daily_limit_for_entitlement(self, entitlement, uid):
         plan = (entitlement or {}).get('plan') or ('user' if uid else 'guest')
@@ -1068,6 +1190,44 @@ class handler(BaseHTTPRequestHandler):
         if uid:
             return _int_env('USER_DAILY_LIMIT', 3)
         return _int_env('GUEST_DAILY_LIMIT', 1)
+
+    def _quota_status(self, uid, limit):
+        if int(limit) <= 0:
+            return True, None
+
+        fs = _get_firestore_client()
+        ip = self._get_client_ip()
+        today = _utc_today_key()
+        is_user = bool(uid)
+
+        if fs:
+            key = (f"user:{uid}:{today}" if is_user else f"guest:{ip}:{today}")
+            try:
+                snap = fs.collection('usage').document(key).get()
+                current = int((snap.to_dict() or {}).get('count', 0)) if snap.exists else 0
+                return current < limit, max(limit - current, 0)
+            except Exception as e:
+                logger.warning(f"Failed to read Firestore quota status: {e}")
+
+        if is_user:
+            safe_key = f"user_{uid}_{today}"
+        else:
+            safe_ip = ip.replace(':', '_').replace('.', '_')
+            safe_key = f"guest_{safe_ip}_{today}"
+        safe_key = "".join(c for c in safe_key if c.isalnum() or c in ('_', '-'))
+
+        try:
+            path = os.path.join(USAGE_DIR, f"{safe_key}.json")
+            current = 0
+            if os.path.exists(path):
+                with open(path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    if data.get('date') == today:
+                        current = int(data.get('count', 0))
+            return current < limit, max(limit - current, 0)
+        except Exception as e:
+            logger.warning(f"Failed to read local quota status: {e}")
+            return True, None
 
     def _reserve_quota(self, uid, limit):
         if int(limit) <= 0:
@@ -1268,6 +1428,9 @@ class handler(BaseHTTPRequestHandler):
                     'uid': auth_ctx['uid'],
                     'plan': 'monthly',
                     'email': auth_ctx['email'],
+                    'amount': _monthly_amount_subunits(),
+                    'currency': _payment_currency(),
+                    'status': created.get('status'),
                     'createdAt': firestore.SERVER_TIMESTAMP
                 }, merge=True)
             self.send_json({'keyId': key_id, 'subscriptionId': sub_id})
@@ -1308,6 +1471,10 @@ class handler(BaseHTTPRequestHandler):
                     'uid': auth_ctx['uid'],
                     'plan': 'lifetime',
                     'email': auth_ctx['email'],
+                    'amount': amount,
+                    'currency': currency,
+                    'receipt': receipt,
+                    'status': created.get('status'),
                     'createdAt': firestore.SERVER_TIMESTAMP
                 }, merge=True)
             self.send_json({'keyId': key_id, 'orderId': order_id, 'amount': amount, 'currency': currency})
@@ -1369,15 +1536,22 @@ class handler(BaseHTTPRequestHandler):
                     self.send_error_json(400, f'Payment not captured ({status or "unknown"})')
                     return
                 fs = _get_firestore_client()
+                purchased_at = _to_utc_datetime(payment.get('created_at')) or _utc_now()
                 if fs:
                     fs.collection('entitlements').document(auth_ctx['uid']).set({
                         'plan': 'lifetime',
+                        'premiumStatus': 'active',
                         'orderId': order_id,
                         'paymentId': payment_id,
                         'email': auth_ctx['email'],
+                        'amount': amount,
+                        'currency': currency,
+                        'purchasedAt': purchased_at,
+                        'activatedAt': _utc_now(),
+                        'expiresAt': None,
                         'updatedAt': firestore.SERVER_TIMESTAMP
                     }, merge=True)
-                self.send_json({'ok': True, 'plan': 'lifetime'})
+                self.send_json({'ok': True, 'plan': 'lifetime', 'purchasedAt': _iso_datetime(purchased_at), 'expiresAt': None})
                 return
 
             if pay_type == 'subscription':
@@ -1402,17 +1576,31 @@ class handler(BaseHTTPRequestHandler):
                     self.send_error_json(400, 'Amount mismatch')
                     return
                 fs = _get_firestore_client()
-                expires_at = _utc_now() + datetime.timedelta(days=31)
+                subscription = {}
+                try:
+                    subscription = _rzp_request('GET', f"/subscriptions/{subscription_id}")
+                except Exception as e:
+                    logger.warning(f"Could not fetch subscription period for {subscription_id}: {e}")
+                period_start, expires_at = _subscription_period_from_entity(subscription)
+                purchased_at = _to_utc_datetime(payment.get('created_at')) or period_start
                 if fs:
                     fs.collection('entitlements').document(auth_ctx['uid']).set({
                         'plan': 'monthly',
+                        'premiumStatus': 'active',
                         'subscriptionId': subscription_id,
                         'paymentId': payment_id,
                         'email': auth_ctx['email'],
+                        'amount': monthly_amount,
+                        'currency': currency,
+                        'purchasedAt': purchased_at,
+                        'activatedAt': period_start,
+                        'renewedAt': _utc_now(),
                         'expiresAt': expires_at,
+                        'renewsAt': expires_at,
+                        'cancelAtPeriodEnd': False,
                         'updatedAt': firestore.SERVER_TIMESTAMP
                     }, merge=True)
-                self.send_json({'ok': True, 'plan': 'monthly', 'expiresAt': expires_at.isoformat() + 'Z'})
+                self.send_json({'ok': True, 'plan': 'monthly', 'purchasedAt': _iso_datetime(purchased_at), 'expiresAt': _iso_datetime(expires_at), 'renewsAt': _iso_datetime(expires_at)})
                 return
 
             self.send_error_json(400, 'Invalid type')
@@ -1450,11 +1638,16 @@ class handler(BaseHTTPRequestHandler):
                 notes = entity.get('notes') or {}
                 uid = notes.get('uid') or ''
                 if uid and sub_id:
-                    expires_at = _utc_now() + datetime.timedelta(days=31)
+                    period_start, expires_at = _subscription_period_from_entity(entity)
                     fs.collection('entitlements').document(uid).set({
                         'plan': 'monthly',
+                        'premiumStatus': 'active',
                         'subscriptionId': sub_id,
+                        'activatedAt': period_start,
+                        'renewedAt': _utc_now(),
                         'expiresAt': expires_at,
+                        'renewsAt': expires_at,
+                        'cancelAtPeriodEnd': False,
                         'updatedAt': firestore.SERVER_TIMESTAMP
                     }, merge=True)
                     logger.info(f"Webhook: renewed monthly for uid={uid} sub={sub_id}")
@@ -1467,8 +1660,16 @@ class handler(BaseHTTPRequestHandler):
                 notes = entity.get('notes') or {}
                 uid = notes.get('uid') or ''
                 if uid:
+                    period_start, expires_at = _subscription_period_from_entity(entity)
                     fs.collection('entitlements').document(uid).set({
-                        'plan': 'user',
+                        'plan': 'monthly',
+                        'premiumStatus': 'cancelled',
+                        'premiumPlan': 'monthly',
+                        'subscriptionId': entity.get('id') or '',
+                        'activatedAt': period_start,
+                        'expiresAt': expires_at,
+                        'renewsAt': None,
+                        'cancelAtPeriodEnd': True,
                         'updatedAt': firestore.SERVER_TIMESTAMP
                     }, merge=True)
                     logger.info(f"Webhook: cancelled/completed for uid={uid}")

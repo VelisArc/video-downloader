@@ -12,11 +12,11 @@ import { API_BASE } from '../lib/api';
 
 const blank: DownloadHistoryItem = { id: '', thumbnail: '', title: '', downloadUrl: '', ext: 'mp4', date: '', type: 'video', platform: '' };
 
-const platformRail = ['YouTube', 'Instagram', 'Facebook', 'TikTok', 'X', 'Vimeo', 'SoundCloud', 'Reddit'];
+const platformRail = ['Instagram', 'Facebook', 'TikTok', 'X', 'Vimeo', 'SoundCloud', 'Reddit', 'Dailymotion'];
 
 const capabilityCards = [
   { title: 'Format control', desc: 'Switch between video and audio before processing the link.', icon: Music4 },
-  { title: 'Fast checks', desc: 'The API validates and prepares public links with a tight feedback loop.', icon: Gauge },
+  { title: 'Fast checks', desc: 'The API validates public links first, and failed checks do not consume your daily limit.', icon: Gauge },
   { title: 'Local history', desc: 'Recent downloads stay on this browser for quick repeat saves.', icon: History },
   { title: 'Responsible access', desc: 'Built around public content and transparent platform limits.', icon: ShieldCheck },
 ];
@@ -109,13 +109,13 @@ export default function Home() {
     <>
       <Helmet>
         <title>SwiftDL | Multi-Platform Video & Audio Downloader</title>
-        <meta name="description" content="Download videos and audio from YouTube, Instagram, Facebook, TikTok and more. Fast, free, browser-based downloader." />
+        <meta name="description" content="Download public videos and audio from supported platforms including Instagram, Facebook, TikTok, X, Vimeo, Reddit and more. Fast browser-based downloader." />
         <link rel="canonical" href={siteUrl('/')} />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={siteConfig.name} />
         <meta property="og:url" content={siteUrl('/')} />
         <meta property="og:title" content="SwiftDL | Multi-Platform Video Downloader" />
-        <meta property="og:description" content="Download videos and audio from many major platforms. Fast, free, no sign-up required." />
+        <meta property="og:description" content="Download public videos and audio from supported platforms. Fast browser workflow, no install required." />
         <meta property="og:image" content={siteUrl('/logo.png')} />
       </Helmet>
 
@@ -127,10 +127,10 @@ export default function Home() {
                 <Sparkles className="h-4 w-4" /> Browser media workspace
               </span>
               <h1 className="mt-5 max-w-xl text-3xl font-extrabold leading-tight text-white sm:text-5xl">
-                Download public videos and audio with a calmer workflow.
+                Download public media with a cleaner, success-counted workflow.
               </h1>
               <p className="mt-5 max-w-lg text-base leading-7" style={{ color: 'rgba(255,255,255,0.72)' }}>
-                Paste a supported link, choose the format, and keep the result ready for your device without jumping between messy tools.
+                Paste a supported public link, choose the format, and keep successful results ready for your device without failed checks burning daily limits.
               </p>
 
               <div className="mt-7 hidden gap-3 sm:grid sm:grid-cols-3">

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { AlertTriangle, CheckCircle2, ChevronDown, Globe2, Music4, PlayCircle, RefreshCw, ShieldCheck, Smartphone, Sparkles, Video, Zap } from 'lucide-react';
 
 const capabilities = [
-  { title: 'Broad platform coverage', desc: 'SwiftDL accepts many yt-dlp-compatible public links across social, video, and audio sites.', icon: Globe2 },
+  { title: 'Broad platform coverage', desc: 'SwiftDL accepts many yt-dlp-compatible public links across social, video, and audio sites while keeping failures clear.', icon: Globe2 },
   { title: 'Video and audio modes', desc: 'Keep the original media flow simple by choosing a video or audio output before processing.', icon: Video },
   { title: 'Mobile-ready saves', desc: 'The responsive interface keeps the same controls available on desktop, tablet, and phone.', icon: Smartphone },
   { title: 'Clear result actions', desc: 'Download, copy, or share the prepared file link from one focused result state.', icon: Sparkles },
@@ -18,7 +18,7 @@ const steps = [
 
 const platforms = [
   { name: 'Social', items: ['Instagram Reels and posts', 'Facebook Watch and reels', 'TikTok public videos', 'X public video posts'] },
-  { name: 'Video', items: ['YouTube public links', 'Vimeo videos', 'Dailymotion links', 'Reddit hosted media'] },
+  { name: 'Video', items: ['Vimeo public videos', 'Dailymotion links', 'Reddit hosted media', 'Twitch clips where available'] },
   { name: 'Audio', items: ['SoundCloud tracks', 'Podcast-compatible pages', 'Music clips where streams are exposed', 'Audio extraction from supported videos'] },
 ];
 
