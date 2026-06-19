@@ -71,32 +71,94 @@ export default function Home() {
 
       <div style={{ paddingBottom: '4rem', paddingTop: '2rem' }}>
         <div className="shell">
-          {/* Hero */}
-          <section className="relative rounded-xl p-8 md:p-12 text-center" style={{ background: 'var(--ink-heavy)', overflow: 'hidden' }}>
-            <div className="absolute inset-0 opacity-[0.04]" style={{ background: 'radial-gradient(ellipse at 50% 40%, var(--brand-400), transparent 70%)' }} />
-            <div className="relative z-10 max-w-2xl mx-auto">
-              <span className="inline-block rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-wider" style={{ borderColor: 'rgba(255,255,255,0.12)', color: 'var(--brand-400)' }}>
-                Browser-first downloader
-              </span>
-              <h1 className="mt-5 text-[clamp(1.6rem,4vw,2.8rem)] font-bold leading-tight text-white">
-                Download from <span style={{ color: 'var(--brand-400)' }}>any major platform</span>
-              </h1>
-              <p className="mt-3 text-sm leading-relaxed max-w-xl mx-auto" style={{ color: 'var(--ink-500)' }}>
-                YouTube, Instagram, Facebook, TikTok, and many more. Paste a link, choose format, download.
-              </p>
+          {/* Hero - Split Layout */}
+          <section className="relative overflow-hidden rounded-2xl" style={{ background: 'var(--ink-heavy)', minHeight: '480px' }}>
+            {/* Background gradient */}
+            <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 70% 50%, rgba(59,130,246,0.12) 0%, transparent 60%)' }} />
+            {/* Subtle dot pattern */}
+            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+
+            <div className="relative z-10 flex items-center min-h-[480px]">
+              {/* Left: Content */}
+              <div className="w-full lg:w-1/2 px-8 py-10 lg:px-14 lg:py-12">
+                <span className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-wider" style={{ borderColor: 'rgba(255,255,255,0.15)', color: 'var(--brand-400)' }}>
+                  <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: 'var(--brand-400)' }} />
+                  Browser-first downloader
+                </span>
+                <h1 className="mt-5 text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight text-white">
+                  Download from<br /><span style={{ color: 'var(--brand-400)' }}>any major platform</span>
+                </h1>
+                <p className="mt-4 text-sm leading-relaxed max-w-md" style={{ color: 'var(--ink-500)' }}>
+                  YouTube, Instagram, Facebook, TikTok, and 1000+ other sites. Paste a link, pick your format, download instantly.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  {['No signup required', 'Free to use', 'HD downloads'].map(t => (
+                    <span key={t} className="inline-flex items-center gap-1.5 text-xs" style={{ color: 'var(--ink-400)' }}>
+                      <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--accent-500)' }} />{t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right: Device Mockup */}
+              <div className="hidden lg:flex w-1/2 items-center justify-center pr-12" style={{ perspective: '1200px' }}>
+                <div className="relative" style={{ transform: 'rotateY(-12deg) rotateX(5deg)', transformStyle: 'preserve-3d' }}>
+                  {/* Main browser window */}
+                  <div className="rounded-xl overflow-hidden border" style={{ background: 'var(--surface)', borderColor: 'rgba(255,255,255,0.1)', boxShadow: 'var(--shadow-2xl)', width: '380px' }}>
+                    {/* Browser chrome */}
+                    <div className="flex items-center gap-1.5 px-3 py-2 border-b" style={{ background: 'var(--surface-soft)', borderColor: 'rgba(255,255,255,0.06)' }}>
+                      <span className="h-2.5 w-2.5 rounded-full" style={{ background: '#ff5f57' }} />
+                      <span className="h-2.5 w-2.5 rounded-full" style={{ background: '#febc2e' }} />
+                      <span className="h-2.5 w-2.5 rounded-full" style={{ background: '#28c840' }} />
+                      <div className="flex-1 mx-3 h-5 rounded-md" style={{ background: 'rgba(255,255,255,0.06)' }} />
+                    </div>
+                    {/* Content */}
+                    <div className="p-4 space-y-3">
+                      <div className="rounded-lg h-24 flex items-center justify-center" style={{ background: 'var(--brand-700)' }}>
+                        <span className="text-white/60 text-xs">Video Preview</span>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="h-2.5 rounded-full w-full" style={{ background: 'var(--brand-600)', opacity: 0.3 }} />
+                        <div className="h-2 rounded-full w-4/5" style={{ background: 'var(--ink-300)' }} />
+                        <div className="h-2 rounded-full w-3/5" style={{ background: 'var(--ink-300)' }} />
+                      </div>
+                      <div className="flex gap-2 pt-1">
+                        <div className="h-7 flex-1 rounded-md" style={{ background: 'var(--brand-600)' }} />
+                        <div className="h-7 w-16 rounded-md" style={{ background: 'var(--surface-soft)' }} />
+                      </div>
+                    </div>
+                  </div>
+                  {/* Floating mini card */}
+                  <div className="absolute -bottom-4 -right-8 rounded-lg border p-2.5" style={{ background: 'var(--surface)', borderColor: 'rgba(255,255,255,0.08)', boxShadow: 'var(--shadow-xl)', transform: 'translateZ(40px) rotateY(8deg) rotateX(-4deg)' }}>
+                    <div className="flex items-center gap-2">
+                      <div className="h-8 w-8 rounded-md flex items-center justify-center" style={{ background: 'var(--accent-500)' }}>
+                        <span className="text-white text-[10px] font-bold">MP4</span>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-semibold text-white">Ready to download</p>
+                        <p className="text-[9px]" style={{ color: 'var(--ink-500)' }}>1080p • 42.3 MB</p>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Floating platform pills */}
+                  <div className="absolute -top-3 -left-6 rounded-full px-2.5 py-1 border text-[9px] font-medium" style={{ background: 'var(--surface)', borderColor: 'rgba(255,255,255,0.08)', color: 'var(--ink-400)', transform: 'translateZ(30px) rotateY(-6deg)' }}>
+                    YouTube • Instagram • TikTok
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
           {/* Downloader */}
-          <section className="relative z-20" style={{ margin: '-1.25rem auto 0', maxWidth: '40rem' }}>
-            <div className="rounded-xl border p-5" style={{ borderColor: 'var(--border)', background: 'var(--surface)', boxShadow: 'var(--shadow-lg)' }}>
+          <section className="relative z-20" style={{ margin: '-1.5rem auto 0', maxWidth: '42rem' }}>
+            <div className="rounded-2xl border p-5" style={{ borderColor: 'var(--border)', background: 'var(--surface)', boxShadow: 'var(--shadow-xl)' }}>
               <DownloaderPanel url={url} setUrl={setUrl} downloadType={type} setDownloadType={setType} isLoading={loading} onDownload={handleDownload} />
               {showResults && <ResultCard videoData={data} />}
             </div>
           </section>
 
           {/* Features */}
-          <section className="mt-10">
+          <section className="mt-12">
             <div className="grid-features">
               {[
                 { title: 'Wide platform coverage', desc: 'Works with many major yt-dlp-compatible platforms.', icon: Download },
