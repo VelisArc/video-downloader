@@ -1,319 +1,100 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import {
-  AlertCircle,
-  CheckCircle2,
-  ChevronDown,
-  Download,
-  Instagram,
-  Music4,
-  Smartphone,
-  Shield,
-} from 'lucide-react';
+import { ChevronDown, Instagram, Link as LinkIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { siteConfig, siteUrl } from '../lib/site';
 
 const steps = [
-  'Locate the reel, post, or IGTV video on Instagram.',
-  'Tap the Share icon (paper airplane) and select "Copy Link".',
-  'Open SwiftDL in your web browser.',
-  'Paste the copied link into the main input field.',
-  'Select "Video" or "Audio" depending on what you want to extract.',
-  'Click the primary download button to start extraction.',
-  'Wait a few seconds for our servers to process the Instagram URL.',
-  'Check the preview card to ensure the title and thumbnail match what you expect.',
-  'Click the final save button presented in the result card.',
-  "If the browser opens the video instead of saving it, use the browser's \"Save Page As\" or long-press context menu.",
+  'Open Instagram and find the Reel or post video you want to download.',
+  'Tap the Share icon (paper airplane) below the post.',
+  'Select "Copy Link" from the share menu.',
+  'Come back to SwiftDL and paste the link into the input field above.',
+  'Choose "Video" as your format, then click Download.',
+  'Wait for processing, then save the file to your device.',
+];
+
+const features = [
+  'Audio extraction when the source stream includes a compatible audio track',
+  'Public links only — private or friends-only posts are not accessible',
+  'Works on both mobile and desktop browsers without any app',
+  'Watermark-free downloads when extracting the raw video file',
+  'Carousel posts: SwiftDL handles the first video or image in the carousel',
+  'Stories: may work if the link is copied while the story is still active (24 hr window)',
+];
+
+const troubleshooting = [
+  'Make sure the link starts with https://www.instagram.com/reel/ or /p/',
+  'If the download fails, the post may be private or the link may be expired',
+  'Instagram may occasionally change their API, causing temporary issues',
+  'Very old posts may not have accessible media streams anymore',
+  'Rate limiting: if you download too many videos quickly, Instagram may block requests temporarily',
 ];
 
 const faqs = [
-  {
-    question: 'Can I use this for private accounts?',
-    answer:
-      'Public links are the main path. For login-required links, you would need to be already authorized to view the media.',
-  },
-  {
-    question: 'Can I download audio only?',
-    answer:
-      'Yes. Switch to the audio option before submitting the link and SwiftDL will request the best available audio stream.',
-  },
-  {
-    question: 'Does Instagram know that I downloaded the reel?',
-    answer:
-      'The downloader workflow does not notify the creator by itself, but you should still respect creator rights and platform rules.',
-  },
-  {
-    question: 'Why did the link stop working later?',
-    answer:
-      'Instagram media URLs are often temporary. Save the file locally instead of relying on the temporary direct media URL.',
-  },
-  {
-    question: 'Can I download Instagram Stories?',
-    answer:
-      'Downloading stories is highly unreliable because they expire quickly and often require authentication. If you try, you must use the exact story URL.',
-  },
-  {
-    question: 'Are there limits on how many reels I can download?',
-    answer:
-      'Yes, we enforce daily quotas to prevent abuse. If you are a free user, you can upgrade to a premium plan for higher limits.',
-  },
-  {
-    question: 'Why is the video quality lower than on the app?',
-    answer:
-      'Instagram heavily compresses videos. We extract the highest quality stream the platform exposes to external applications, which may sometimes differ from the app playback.',
-  },
-  {
-    question: 'Can I download carousel posts?',
-    answer:
-      'If a carousel post contains multiple videos, our current system usually extracts the first video in the gallery.',
-  },
-  {
-    question: 'Why do I get a "Video not found" error?',
-    answer:
-      'This happens if the video was deleted, if the account went private, or if the URL was copied incorrectly.',
-  },
-  {
-    question: 'Can I download IGTV videos?',
-    answer:
-      'Yes, IGTV links are supported using the exact same workflow as standard reels and posts.',
-  },
-  {
-    question: 'Do I need to install a mobile app?',
-    answer:
-      'No. SwiftDL works entirely within your browser (Chrome, Safari, Firefox, etc.) without needing a dedicated mobile app.',
-  },
+  { q: 'Does it work with private Instagram accounts?', a: 'No. We can only process public posts. Private account content is not accessible through our tool.' },
+  { q: 'Can I download Instagram Stories?', a: 'Stories may work if you copy the link while the story is still live (within 24 hours). However, stories are less reliable than Reels or posts.' },
+  { q: 'Does it download Instagram profile pictures?', a: 'No. Profile pictures and other non-video/non-audio content are not supported.' },
+  { q: 'Why does my download fail?', a: 'The post may be private, the link may be expired, or Instagram may have changed their platform structure.' },
+  { q: 'Can I download audio only from Instagram?', a: 'Yes, if the source post has a compatible audio stream, you can toggle to Audio mode before downloading.' },
 ];
 
 export default function HowToDownloadInstagramReels() {
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <div className="section-shell max-w-5xl py-8">
-      <Helmet>
-        <title>Instagram Download Guide | {siteConfig.name}</title>
-        <meta
-          name="description"
-          content="Learn the safest workflow for supported Instagram reels, post videos, and audio extraction."
-        />
-        <link rel="canonical" href={siteUrl('/how-to-download-instagram-reels')} />
-      </Helmet>
+    <div className="shell" style={{ maxWidth: 720, padding: '2rem 1rem 3rem' }}>
+      <Helmet><title>Instagram Download Guide | {siteConfig.name}</title><meta name="description" content="Learn how to download Instagram Reels and post videos." /><link rel="canonical" href={siteUrl('/how-to-download-instagram-reels')} /></Helmet>
 
-      <section className="rounded-2xl border border-[var(--border-soft)] bg-[var(--brand-50)] p-5 shadow-sm md:p-6">
-        <div className="mx-auto max-w-3xl text-center">
-          <div className="mx-auto inline-flex rounded-2xl" style={{ background: 'linear-gradient(135deg, #f05f6b, #f49c4d)', color: 'white' }} >
-            <Instagram className="h-8 w-8" />
-          </div>
-          <h1 className="mt-5 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
-            How to download Instagram reels and post media
-          </h1>
-          <p className="mt-4 text-base leading-8 text-[var(--ink-600)]">
-            A clearer workflow for public Instagram links, creator archives, and
-            session-based links you are already allowed to view.
-          </p>
-          <Link to="/" className="mt-4 btn-brand inline-flex">
-            Open downloader
-          </Link>
-        </div>
-      </section>
+      <div className="rounded-xl border p-6 text-center mb-8" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
+        <div className="mx-auto inline-flex rounded-xl p-3 text-white mb-4" style={{ background: 'linear-gradient(135deg, #e1306c, #f77737)' }}><Instagram className="h-8 w-8" /></div>
+        <h1 className="text-2xl font-bold" style={{ color: 'var(--ink-900)' }}>How to download Instagram Reels</h1>
+        <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--ink-600)' }}>A simple guide for downloading public Instagram Reels and post videos.</p>
+        <Link to="/" className="btn-primary inline-flex mt-4 text-xs">Open downloader</Link>
+      </div>
 
-      <section className="mt-8 grid gap-5 lg:grid-cols-[1fr_0.92fr]">
-        <article className="feature-card p-5">
-          <span className="section-eyebrow">Step by step</span>
-          <h2 className="mt-4 text-2xl font-black text-[var(--ink-900)]">
-            The simple workflow
-          </h2>
-          <div className="mt-4 space-y-3">
-            {steps.map((step, index) => (
-              <div
-                key={step}
-                className="flex gap-3 rounded-[24px] bg-[var(--surface-soft)] p-3"
-              >
-                <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-white text-sm font-bold text-[var(--brand-700)] shadow-sm">
-                  {index + 1}
-                </div>
-                <p className="text-sm leading-7 text-[var(--ink-600)]">
-                  {step}
-                </p>
-              </div>
-            ))}
-          </div>
-        </article>
+      <div className="card mb-8">
+        <h2 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>Step-by-step workflow</h2>
+        <ol className="mt-3 space-y-3">
+          {steps.map((s, i) => (
+            <li key={i} className="flex gap-3 text-xs leading-relaxed" style={{ color: 'var(--ink-600)' }}>
+              <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0 mt-0.5" style={{ background: 'var(--brand-600)' }}>{i + 1}</span>
+              {s}
+            </li>
+          ))}
+        </ol>
+      </div>
 
-        <div className="space-y-6">
-          <article className="feature-card">
-            <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
-              <Music4 className="h-5 w-5" />
-            </div>
-            <h2 className="text-xl font-black text-[var(--ink-900)]">
-              Audio extraction
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-              If the source exposes an audio stream, SwiftDL can request it
-              directly. This is useful for reference tracks, edits, or offline
-              listening.
-            </p>
-          </article>
+      <div className="card mb-8">
+        <h2 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>What to expect</h2>
+        <ul className="mt-3 space-y-2">
+          {features.map(f => <li key={f} className="flex items-start gap-2 text-xs leading-relaxed" style={{ color: 'var(--ink-600)' }}><span className="w-1.5 h-1.5 rounded-full mt-1 shrink-0" style={{ background: 'var(--brand-500)' }} />{f}</li>)}
+        </ul>
+      </div>
 
-          <article className="feature-card">
-            <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
-              <Shield className="h-5 w-5" />
-            </div>
-            <h2 className="text-xl font-black text-[var(--ink-900)]">
-              Public links only
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-              SwiftDL works best with public links. Content you are already
-              authorized to view may have additional options.
-            </p>
-          </article>
+      <div className="card mb-8">
+        <h2 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>Troubleshooting tips</h2>
+        <ul className="mt-3 space-y-2">
+          {troubleshooting.map(t => <li key={t} className="flex items-start gap-2 text-xs leading-relaxed" style={{ color: 'var(--ink-600)' }}><LinkIcon className="h-3 w-3 mt-0.5 shrink-0" style={{ color: 'var(--brand-500)' }} />{t}</li>)}
+        </ul>
+      </div>
 
-          <article className="feature-card">
-            <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
-              <Smartphone className="h-5 w-5" />
-            </div>
-            <h2 className="text-xl font-black text-[var(--ink-900)]">
-              Mobile behavior
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-              On iPhone or Android, the browser may preview the media first. Use
-              the platform save action or long-press menu to store the file on
-              your device.
-            </p>
-          </article>
-
-          <article className="feature-card">
-            <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
-              <Download className="h-5 w-5" />
-            </div>
-            <h2 className="text-xl font-black text-[var(--ink-900)]">
-              Watermark free
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-              Unlike the in-app download feature, extracting reels via the
-              direct link usually provides the original video without an added
-              Instagram watermark.
-            </p>
-          </article>
-
-          <article className="feature-card">
-            <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
-              <Music4 className="h-5 w-5" />
-            </div>
-            <h2 className="text-xl font-black text-[var(--ink-900)]">
-              Carousel Posts
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-              For posts containing multiple images or videos, only the first
-              valid media element in the gallery is typically extracted.
-            </p>
-          </article>
-
-          <article className="feature-card">
-            <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
-              <Smartphone className="h-5 w-5" />
-            </div>
-            <h2 className="text-xl font-black text-[var(--ink-900)]">
-              Story Expiration
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-              Stories disappear after 24 hours. Attempting to download a story
-              link after it has expired will always result in an error.
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <section className="mt-8 feature-card bg-[var(--surface-soft)] p-5">
-        <div className="flex items-start gap-3">
-          <AlertCircle className="mt-1 h-6 w-6 flex-none text-[var(--brand-700)]" />
-          <div>
-            <h2 className="text-xl font-black text-[var(--ink-900)]">
-              Troubleshooting tips
-            </h2>
-            <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
-              <li className="flex gap-3">
-                <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                Make sure you copied the direct reel or post link, not a partial
-                share string.
-              </li>
-              <li className="flex gap-3">
-                <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                If the post is login-required, you may need to be already
-                authorized to view the content.
-              </li>
-              <li className="flex gap-3">
-                <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                If the platform rate-limits requests, wait a little and retry
-                with fewer repeated submissions.
-              </li>
-              <li className="flex gap-3">
-                <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                Verify the video has not been deleted or taken down for copyright
-                reasons.
-              </li>
-              <li className="flex gap-3">
-                <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                Ensure you are not copying a profile link instead of a specific
-                video link.
-              </li>
-              <li className="flex gap-3">
-                <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                Check if your premium plan daily limit has been reached in the
-                Dashboard.
-              </li>
-              <li className="flex gap-3">
-                <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                Try opening the link in a private/incognito window to verify it
-                is actually public.
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section className="mt-8">
-        <h2 className="text-2xl font-black text-[var(--ink-900)]">
-          Common questions
-        </h2>
-        <div className="mt-4 space-y-3">
-          {faqs.map((faq, index) => (
-            <article
-              key={faq.question}
-              className="feature-card overflow-hidden"
-            >
-              <button
-                type="button"
-                onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                className="flex w-full items-start justify-between gap-3 px-5 py-4 text-left"
-              >
-                <span className="text-sm font-semibold leading-6 text-[var(--ink-900)]">
-                  {faq.question}
-                </span>
-                <ChevronDown
-                  className={`mt-1 h-5 w-5 flex-none text-[var(--brand-600)] transition-transform duration-300 ${
-                    openFaq === index ? 'rotate-180' : ''
-                  }`}
-                />
+      <div className="space-y-2">
+        <h2 className="text-sm font-bold mb-3" style={{ color: 'var(--ink-900)' }}>FAQ</h2>
+        {faqs.map((f, i) => {
+          const isOpen = open === i;
+          return (
+            <article key={f.q} className="card" style={{ padding: 0, overflow: 'hidden' }}>
+              <button onClick={() => setOpen(isOpen ? null : i)} className="flex w-full items-center justify-between gap-4 p-3 text-left">
+                <span className="text-xs font-semibold" style={{ color: 'var(--ink-900)' }}>{f.q}</span>
+                <ChevronDown className={`h-3.5 w-3.5 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} style={{ color: 'var(--ink-400)' }} />
               </button>
-              <div
-                className={`grid transition-all duration-300 ease-in-out ${
-                  openFaq === index
-                    ? 'grid-rows-[1fr] opacity-100'
-                    : 'grid-rows-[0fr] opacity-0'
-                }`}
-              >
-                <div className="overflow-hidden">
-                  <div className="border-t border-[var(--border-soft)] px-5 py-4">
-                    <p className="text-sm leading-7 text-[var(--ink-600)]">
-                      {faq.answer}
-                    </p>
-                  </div>
-                </div>
+              <div className={`grid transition-all duration-200 ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                <div className="overflow-hidden px-3 pb-3"><p className="text-xs leading-relaxed" style={{ color: 'var(--ink-600)' }}>{f.a}</p></div>
               </div>
             </article>
-          ))}
-        </div>
-      </section>
+          );
+        })}
+      </div>
     </div>
   );
 }

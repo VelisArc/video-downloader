@@ -1,44 +1,20 @@
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import { ArrowLeft, Home } from 'lucide-react';
-import { siteConfig, siteUrl } from '../lib/site';
 
 export default function NotFound() {
   return (
-    <main className="mx-auto flex min-h-[50vh] max-w-3xl flex-col items-center justify-center px-4 py-10 text-center">
-      <Helmet>
-        <title>Page Not Found | {siteConfig.name}</title>
-        <meta
-          name="description"
-          content="The page you are looking for does not exist or may have moved."
-        />
-        <link rel="canonical" href={siteUrl('/404')} />
-      </Helmet>
-
-      <span className="mb-5 inline-flex rounded-full border border-[var(--border-strong)] bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)] shadow-sm">
-        404
-      </span>
-      <h1 className="max-w-2xl text-3xl font-black tracking-tight text-[var(--ink-900)] md:text-4xl">
-        This page is not available.
-      </h1>
-      <p className="mt-4 max-w-xl text-base leading-7 text-[var(--ink-600)]">
-        The link may be outdated, the route may have changed, or the page may
-        not exist on this deployment.
-      </p>
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <Link to="/" className="btn-brand inline-flex items-center gap-2">
-          <Home className="h-4 w-4" />
-          Go Home
-        </Link>
-        <button
-          type="button"
-          onClick={() => window.history.back()}
-          className="btn-outline inline-flex items-center gap-2"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Go Back
-        </button>
+    <div className="shell" style={{ padding: '5rem 1rem', textAlign: 'center' }}>
+      <Helmet><title>Page Not Found | SwiftDL</title><meta name="robots" content="noindex, nofollow" /></Helmet>
+      <div className="max-w-sm mx-auto">
+        <div className="text-5xl font-bold mb-2" style={{ color: 'var(--brand-600)' }}>404</div>
+        <h1 className="text-xl font-bold" style={{ color: 'var(--ink-900)' }}>This page is not available</h1>
+        <p className="text-sm mt-2 leading-relaxed" style={{ color: 'var(--ink-600)' }}>The page you are looking for does not exist or has been moved.</p>
+        <div className="mt-6 flex justify-center gap-3">
+          <Link to="/" className="btn-primary text-xs"><Home className="h-3.5 w-3.5" /> Go home</Link>
+          <button onClick={() => window.history.back()} className="btn-outline text-xs"><ArrowLeft className="h-3.5 w-3.5" /> Go back</button>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }

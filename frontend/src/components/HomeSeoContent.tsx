@@ -1,347 +1,182 @@
 import { useState } from 'react';
-import {
-  AlertTriangle,
-  CheckCircle2,
-  ChevronDown,
-  Globe2,
-  MonitorSmartphone,
-  Music4,
-  ShieldCheck,
-  Sparkles,
-  Video,
-  Zap,
-  Smartphone,
-  Wifi,
-  HardDrive,
-  RefreshCw,
-  PlayCircle,
-} from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ChevronDown, Globe2, MonitorSmartphone, Music4, ShieldCheck, Sparkles, Video, Zap, Smartphone, Wifi, HardDrive, RefreshCw, PlayCircle } from 'lucide-react';
 
-const capabilityCards = [
-  { title: 'Universal Video Downloader', description: 'SwiftDL supports thousands of platforms. From mainstream social media giants to niche platforms, our free video downloader handles them all.', icon: Globe2 },
-  { title: 'Lightning Fast Speeds', description: 'Experience ultra-fast download speeds. Our backend infrastructure is optimized to extract and deliver media instantly without waiting.', icon: Zap },
-  { title: 'High Quality 4K & HD', description: 'Never compromise on quality. Download videos in stunning 4K, 1080p, or 720p HD resolution exactly as the creator intended.', icon: Video },
-  { title: 'Crystal Clear MP3 Audio', description: 'Need just the music? Extract high-fidelity 320kbps MP3 or M4A audio streams directly from any video link.', icon: Music4 },
-  { title: 'No App Installation', description: 'A pure browser-based experience. Forget about downloading shady APKs or heavy desktop software. It works instantly on the web.', icon: MonitorSmartphone },
-  { title: 'No Watermarks', description: 'Save content without annoying platform logos or watermarks ruining the visual experience. Clean, pristine downloads every time.', icon: Sparkles },
-  { title: '100% Secure & Private', description: 'We do not log your downloads or store your media. Your privacy is our top priority, backed by industry-standard HTTPS encryption.', icon: ShieldCheck },
-  { title: 'Mobile & Tablet Ready', description: 'Perfectly responsive design means you can save videos directly to your iPhone, iPad, or Android camera roll with zero friction.', icon: Smartphone },
-  { title: 'Offline Viewing', description: 'Save data by downloading videos while on Wi-Fi, then watch them anywhere without buffering or eating up your mobile data plan.', icon: Wifi },
-  { title: 'Batch Ready', description: 'Our system processes links rapidly, making it easy to download multiple videos one after another without breaking a sweat.', icon: RefreshCw },
-  { title: 'Save Directly to Storage', description: 'Choose your destination folder and save mp4 or mp3 files directly to your internal storage, SD card, or external hard drive.', icon: HardDrive },
+const capabilities = [
+  { title: 'Universal Video Downloader', desc: 'SwiftDL supports thousands of platforms. From mainstream social media giants to niche platforms, our free video downloader handles them all.', icon: Globe2 },
+  { title: 'Lightning Fast Speeds', desc: 'Experience ultra-fast download speeds. Our backend infrastructure is optimized to extract and deliver media instantly without waiting.', icon: Zap },
+  { title: 'High Quality 4K & HD', desc: 'Never compromise on quality. Download videos in stunning 4K, 1080p, or 720p HD resolution exactly as the creator intended.', icon: Video },
+  { title: 'Crystal Clear MP3 Audio', desc: 'Need just the music? Extract high-fidelity 320kbps MP3 or M4A audio streams directly from any video link.', icon: Music4 },
+  { title: 'No App Installation', desc: 'A pure browser-based experience. Forget about downloading shady APKs or heavy desktop software. It works instantly on the web.', icon: MonitorSmartphone },
+  { title: 'No Watermarks', desc: 'Save content without annoying platform logos or watermarks ruining the visual experience.', icon: Sparkles },
+  { title: '100% Secure & Private', desc: 'We do not log your downloads or store your media. Your privacy is our top priority.', icon: ShieldCheck },
+  { title: 'Mobile & Tablet Ready', desc: 'Perfectly responsive design means you can save videos directly to your iPhone, iPad, or Android device.', icon: Smartphone },
+  { title: 'Offline Viewing', desc: 'Save data by downloading videos while on Wi-Fi, then watch them anywhere without buffering.', icon: Wifi },
+  { title: 'Batch Ready', desc: 'Our system processes links rapidly, making it easy to download multiple videos one after another.', icon: RefreshCw },
+  { title: 'Save Directly to Storage', desc: 'Choose your destination folder and save mp4 or mp3 files directly to your device.', icon: HardDrive },
 ];
 
-const workflowSteps = [
-  { title: '1. Find Your Video', description: 'Open your favorite social media app or website. Find the video, reel, short, or song you want to save offline.' },
-  { title: '2. Copy the Share Link', description: 'Tap the "Share" icon on the post and select "Copy Link". Make sure you have the direct URL to the specific post.' },
-  { title: '3. Paste into SwiftDL', description: 'Come back to our website and paste the copied URL into the central search box. Our system instantly recognizes the link.' },
-  { title: '4. Choose Format', description: 'Decide if you want the full MP4 video or just the MP3 audio track. We provide options based on what the source supports.' },
-  { title: '5. Click Download', description: 'Hit the big download button. Our backend engines will begin extracting the highest quality media streams available.' },
-  { title: '6. Save to Gallery', description: 'Once processed, click "Save File" to download it directly to your device storage, camera roll, or downloads folder.' },
+const steps = [
+  { title: 'Find Your Video', desc: 'Open your favorite social media app or website. Find the video, reel, or song you want to save.' },
+  { title: 'Copy the Share Link', desc: 'Tap the "Share" icon on the post and select "Copy Link".' },
+  { title: 'Paste into SwiftDL', desc: 'Come back to our website and paste the copied URL into the search box.' },
+  { title: 'Choose Format', desc: 'Decide if you want the full MP4 video or just the MP3 audio track.' },
+  { title: 'Click Download', desc: 'Hit the download button. Our backend extracts the highest quality media streams.' },
+  { title: 'Save to Gallery', desc: 'Click "Save File" to download it directly to your device storage.' },
 ];
 
-const supportedContent = [
-  {
-    platform: 'Social Media Giants',
-    items: [
-      'Instagram Reels, Stories, IGTV, and Posts',
-      'Facebook Watch, Groups, Pages, and Live Streams',
-      'X (Twitter) Videos and Voice Tweets',
-      'TikTok Videos (No Watermark extraction when possible)',
-      'Snapchat Spotlight and Stories',
-      'Pinterest Videos and Idea Pins',
-      'LinkedIn Professional Videos',
-    ],
-  },
-  {
-    platform: 'Video Streaming & Entertainment',
-    items: [
-      'YouTube Shorts, Vlogs, and 4K Videos',
-      'Vimeo High-Quality Showcases',
-      'Dailymotion Clips and Episodes',
-      'Twitch VODs and Clips',
-      'Rumble Independent Videos',
-      'Bilibili Animations and Vlogs',
-      'Reddit Hosted Videos with Audio',
-    ],
-  },
-  {
-    platform: 'Audio & Music Platforms',
-    items: [
-      'SoundCloud Tracks and Playlists',
-      'Mixcloud DJ Sets',
-      'Bandcamp Indie Releases',
-      'Audiomack Trending Songs',
-      'Podcast direct MP3 extraction',
-    ],
-  },
-  {
-    platform: 'News & Educational',
-    items: [
-      'TED Talks and Presentations',
-      'Coursera & Udemy (Public previews)',
-      'BBC News, CNN, and Reuters video clips',
-      'Bloomberg Market Updates',
-      'Khan Academy Educational Clips',
-    ],
-  },
+const platforms = [
+  { name: 'Social Media Giants', items: ['Instagram Reels, Stories, IGTV', 'Facebook Watch, Groups, Pages', 'X (Twitter) Videos', 'TikTok Videos', 'Snapchat Spotlight', 'Pinterest Videos', 'LinkedIn Videos'] },
+  { name: 'Video Streaming', items: ['YouTube Shorts & 4K', 'Vimeo Showcases', 'Dailymotion Episodes', 'Twitch VODs & Clips', 'Rumble Videos', 'Bilibili Vlogs', 'Reddit Videos'] },
+  { name: 'Audio & Music', items: ['SoundCloud Tracks', 'Mixcloud DJ Sets', 'Bandcamp Releases', 'Audiomack Songs', 'Podcast MP3 extraction'] },
+  { name: 'News & Educational', items: ['TED Talks', 'BBC, CNN clips', 'Bloomberg Updates', 'Khan Academy'] },
 ];
 
-const trustNotes = [
-  { title: 'Strictly No Logging', copy: 'We do not track which videos you download. Your session history is stored locally on your device, ensuring maximum privacy.', icon: ShieldCheck },
-  { title: 'Transparent Limitations', copy: 'We do not claim to bypass paywalls or DRM. SwiftDL relies on standard yt-dlp extraction for publicly accessible content.', icon: AlertTriangle },
-  { title: 'Fair Usage Quotas', copy: 'To keep the service fast for everyone, we use a transparent daily quota system. Heavy users can upgrade for unlimited capacity.', icon: Zap },
+const trust = [
+  { title: 'Strictly No Logging', desc: 'We do not track which videos you download. Your session history is stored locally on your device.', icon: ShieldCheck },
+  { title: 'Transparent Limitations', desc: 'We do not claim to bypass paywalls or DRM. SwiftDL relies on standard yt-dlp extraction for public content.', icon: AlertTriangle },
+  { title: 'Fair Usage Quotas', desc: 'To keep the service fast for everyone, we use a transparent daily quota system.', icon: Zap },
 ];
 
-const faqs = [
-  { question: 'Is SwiftDL a free video downloader?', answer: 'Yes! SwiftDL offers a generous free tier that allows anyone to download videos and audio from hundreds of supported platforms without paying. Premium tiers are available for heavy users who need higher daily limits.' },
-  { question: 'How do I download Instagram Reels?', answer: 'Open Instagram, tap the "Share" icon on the Reel, and copy the link. Paste it into SwiftDL, select "Video", and hit download. It will save directly to your device.' },
-  { question: 'Can I download videos without a watermark?', answer: 'Yes, for many platforms like TikTok and Instagram, our backend extracts the raw video file directly from the content delivery network, meaning you get a clean, watermark-free video.' },
-  { question: 'What video quality can I download?', answer: 'We support up to 4K resolution! The available quality depends on the original source video. If a video was uploaded in 1080p, we provide the 1080p MP4 file.' },
-  { question: 'How can I convert YouTube videos to MP3?', answer: 'Paste your YouTube link and toggle the format switch from "Video" to "Audio". Our system will extract the highest quality audio stream for you to download.' },
-  { question: 'Where do the downloaded videos go on my iPhone?', answer: 'On iOS, downloaded files go to the "Files" app inside the "Downloads" folder. Open Files, tap the video, click share, and select "Save Video" to move it to your Camera Roll.' },
-  { question: 'Does this work on Android devices?', answer: 'Absolutely. SwiftDL is fully optimized for Android. Videos typically save directly to your "Downloads" folder, accessible via your Gallery or any File Manager.' },
-  { question: 'Why did my download fail?', answer: 'Downloads can fail if the video is private, the link is broken, or the platform changed their code. SwiftDL works best with public, unrestricted links.' },
-  { question: 'Are there any ads or popups?', answer: 'Our free tier may display unobtrusive banner ads to cover server costs. We prohibit malicious popups or redirects. Premium users enjoy a 100% ad-free experience.' },
-  { question: 'How fast are the downloads?', answer: 'Incredibly fast. We rely on top-tier server infrastructure. The time depends on your internet connection and the file size.' },
+const faqData = [
+  { q: 'Is SwiftDL a free video downloader?', a: 'Yes! SwiftDL offers a generous free tier for downloading from hundreds of platforms. Premium tiers are available for higher daily limits.' },
+  { q: 'How do I download Instagram Reels?', a: 'Open Instagram, tap Share on the Reel, copy the link. Paste into SwiftDL, select Video, and hit download.' },
+  { q: 'Can I download videos without a watermark?', a: 'Yes - for many platforms, our backend extracts the raw video file directly from the CDN without watermarks.' },
+  { q: 'What video quality can I download?', a: 'We support up to 4K resolution depending on the original source video.' },
+  { q: 'How can I convert YouTube videos to MP3?', a: 'Paste your YouTube link and toggle from Video to Audio. Our system extracts the highest quality audio stream.' },
+  { q: 'Does this work on mobile?', a: 'Absolutely. SwiftDL is fully optimized for iPhone, iPad, and Android.' },
+  { q: 'Why did my download fail?', a: 'Downloads can fail if the video is private, the link is broken, or the platform changed their code. Public links work best.' },
+  { q: 'Are there any ads?', a: 'Our free tier may display unobtrusive banner ads. Premium users enjoy a 100% ad-free experience.' },
 ];
 
 export default function HomeSeoContent() {
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <div className="section-shell py-10 md:py-14">
-      {/* Hero SEO Intro */}
-      <section className="grid gap-8 lg:grid-cols-2 lg:items-center">
-        <div className="space-y-4">
-          <span className="section-eyebrow">
-            <Sparkles className="h-3 w-3" />
-            The Ultimate Downloader Toolkit
-          </span>
-          <h2 className="text-balance text-3xl font-extrabold tracking-tight text-[var(--ink-900)] md:text-4xl leading-tight">
-            Download Any Video.{' '}
-            <br className="hidden md:block" />
-            <span style={{ color: 'var(--brand-600)' }}>Anywhere, Anytime.</span>
+    <div className="shell py-10 md:py-14">
+      {/* SEO Intro */}
+      <section className="grid gap-8 lg:grid-cols-2 lg:items-center mb-14">
+        <div>
+          <span className="tag"><Sparkles className="h-3 w-3" /> The Ultimate Downloader</span>
+          <h2 className="text-3xl md:text-4xl font-bold mt-4 leading-tight" style={{ color: 'var(--ink-900)' }}>
+            Download Any Video.{' '}<span style={{ color: 'var(--brand-600)' }}>Anywhere, Anytime.</span>
           </h2>
-          <div className="space-y-3 text-sm leading-relaxed text-[var(--ink-600)]">
-            <p>
-              Welcome to the internet's most powerful, free video downloader.
-              SwiftDL supports <strong>thousands of websites</strong>, from
-              mainstream platforms like YouTube, Instagram, and TikTok, to niche
-              video and audio platforms.
-            </p>
-            <p>
-              Forget about sketchy apps, hidden fees, or malware. Our 100%
-              cloud-based infrastructure ensures you get maximum quality - whether
-              you need a 4K MP4 or a crystal-clear 320kbps MP3.
-            </p>
-          </div>
+          <p className="mt-3 text-sm leading-relaxed" style={{ color: 'var(--ink-600)' }}>
+            The internet's most powerful, free video downloader. Supports <strong>thousands of websites</strong> - from YouTube and Instagram to niche platforms. 100% cloud-based, no malware, no hidden fees.
+          </p>
         </div>
-
-        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-          <div style={{ padding: '1.25rem' }}>
-            <div className="flex items-center gap-3 border-b pb-3 mb-3" style={{ borderColor: 'var(--border-soft)' }}>
-              <div style={{ borderRadius: 'var(--radius-md)', padding: '0.5rem', background: 'var(--brand-50)', color: 'var(--brand-600)' }}>
-                <CheckCircle2 className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="font-bold text-sm text-[var(--ink-900)]">Universal Compatibility</h3>
-                <p className="text-[11px] text-[var(--ink-600)]">Powered by advanced yt-dlp engines</p>
-              </div>
+        <div className="card" style={{ padding: 0 }}>
+          <div className="p-5">
+            <div className="flex items-center gap-3 border-b pb-3 mb-3" style={{ borderColor: 'var(--border)' }}>
+              <div className="rounded-lg p-2" style={{ background: 'var(--brand-50)', color: 'var(--brand-600)' }}><CheckCircle2 className="h-5 w-5" /></div>
+              <div><h3 className="font-bold text-sm" style={{ color: 'var(--ink-900)' }}>Universal Compatibility</h3><p className="text-[11px]" style={{ color: 'var(--ink-600)' }}>Powered by advanced yt-dlp engines</p></div>
             </div>
-            <div className="flex gap-3 items-center">
+            <div className="flex items-center gap-3">
               <div className="flex -space-x-2">
-                {[1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: '50%',
-                      background: 'var(--brand-100)',
-                      border: '2px solid var(--surface)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'var(--brand-600)',
-                    }}
-                  >
-                    <User style={{ width: 12, height: 12 }} />
-                  </div>
-                ))}
+                {[1, 2, 3].map(i => <div key={i} className="w-7 h-7 rounded-full flex items-center justify-center border-2" style={{ background: 'var(--brand-100)', borderColor: 'var(--surface)', color: 'var(--brand-600)' }}><Sparkles className="h-3 w-3" /></div>)}
               </div>
-              <p className="text-[11px] font-medium text-[var(--ink-600)]">Trusted by 100k+ users daily.</p>
+              <p className="text-[11px] font-medium" style={{ color: 'var(--ink-600)' }}>Trusted by 100k+ users daily.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Capabilities Grid */}
-      <section className="mt-14">
+      {/* Capabilities */}
+      <section className="mb-14">
         <div className="text-center max-w-2xl mx-auto mb-8">
-          <span className="section-eyebrow">Industry Standard Features</span>
-          <h2 className="mt-3 text-2xl font-extrabold text-[var(--ink-900)] md:text-3xl">
-            Why Choose SwiftDL?
-          </h2>
-          <p className="mt-2 text-sm text-[var(--ink-600)]">
-            Enterprise-grade extraction tools in a simple, clean interface.
-          </p>
+          <span className="tag">Features</span>
+          <h2 className="text-2xl md:text-3xl font-bold mt-3" style={{ color: 'var(--ink-900)' }}>Why Choose SwiftDL?</h2>
+          <p className="mt-2 text-sm" style={{ color: 'var(--ink-600)' }}>Enterprise-grade extraction tools in a clean, simple interface.</p>
         </div>
-
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {capabilityCards.map(({ title, description, icon: Icon }) => (
-            <article key={title} className="feature-card">
-              <div className="flex items-center gap-2.5 mb-2">
-                <div style={{ borderRadius: 'var(--radius-md)', padding: '0.375rem', background: 'var(--brand-50)', color: 'var(--brand-600)' }}>
-                  <Icon className="h-4 w-4" />
-                </div>
-                <h3 className="text-sm font-bold text-[var(--ink-900)]">{title}</h3>
+          {capabilities.map(c => (
+            <article key={c.title} className="card card-hover">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="rounded-md p-1.5" style={{ background: 'var(--brand-50)', color: 'var(--brand-600)' }}><c.icon className="h-4 w-4" /></div>
+                <h3 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>{c.title}</h3>
               </div>
-              <p className="text-[11px] leading-relaxed text-[var(--ink-600)]">{description}</p>
+              <p className="text-[11px] leading-relaxed" style={{ color: 'var(--ink-600)' }}>{c.desc}</p>
             </article>
           ))}
         </div>
       </section>
 
-      {/* Workflow Steps */}
-      <section className="mt-14 rounded-xl border px-5 py-8 md:px-8 md:py-10" style={{ borderColor: 'var(--border-soft)', background: 'var(--surface)' }}>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-          <div className="max-w-2xl">
-            <span className="section-eyebrow">Simple Workflow</span>
-            <h2 className="mt-3 text-2xl font-extrabold text-[var(--ink-900)] md:text-3xl">
-              How to Download Any Video
-            </h2>
-          </div>
-          <p className="max-w-md text-xs leading-relaxed text-[var(--ink-600)]">
-            Our clean, 6-step process is engineered for speed. Whether you are on iPhone, Android, Mac, or PC, the steps remain identically simple.
-          </p>
+      {/* Workflow */}
+      <section className="mb-14 rounded-xl border p-6 md:p-8" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
+        <div className="max-w-2xl mb-6">
+          <span className="tag">Simple Workflow</span>
+          <h2 className="text-2xl font-bold mt-3" style={{ color: 'var(--ink-900)' }}>How to Download Any Video</h2>
         </div>
-
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {workflowSteps.map((step, index) => (
-            <article key={step.title} className="card" style={{ padding: '1rem' }}>
-              <div className="flex items-center gap-2.5 mb-2">
-                <div
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: '50%',
-                    background: 'var(--brand-600)',
-                    color: 'white',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    flexShrink: 0,
-                  }}
-                >
-                  {index + 1}
-                </div>
-                <h3 className="text-sm font-bold text-[var(--ink-900)]">{step.title}</h3>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {steps.map((s, i) => (
+            <article key={s.title} className="card-hover" style={{ padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border)' }}>
+              <div className="flex items-center gap-2.5 mb-1.5">
+                <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white" style={{ background: 'var(--brand-600)' }}>{i + 1}</div>
+                <h3 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>{s.title}</h3>
               </div>
-              <p className="text-xs leading-relaxed text-[var(--ink-600)]">{step.description}</p>
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--ink-600)' }}>{s.desc}</p>
             </article>
           ))}
         </div>
       </section>
 
-      {/* Supported Platforms */}
-      <section className="mt-14">
+      {/* Platforms */}
+      <section className="mb-14">
         <div className="text-center max-w-2xl mx-auto mb-8">
-          <span className="section-eyebrow">Unmatched Compatibility</span>
-          <h2 className="mt-3 text-2xl font-extrabold text-[var(--ink-900)] md:text-3xl">
-            Download from Thousands of Platforms
-          </h2>
+          <span className="tag">Compatibility</span>
+          <h2 className="text-2xl font-bold mt-3" style={{ color: 'var(--ink-900)' }}>Download from Thousands of Platforms</h2>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
-          {supportedContent.map((section) => (
-            <article key={section.platform} className="feature-card">
-              <div className="flex items-center gap-2.5 border-b pb-3 mb-3" style={{ borderColor: 'var(--border-soft)' }}>
-                <div style={{ borderRadius: 'var(--radius-md)', padding: '0.375rem', background: 'var(--brand-50)', color: 'var(--brand-600)' }}>
-                  <PlayCircle className="h-4 w-4" />
-                </div>
-                <h3 className="text-base font-bold text-[var(--ink-900)]">{section.platform}</h3>
+          {platforms.map(g => (
+            <article key={g.name} className="card card-hover">
+              <div className="flex items-center gap-2.5 border-b pb-3 mb-3" style={{ borderColor: 'var(--border)' }}>
+                <div className="rounded-md p-1.5" style={{ background: 'var(--brand-50)', color: 'var(--brand-600)' }}><PlayCircle className="h-4 w-4" /></div>
+                <h3 className="font-bold" style={{ color: 'var(--ink-900)' }}>{g.name}</h3>
               </div>
-              <ul className="space-y-2">
-                {section.items.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-xs leading-relaxed text-[var(--ink-600)]">
-                    <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 flex-none" style={{ color: 'var(--brand-500)' }} />
-                    <span>{item}</span>
-                  </li>
-                ))}
+              <ul className="space-y-1.5">
+                {g.items.map(item => <li key={item} className="flex items-start gap-2 text-xs" style={{ color: 'var(--ink-600)' }}><CheckCircle2 className="h-3 w-3 mt-0.5 shrink-0" style={{ color: 'var(--brand-500)' }} />{item}</li>)}
               </ul>
             </article>
           ))}
         </div>
       </section>
 
-      {/* Trust & Safety */}
-      <section className="mt-14 rounded-xl px-6 py-10 overflow-hidden relative" style={{ background: 'var(--ink-900)' }}>
-        <div className="relative z-10 max-w-4xl mx-auto text-center mb-8">
-          <span style={{ display: 'inline-block', borderRadius: 'var(--radius-full)', border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.08)', padding: '0.25rem 0.75rem', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--brand-400)' }}>
-            Safe & Secure
-          </span>
-          <h2 className="mt-4 text-2xl font-extrabold md:text-3xl" style={{ color: 'white' }}>
-            Enterprise-Grade Security for Everyone.
-          </h2>
-          <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--ink-500)' }}>
-            We believe powerful tools should be inherently safe. SwiftDL processes millions of requests without compromising user privacy.
-          </p>
+      {/* Trust */}
+      <section className="mb-14 rounded-xl p-8" style={{ background: 'var(--ink-heavy)' }}>
+        <div className="text-center max-w-2xl mx-auto mb-8">
+          <span className="inline-block rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-wider" style={{ borderColor: 'rgba(255,255,255,0.12)', color: 'var(--brand-400)' }}>Safe & Secure</span>
+          <h2 className="text-2xl font-bold mt-4 text-white">Enterprise-Grade Security for Everyone.</h2>
+          <p className="mt-2 text-sm" style={{ color: 'var(--ink-500)' }}>SwiftDL processes millions of requests without compromising user privacy.</p>
         </div>
-
-        <div className="relative z-10 grid gap-4 md:grid-cols-3 max-w-4xl mx-auto">
-          {trustNotes.map(({ title, copy, icon: Icon }) => (
-            <article key={title} className="rounded-xl p-5" style={{ border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)' }}>
-              <div className="mb-3 inline-flex rounded-lg p-2" style={{ background: 'var(--brand-600)', color: 'white' }}>
-                <Icon className="h-4 w-4" />
-              </div>
-              <h3 className="text-sm font-bold mb-1.5" style={{ color: 'white' }}>{title}</h3>
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--ink-500)' }}>{copy}</p>
+        <div className="grid gap-4 md:grid-cols-3 max-w-4xl mx-auto">
+          {trust.map(t => (
+            <article key={t.title} className="rounded-xl p-5" style={{ border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)' }}>
+              <div className="inline-flex rounded-lg p-2 mb-3" style={{ background: 'var(--brand-600)', color: 'white' }}><t.icon className="h-4 w-4" /></div>
+              <h3 className="text-sm font-bold text-white mb-1">{t.title}</h3>
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--ink-500)' }}>{t.desc}</p>
             </article>
           ))}
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="mt-14">
-        <div className="mx-auto max-w-3xl text-center mb-8">
-          <span className="section-eyebrow">Knowledge Base</span>
-          <h2 className="mt-3 text-2xl font-extrabold text-[var(--ink-900)]">
-            Frequently Asked Questions
-          </h2>
-          <p className="mt-2 text-sm text-[var(--ink-600)]">
-            Everything you need to know about SwiftDL.
-          </p>
+      <section>
+        <div className="text-center max-w-3xl mx-auto mb-8">
+          <span className="tag">FAQ</span>
+          <h2 className="text-2xl font-bold mt-3" style={{ color: 'var(--ink-900)' }}>Frequently Asked Questions</h2>
         </div>
-
-        <div className="mx-auto max-w-3xl space-y-2">
-          {faqs.map((faq, index) => {
-            const isOpen = openFaq === index;
+        <div className="max-w-3xl mx-auto space-y-2">
+          {faqData.map((f, i) => {
+            const isOpen = open === i;
             return (
-              <article key={faq.question} className="feature-card overflow-hidden">
-                <button
-                  type="button"
-                  onClick={() => setOpenFaq(isOpen ? null : index)}
-                  className="flex w-full items-center justify-between gap-4 p-3 text-left"
-                >
-                  <span className="text-sm font-semibold leading-tight text-[var(--ink-900)]">{faq.question}</span>
-                  <div
-                    className="flex-none rounded-md p-1"
-                    style={{
-                      background: isOpen ? 'var(--brand-50)' : 'transparent',
-                      color: isOpen ? 'var(--brand-600)' : 'var(--ink-400)',
-                    }}
-                  >
-                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+              <article key={f.q} className="card" style={{ padding: 0, overflow: 'hidden' }}>
+                <button onClick={() => setOpen(isOpen ? null : i)} className="flex w-full items-center justify-between gap-4 p-4 text-left">
+                  <span className="text-sm font-semibold leading-snug" style={{ color: 'var(--ink-900)' }}>{f.q}</span>
+                  <div className="shrink-0 rounded-md p-1" style={{ background: isOpen ? 'var(--brand-50)' : 'transparent', color: isOpen ? 'var(--brand-600)' : 'var(--ink-400)' }}>
+                    <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                   </div>
                 </button>
-                <div className={`grid transition-all duration-200 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-                  <div className="overflow-hidden">
-                    <div className="px-3 pb-3 pt-0">
-                      <p className="text-xs leading-relaxed text-[var(--ink-600)]">{faq.answer}</p>
-                    </div>
-                  </div>
+                <div className={`grid transition-all duration-200 ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                  <div className="overflow-hidden px-4 pb-4"><p className="text-xs leading-relaxed" style={{ color: 'var(--ink-600)' }}>{f.a}</p></div>
                 </div>
               </article>
             );

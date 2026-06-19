@@ -1,157 +1,50 @@
 import { Helmet } from 'react-helmet-async';
-import {
-  ArrowRight,
-  CheckCircle2,
-  Facebook,
-  Globe2,
-  Instagram,
-  Music4,
-  Video,
-} from 'lucide-react';
+import { ArrowRight, CheckCircle2, Facebook, Globe2, Instagram, Music4, Video } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { siteConfig, siteUrl } from '../lib/site';
 
-const platformData = [
-  {
-    title: 'Instagram',
-    icon: Instagram,
-    copy:
-      'Strong for reels, post videos, and other supported Instagram media.',
-    points: [
-      'Public reels and post videos',
-      'Many post and carousel links',
-      'Audio extraction when the source exposes it',
-    ],
-    to: '/how-to-download-instagram-reels',
-    cta: 'Read the Instagram guide',
-  },
-  {
-    title: 'Facebook',
-    icon: Facebook,
-    copy:
-      'Strong for feed videos, Watch links, reels, and other supported Facebook URLs.',
-    points: [
-      'Feed videos, reels, and Watch links',
-      'Replay content after live streams end',
-      'Audio extraction when available',
-    ],
-    to: '/how-to-download-facebook-videos',
-    cta: 'Read the Facebook guide',
-  },
-  {
-    title: 'Broader extractor coverage',
-    icon: Globe2,
-    copy:
-      'SwiftDL now accepts many other yt-dlp-compatible links as well, including major short-video, long-form video, and community platforms.',
-    points: [
-      'Common support across YouTube, TikTok, X, Reddit, Vimeo, Twitch, and more',
-      'Exact results depend on the URL format and current platform rules',
-      'Some sites may expose video only, while others also expose audio',
-      'Unsupported or heavily protected URLs can still fail gracefully',
-    ],
-    to: '/faq',
-    cta: 'See compatibility notes',
-  },
+const data = [
+  { title: 'Instagram', icon: Instagram, copy: 'Strong for reels, post videos, and other supported Instagram media.', points: ['Public reels and post videos', 'Many post and carousel links', 'Audio extraction when available'], to: '/how-to-download-instagram-reels', cta: 'Read Instagram guide', color: 'linear-gradient(135deg, #e1306c, #f77737)' },
+  { title: 'Facebook', icon: Facebook, copy: 'Strong for feed videos, Watch links, reels, and other supported Facebook URLs.', points: ['Feed videos, reels, and Watch', 'Replay after live streams', 'Audio extraction when available'], to: '/how-to-download-facebook-videos', cta: 'Read Facebook guide', color: 'var(--brand-600)' },
+  { title: 'Broader coverage', icon: Globe2, copy: 'SwiftDL now accepts many other yt-dlp-compatible links including YouTube, TikTok, X, and more.', points: ['YouTube, TikTok, X, Reddit, Vimeo', 'Results depend on URL format', 'Unsupported URLs fail gracefully'], to: '/faq', cta: 'Compatibility notes', color: 'var(--ink-heavy)' },
 ];
 
 export default function SupportedPlatforms() {
   return (
-    <div className="section-shell max-w-6xl py-8">
-      <Helmet>
-        <title>Supported Platforms | {siteConfig.name}</title>
-        <meta
-          name="description"
-          content="See the major platforms and wider yt-dlp-compatible coverage SwiftDL now supports."
-        />
-        <link rel="canonical" href={siteUrl('/supported-platforms')} />
-      </Helmet>
+    <div className="shell-wide py-8">
+      <Helmet><title>Supported Platforms | {siteConfig.name}</title><meta name="description" content="See the platforms SwiftDL supports." /><link rel="canonical" href={siteUrl('/supported-platforms')} /></Helmet>
 
-      <div className="mx-auto max-w-3xl text-center">
-        <span className="section-eyebrow">Platform coverage</span>
-        <h1 className="mt-4 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
-          Supported today
-        </h1>
-        <p className="mt-3 text-base leading-8 text-[var(--ink-600)]">
-          SwiftDL is no longer locked to only Instagram and Facebook. It now
-          handles a wider set of yt-dlp-compatible platforms while still being
-          honest that final compatibility depends on the exact URL, platform
-          restrictions, and whether the media is public.
-        </p>
+      <div className="text-center max-w-2xl mx-auto mb-8">
+        <span className="tag">Platforms</span>
+        <h1 className="text-3xl font-bold mt-3" style={{ color: 'var(--ink-900)' }}>Supported today</h1>
+        <p className="mt-3 text-sm leading-relaxed" style={{ color: 'var(--ink-600)' }}>SwiftDL now handles a wider set of yt-dlp-compatible platforms while being honest that results depend on the exact URL and platform restrictions.</p>
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-3">
-        {platformData.map(
-          ({ title, icon: Icon, copy, points, to, cta }) => (
-            <article
-              key={title}
-              className="card overflow-hidden"
-            >
-              <div
-                className="px-5 py-4 text-white"
-                style={{ background: title === 'Instagram' ? 'linear-gradient(135deg, #f05f6b, #f49c4d)' : title === 'Facebook' ? 'var(--brand-600)' : 'var(--ink-900)' }}
-              >
-                <div className="inline-flex rounded-[24px] bg-white/15 p-3">
-                  <Icon className="h-7 w-7" />
-                </div>
-                <h2 className="mt-3 text-2xl font-black">{title}</h2>
-              </div>
-              <div className="card-inner space-y-3 p-5">
-                <p className="text-sm leading-7 text-[var(--ink-600)]">
-                  {copy}
-                </p>
-                <ul className="space-y-3 text-sm leading-7 text-[var(--ink-600)]">
-                  {points.map((point) => (
-                    <li key={point} className="flex gap-3">
-                      <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  to={to}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--brand-700)] transition hover:text-[var(--brand-600)]"
-                >
-                  {cta}
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </article>
-          )
-        )}
+      <div className="grid gap-5 md:grid-cols-3">
+        {data.map(d => (
+          <article key={d.title} className="overflow-hidden rounded-xl border" style={{ borderColor: 'var(--border)' }}>
+            <div className="px-5 py-4 text-white" style={{ background: d.color }}>
+              <div className="inline-flex rounded-full bg-white/15 p-2.5"><d.icon className="h-6 w-6" /></div>
+              <h2 className="mt-3 text-xl font-bold">{d.title}</h2>
+            </div>
+            <div className="p-5">
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--ink-600)' }}>{d.copy}</p>
+              <ul className="mt-3 space-y-1.5">
+                {d.points.map(p => <li key={p} className="flex gap-2 text-xs" style={{ color: 'var(--ink-600)' }}><CheckCircle2 className="h-3.5 w-3.5 mt-0.5 shrink-0" style={{ color: 'var(--brand-500)' }} />{p}</li>)}
+              </ul>
+              <Link to={d.to} className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold hover:underline" style={{ color: 'var(--brand-600)' }}>{d.cta} <ArrowRight className="h-3 w-3" /></Link>
+            </div>
+          </article>
+        ))}
       </div>
 
-      <section className="mt-8 grid gap-4 md:grid-cols-3">
-        <article className="feature-card">
-          <Video className="mb-4 h-5 w-5 text-[var(--brand-600)]" />
-          <h2 className="text-xl font-black text-[var(--ink-900)]">
-            Public media first
-          </h2>
-          <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-            Public links remain the clearest and most stable path across every
-            supported platform.
-          </p>
-        </article>
-        <article className="feature-card">
-          <Music4 className="mb-4 h-5 w-5 text-[var(--brand-600)]" />
-          <h2 className="text-xl font-black text-[var(--ink-900)]">
-            Audio when available
-          </h2>
-          <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-            Audio extraction depends on the streams the source platform exposes
-            for that specific link.
-          </p>
-        </article>
-        <article className="feature-card">
-          <Globe2 className="mb-4 h-5 w-5 text-[var(--brand-600)]" />
-          <h2 className="text-xl font-black text-[var(--ink-900)]">
-            Broad compatibility
-          </h2>
-          <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-            Many yt-dlp-compatible platforms work, but some URLs may still fail
-            depending on platform restrictions.
-          </p>
-        </article>
-      </section>
+      <div className="mt-6 grid gap-4 md:grid-cols-3">
+        {[
+          { icon: Video, title: 'Public media first', desc: 'Public links remain the clearest and most stable path across every supported platform.' },
+          { icon: Music4, title: 'Audio when available', desc: 'Audio extraction depends on the streams the source platform exposes for that link.' },
+          { icon: Globe2, title: 'Broad compatibility', desc: 'Many yt-dlp-compatible platforms work, but some URLs may fail depending on restrictions.' },
+        ].map(f => <article key={f.title} className="card card-hover"><div className="inline-flex rounded-lg p-2 mb-3" style={{ background: 'var(--brand-50)', color: 'var(--brand-600)' }}><f.icon className="h-4 w-4" /></div><h2 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>{f.title}</h2><p className="text-xs mt-1 leading-relaxed" style={{ color: 'var(--ink-600)' }}>{f.desc}</p></article>)}
+      </div>
     </div>
   );
 }

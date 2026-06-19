@@ -1,123 +1,50 @@
 import { Helmet } from 'react-helmet-async';
-import { CheckCircle2, Globe, Shield, Sparkles, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { CheckCircle2, Globe, Lock, Shield } from 'lucide-react';
 import { siteConfig, siteUrl } from '../lib/site';
 
 const principles = [
-  {
-    title: 'Broader but honest scope',
-    description:
-      'SwiftDL now supports a broader set of yt-dlp-compatible platforms without pretending every link on the internet will always work.',
-    icon: Sparkles,
-  },
-  {
-    title: 'Privacy-minded handling',
-    description:
-      'The product is designed around direct lookup and browser-side history. It is not trying to become a hosted library of user downloads.',
-    icon: Shield,
-  },
-  {
-    title: 'Accessible UX',
-    description:
-      'The workflow is meant to be understandable on desktop and mobile without extensions, installers, or complicated setup.',
-    icon: Globe,
-  },
-  {
-    title: 'Permission-aware use',
-    description:
-      'Advanced options are positioned for links you already have permission to access, not as a rights bypass.',
-    icon: Target,
-  },
+  { title: 'Broader but honest scope', desc: 'We cover many platforms while being clear that not every link will work.', icon: Globe },
+  { title: 'Privacy-minded handling', desc: 'Your downloads are not logged. History stays in your browser.', icon: Shield },
+  { title: 'Accessible UX', desc: 'Clean, fast, and works on every device without installation.', icon: CheckCircle2 },
+  { title: 'Permission-aware use', desc: 'We only process public content you already have access to.', icon: Lock },
 ];
 
 export default function AboutUs() {
   return (
-    <div className="section-shell max-w-5xl py-8">
-      <Helmet>
-        <title>About | {siteConfig.name}</title>
-        <meta
-          name="description"
-          content="Learn how SwiftDL approaches supported downloads, privacy-minded handling, and permission-aware workflows."
-        />
-        <link rel="canonical" href={siteUrl('/about-us')} />
-      </Helmet>
+    <div className="shell" style={{ maxWidth: 720, padding: '3rem 1rem 4rem' }}>
+      <Helmet><title>About Us | {siteConfig.name}</title><meta name="description" content={`Learn more about ${siteConfig.name}.`} /><link rel="canonical" href={siteUrl('/about-us')} /></Helmet>
 
-      <div className="mx-auto max-w-3xl text-center">
-        <div className="mx-auto inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
-          <Sparkles className="h-7 w-7" />
-        </div>
-        <h1 className="mt-4 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
-          A cleaner download workflow with broader coverage and honest limits
-        </h1>
-        <p className="mt-4 text-base leading-8 text-[var(--ink-600)]">
-          SwiftDL exists to make supported video downloads feel simpler, more
-          trustworthy, and less cluttered than the typical downloader experience.
+      <div className="text-center mb-8">
+        <span className="tag">About</span>
+        <h1 className="text-3xl font-bold mt-3" style={{ color: 'var(--ink-900)' }}>About {siteConfig.name}</h1>
+        <p className="mt-3 text-sm leading-relaxed" style={{ color: 'var(--ink-600)' }}>
+          {siteConfig.name} is a browser-based video and audio downloader that works with thousands of platforms. We believe downloading public content should be simple, fast, and private.
         </p>
       </div>
 
-      <section className="feature-card mt-8 p-6 md:p-8">
-        <h2 className="text-3xl font-black text-[var(--ink-900)]">
-          What we optimize for
-        </h2>
-        <div className="mt-5 space-y-4 text-sm leading-7 text-[var(--ink-600)]">
-          <p>
-            The project focuses on the workflows that matter to real users:
-            public link downloads, creator self-archiving, internal review, and
-            authorized session-based downloads.
-          </p>
-          <p>
-            That more balanced scope keeps the app easier to explain and
-            maintain. It also reduces the temptation to promise unrealistic
-            features that do not hold up when platform behavior changes.
-          </p>
-        </div>
-      </section>
-
-      <section className="mt-8 grid gap-4 md:grid-cols-2">
-        {principles.map(({ title, description, icon: Icon }) => (
-          <article key={title} className="feature-card">
-            <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
-              <Icon className="h-5 w-5" />
-            </div>
-            <h2 className="text-xl font-black text-[var(--ink-900)]">
-              {title}
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-              {description}
-            </p>
+      <div className="grid gap-4 sm:grid-cols-2 mb-8">
+        {principles.map(p => (
+          <article key={p.title} className="card card-hover">
+            <div className="inline-flex rounded-lg p-2 mb-3" style={{ background: 'var(--brand-50)', color: 'var(--brand-600)' }}><p.icon className="h-4 w-4" /></div>
+            <h2 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>{p.title}</h2>
+            <p className="text-xs mt-1 leading-relaxed" style={{ color: 'var(--ink-600)' }}>{p.desc}</p>
           </article>
         ))}
-      </section>
+      </div>
 
-      <section className="mt-8 feature-card bg-[var(--surface-soft)] p-5 md:p-6">
-        <h2 className="text-3xl font-black text-[var(--ink-900)]">
-          Responsible use
-        </h2>
-        <ul className="mt-5 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
-          <li className="flex gap-3">
-            <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-            Use SwiftDL for media you own, media you are allowed to access, or
-            approved offline/internal reference workflows.
-          </li>
-          <li className="flex gap-3">
-            <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-            Respect copyright, creator rights, and the platform rules that apply
-            to the source content.
-          </li>
-          <li className="flex gap-3">
-            <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-            Only access content you are already authorized to view.
-          </li>
+      <div className="card mb-8">
+        <h2 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>Responsible use</h2>
+        <ul className="mt-3 space-y-2">
+          {['Download only public content you have permission to access.', 'Respect platform terms of service.', 'Do not use for copyright infringement.', 'Content is saved locally on your device.'].map(item => (
+            <li key={item} className="flex items-start gap-2 text-xs" style={{ color: 'var(--ink-600)' }}><CheckCircle2 className="h-3 w-3 mt-0.5 shrink-0" style={{ color: 'var(--brand-500)' }} />{item}</li>
+          ))}
         </ul>
-      </section>
+      </div>
 
-      <div className="mt-8 flex flex-wrap gap-3">
-        <Link to="/contact-us" className="btn-dark">
-          Contact support
-        </Link>
-        <Link to="/privacy-policy" className="btn-outline">
-          Read privacy policy
-        </Link>
+      <div className="flex gap-3">
+        <Link to="/contact-us" className="btn-primary text-xs">Contact us</Link>
+        <Link to="/privacy-policy" className="btn-outline text-xs">Privacy policy</Link>
       </div>
     </div>
   );

@@ -1,106 +1,39 @@
 import { Helmet } from 'react-helmet-async';
-import { Clock3, Globe2, Mail, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Mail } from 'lucide-react';
 import { siteConfig, siteUrl } from '../lib/site';
-
-const helpTopics = [
-  'Broken or unsupported links',
-  'Billing or plan questions',
-  'Copyright or DMCA notices',
-  'Feature requests and product feedback',
-];
 
 export default function ContactUs() {
   return (
-    <div className="section-shell max-w-4xl py-8">
-      <Helmet>
-        <title>Contact | {siteConfig.name}</title>
-        <meta
-          name="description"
-          content="Reach SwiftDL support for technical issues, billing, copyright notices, or product feedback."
-        />
-        <link rel="canonical" href={siteUrl('/contact-us')} />
-      </Helmet>
+    <div className="shell" style={{ maxWidth: 600, padding: '3rem 1rem 4rem' }}>
+      <Helmet><title>Contact Us | {siteConfig.name}</title><meta name="description" content="Get in touch with the SwiftDL team." /><link rel="canonical" href={siteUrl('/contact-us')} /></Helmet>
 
-      <div className="mx-auto max-w-3xl text-center">
-        <div className="mx-auto inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
-          <MessageCircle className="h-7 w-7" />
-        </div>
-        <h1 className="mt-3 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
-          Contact support
-        </h1>
-        <p className="mt-4 text-base leading-8 text-[var(--ink-600)]">
-          Share the platform, the type of link, and the exact error message if
-          you want the fastest troubleshooting response.
-        </p>
+      <div className="text-center mb-8">
+        <span className="tag">Contact</span>
+        <h1 className="text-3xl font-bold mt-3" style={{ color: 'var(--ink-900)' }}>Contact Us</h1>
+        <p className="mt-2 text-sm" style={{ color: 'var(--ink-600)' }}>Have a question or need help? We are here for you.</p>
       </div>
 
-      <section className="mt-10 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-        <article className="feature-card">
-          <h2 className="text-xl font-black text-[var(--ink-900)]">Reach us</h2>
-          <div className="mt-5 space-y-5 text-sm leading-7 text-[var(--ink-600)]">
-            <div className="flex gap-3">
-              <Mail className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-              <div>
-                <p className="font-semibold text-[var(--ink-900)]">Email</p>
-                <a
-                  href={siteConfig.supportMailto}
-                  className="text-[var(--brand-700)] hover:underline"
-                >
-                  {siteConfig.supportEmail}
-                </a>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <Clock3 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-              <div>
-                <p className="font-semibold text-[var(--ink-900)]">
-                  Support hours
-                </p>
-                <p>{siteConfig.supportHours}</p>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <Globe2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-              <div>
-                <p className="font-semibold text-[var(--ink-900)]">Website</p>
-                <a
-                  href={siteConfig.baseUrl}
-                  className="text-[var(--brand-700)] hover:underline"
-                >
-                  {siteConfig.domain}
-                </a>
-              </div>
-            </div>
-          </div>
-        </article>
+      <div className="card text-center mb-6">
+        <div className="inline-flex rounded-lg p-3 mb-4" style={{ background: 'var(--brand-50)', color: 'var(--brand-600)' }}><Mail className="h-6 w-6" /></div>
+        <h2 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>Email us</h2>
+        <a href={siteConfig.supportMailto} className="mt-2 inline-block text-sm font-semibold hover:underline" style={{ color: 'var(--brand-600)' }}>{siteConfig.supportEmail}</a>
+        <p className="mt-1 text-xs" style={{ color: 'var(--ink-500)' }}>{siteConfig.supportHours}</p>
+      </div>
 
-        <article className="feature-card">
-          <h2 className="text-xl font-black text-[var(--ink-900)]">
-            Helpful context to include
-          </h2>
-          <ul className="mt-5 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
-            {helpTopics.map((topic) => (
-              <li key={topic} className="flex gap-2">
-                <span className="text-[var(--brand-600)]">&#8226;</span>
-                {topic}
-              </li>
-            ))}
-          </ul>
-          <p className="mt-5 text-sm leading-7 text-[var(--ink-600)]">
-            If your issue is technical, include the exact platform, whether the
-            media was public or session-protected, and what you already tried.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Link to="/faq" className="btn-dark">
-              Read FAQ
-            </Link>
-            <Link to="/dmca" className="btn-outline">
-              Copyright / DMCA
-            </Link>
-          </div>
-        </article>
-      </section>
+      <div className="card mb-6">
+        <h2 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>Helpful context to include</h2>
+        <ul className="mt-3 space-y-2 text-xs" style={{ color: 'var(--ink-600)' }}>
+          {['The platform you are trying to download from', 'The exact error message you see', 'Whether you are logged in or a guest', 'Your device type and browser'].map(item => (
+            <li key={item} className="flex items-start gap-2"><span className="mt-1 w-1 h-1 rounded-full shrink-0" style={{ background: 'var(--brand-500)' }} />{item}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="flex gap-3">
+        <Link to="/faq" className="btn-outline text-xs">Visit FAQ</Link>
+        <Link to="/dmca" className="btn-ghost text-xs">DMCA</Link>
+      </div>
     </div>
   );
 }

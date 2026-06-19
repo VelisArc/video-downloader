@@ -4,171 +4,43 @@ import type { DownloadHistoryItem } from '../lib/downloads';
 import { copyText, sanitizeFilename } from '../lib/downloads';
 import { siteConfig } from '../lib/site';
 
-function formatPlatformLabel(platform?: string | null) {
-  const normalized = (platform || '').trim();
-  if (!normalized || normalized === 'generic') return 'Auto-detected';
-  return normalized
-    .split(/[-_.]/g)
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
+function fmt(p?: string | null) {
+  const n = (p || '').trim(); if (!n || n === 'generic') return 'Auto-detected';
+  return n.split(/[-_.]/g).filter(Boolean).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
 }
 
-interface ResultCardProps {
-  videoData: DownloadHistoryItem;
-}
+interface Props { videoData: DownloadHistoryItem; }
 
-export default function ResultCard({ videoData }: ResultCardProps) {
-  const handleFinalDownload = () => {
-    const link = document.createElement('a');
-    link.href = videoData.downloadUrl;
-    link.target = '_blank';
-    link.download = `${sanitizeFilename(videoData.title)}.${videoData.ext || 'mp4'}`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    toast.success('Download started');
+export default function ResultCard({ videoData }: Props) {
+  const dl = () => {
+    const a = document.createElement('a'); a.href = videoData.downloadUrl; a.target = '_blank'; a.download = `${sanitizeFilename(videoData.title)}.${videoData.ext || 'mp4'}`; a.click(); a.remove(); toast.success('Download started');
   };
-
-  const handleCopyLink = async () => {
-    await copyText(videoData.downloadUrl);
-    toast.success('Download link copied');
-  };
-
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `${siteConfig.name} download`,
-          text: videoData.title,
-          url: videoData.downloadUrl,
-        });
-        toast.success('Shared');
-        return;
-      } catch { /* user cancelled */ }
-    }
-    await handleCopyLink();
+  const copy = async () => { await copyText(videoData.downloadUrl); toast.success('Link copied'); };
+  const share = async () => {
+    if (navigator.share) { try { await navigator.share({ title: `${siteConfig.name} download`, text: videoData.title, url: videoData.downloadUrl }); toast.success('Shared'); return; } catch {} }
+    await copy();
   };
 
   return (
-    <article
-      className="animate-fade-in-up"
-      style={{
-        marginTop: '0.875rem',
-        borderRadius: 'var(--radius-xl)',
-        background: 'var(--surface)',
-        border: '1px solid var(--border-soft)',
-        overflow: 'hidden',
-      }}
-    >
-      <div className="flex flex-col gap-3 md:flex-row" style={{ padding: '0.875rem' }}>
-        <div
-          style={{
-            width: '100%',
-            borderRadius: 'var(--radius-md)',
-            overflow: 'hidden',
-            flex: 'none',
-          }}
-          className="md:w-36"
-        >
-          {videoData.thumbnail ? (
-            <img
-              src={videoData.thumbnail}
-              alt={videoData.title}
-              style={{
-                width: '100%',
-                height: '8rem',
-                objectFit: 'cover',
-                borderRadius: 'var(--radius-md)',
-              }}
-            />
-          ) : (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%',
-                height: '8rem',
-                borderRadius: 'var(--radius-md)',
-                background: 'var(--surface-soft)',
-                color: 'var(--brand-600)',
-              }}
-            >
-              <Video style={{ width: 28, height: 28 }} />
-            </div>
+    <article className="animate-fade-up mt-3 rounded-xl border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
+      <div className="flex flex-col sm:flex-row gap-3 p-3">
+        <div className="w-full sm:w-32 shrink-0 rounded-lg overflow-hidden">
+          {videoData.thumbnail ? <img src={videoData.thumbnail} alt="" className="w-full h-28 object-cover" /> : (
+            <div className="flex items-center justify-center h-28" style={{ background: 'var(--brand-50)', color: 'var(--brand-600)' }}><Video className="h-7 w-7" /></div>
           )}
         </div>
-
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div
-            className="flex flex-wrap"
-            style={{ gap: '0.375rem', fontSize: '10px', fontWeight: 500, color: 'var(--ink-600)' }}
-          >
-            {videoData.platform && (
-              <span className="pill-soft">
-                <Sparkles style={{ width: 12, height: 12, color: 'var(--brand-600)' }} />
-                {formatPlatformLabel(videoData.platform)}
-              </span>
-            )}
-            {videoData.uploader && (
-              <span className="pill-soft">
-                <User style={{ width: 12, height: 12, color: 'var(--brand-600)' }} />
-                {videoData.uploader}
-              </span>
-            )}
-            {videoData.duration && videoData.duration !== 'Unknown' && (
-              <span className="pill-soft">
-                <Clock3 style={{ width: 12, height: 12, color: 'var(--brand-600)' }} />
-                {videoData.duration}
-              </span>
-            )}
-            {videoData.view_count && videoData.view_count !== 'N/A' && (
-              <span className="pill-soft">
-                <Eye style={{ width: 12, height: 12, color: 'var(--brand-600)' }} />
-                {videoData.view_count}
-              </span>
-            )}
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap gap-1 text-[10px]">
+            {videoData.platform && <span className="pill"><Sparkles className="h-3 w-3" />{fmt(videoData.platform)}</span>}
+            {videoData.uploader && <span className="pill"><User className="h-3 w-3" />{videoData.uploader}</span>}
+            {videoData.duration && videoData.duration !== 'Unknown' && <span className="pill"><Clock3 className="h-3 w-3" />{videoData.duration}</span>}
+            {videoData.view_count && videoData.view_count !== 'N/A' && <span className="pill"><Eye className="h-3 w-3" />{videoData.view_count}</span>}
           </div>
-
-          <h3
-            className="line-clamp-2"
-            style={{ marginTop: '0.5rem', fontSize: '0.9rem', fontWeight: 700, color: 'var(--ink-900)', lineHeight: 1.4 }}
-          >
-            {videoData.title}
-          </h3>
-
-          <div className="flex flex-col gap-1.5 sm:flex-row" style={{ marginTop: '0.75rem' }}>
-            <button
-              type="button"
-              onClick={handleFinalDownload}
-              className="btn-brand flex-1"
-              style={{ padding: '0.45rem 0.75rem', fontSize: '0.8rem' }}
-              aria-label="Save file to device"
-            >
-              <Download style={{ width: 14, height: 14 }} />
-              Save to device
-            </button>
-            <button
-              type="button"
-              onClick={handleCopyLink}
-              className="btn-ghost"
-              style={{ fontSize: '0.8rem' }}
-              aria-label="Copy direct download link"
-            >
-              <Copy style={{ width: 14, height: 14 }} />
-              Copy link
-            </button>
-            <button
-              type="button"
-              onClick={handleShare}
-              className="btn-ghost"
-              style={{ fontSize: '0.8rem' }}
-              aria-label="Share this download"
-            >
-              <Share2 style={{ width: 14, height: 14 }} />
-              Share
-            </button>
+          <h3 className="mt-1.5 text-sm font-bold line-clamp-2" style={{ color: 'var(--ink-900)' }}>{videoData.title}</h3>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            <button onClick={dl} className="btn-primary flex-1 text-xs py-2"><Download className="h-3.5 w-3.5" /> Save to device</button>
+            <button onClick={copy} className="btn-ghost text-xs"><Copy className="h-3.5 w-3.5" /> Copy</button>
+            <button onClick={share} className="btn-ghost text-xs"><Share2 className="h-3.5 w-3.5" /> Share</button>
           </div>
         </div>
       </div>
