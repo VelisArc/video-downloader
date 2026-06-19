@@ -6,11 +6,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt ./
+COPY backend/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY api/ ./api/
-COPY wsgi.py ./
+COPY backend/api/ ./api/
+COPY backend/wsgi.py ./
 
 ENV PYTHONUNBUFFERED=1
 ENV PORT=10000

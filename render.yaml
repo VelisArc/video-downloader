@@ -4,7 +4,6 @@ services:
     runtime: docker
     region: singapore
     plan: free
-    rootDir: backend
     envVars:
       - key: ALLOWED_ORIGINS
         value: https://swiftdownlod.online
