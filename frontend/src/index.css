@@ -119,7 +119,11 @@
 }
 
 @layer base {
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    font-size: 90%; /* 10% overall zoom-out */
+  }
 
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -130,6 +134,14 @@
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
     transition: background .3s, color .3s;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  /* Compact header */
+  ::-webkit-scrollbar {
+    display: none;
   }
 
   h1,h2,h3,h4,h5,h6 { letter-spacing: -0.02em; line-height: 1.2; font-weight: 700; }

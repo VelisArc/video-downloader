@@ -68,55 +68,70 @@ function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
-        <div className="shell">
-          <div className="flex items-center justify-between py-3">
-            <Link to="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-              <div className="rounded-lg p-1.5 text-white" style={{ background: 'var(--brand-600)' }}>
-                <Download className="h-4 w-4" />
-              </div>
-              <span className="text-[15px] font-bold" style={{ color: 'var(--ink-900)' }}>{siteConfig.name}</span>
-            </Link>
+  <header className="sticky top-0 z-50 border-b py-2" style={{ borderColor: 'var(--border)', background: 'var(--surface)', borderBottomWidth: '1px' }}> 
+    <div className="mx-auto px-4 sm:px-6" style={{ maxWidth: '100%', width: '100%' }}>
+      <div className="flex items-center justify-between h-12">
+        <Link to="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
+          <div className="rounded-md p-1 text-white" style={{ background: 'var(--brand-600)', minWidth: '28px', minHeight: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Download className="h-4 w-4" />
+          </div>
+          <span className="text-[14px] font-bold" style={{ color: 'var(--ink-900)' }}>{siteConfig.name}</span>
+        </Link>
 
-            <nav className="hidden lg:flex items-center gap-0.5">
-              {primaryNav.map(item => <NavLink key={item.to} to={item.to} className={navClass}>{item.label}</NavLink>)}
-            </nav>
+        <nav className="hidden lg:flex items-center h-full">
+          {primaryNav.map(item => {
+            const nc = ({isActive}: {isActive: boolean}) => `flex items-center h-full px-3 text-[13px] font-medium transition-colors ${isActive ? 'bg-[var(--brand-100)] text-[var(--brand-700)]' : 'text-[var(--ink-600)] hover:bg-[var(--surface-soft)]'}`;
+            return <NavLink key={item.to} to={item.to} className={nc}>{item.label}</NavLink>;
+          })}
+        </nav>
 
-            <div className="hidden lg:flex items-center gap-2">
-              <ThemeToggle />
-              {installAvailable && <button onClick={handleInstall} className="btn-ghost text-[13px]">Install</button>}
-              {user ? (
-                <div className="flex items-center gap-1.5">
-                  <Link to="/dashboard" className="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-[var(--surface-soft)]">
-                    {user.photoURL ? <img src={user.photoURL} alt="" className="h-7 w-7 rounded-full border border-[var(--border)]" /> : (
-                      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full" style={{ background: 'var(--surface-soft)', color: 'var(--brand-600)' }}><User className="h-3.5 w-3.5" /></span>
-                    )}
-                    <span className="text-[13px] font-medium max-w-[100px] truncate hidden xl:inline" style={{ color: 'var(--ink-700)' }}>{user.displayName?.split(' ')[0] || 'Account'}</span>
-                  </Link>
-                  <button onClick={() => setShowLogoutConfirm(true)} className="btn-ghost text-[13px]"><LogOut className="h-3.5 w-3.5" /></button>
-                </div>
-              ) : (
-                <button onClick={signInWithGoogle} className="btn-primary text-[13px]"><LogIn className="h-3.5 w-3.5" /> Sign in</button>
-              )}
+        <div className="hidden lg:flex items-center gap-1">
+          <ThemeToggle />
+          {installAvailable && <button onClick={handleInstall} className="btn-ghost text-[12px] px-2 py-1.5">Install</button>}
+          {user ? (
+            <div className="flex items-center h-full">
+              <Link to="/dashboard" className="flex items-center gap-2 h-full px-2 rounded-md hover:bg-[var(--surface-soft)]">
+                {user.photoURL ? <img src={user.photoURL} alt="" className="h-6 w-6 rounded-full border border-[var(--border)]" /> : (
+                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full" style={{ background: 'var(--surface-soft)', color: 'var(--brand-600)' }}><User className="h-3 w-3" /></span>
+                )}
+                <span className="text-[13px] font-medium max-w-[80px] truncate hidden xl:inline" style={{ color: 'var(--ink-700)' }}>{user.displayName?.split(' ')[0] || 'Account'}</span>
+              </Link>
+              <button onClick={() => setShowLogoutConfirm(true)} className="btn-ghost text-[12px] px-2 py-1.5 h-full"><LogOut className="h-3.5 w-3.5" /></button>
             </div>
+          ) : (
+            <button onClick={signInWithGoogle} className="btn-primary text-[12px] px-3 py-1 h-full"><LogIn className="h-3 w-3 mr-1" /> Sign in</button>
+          )}
+        </div>
 
-            <div className="flex lg:hidden items-center gap-1.5">
-              <ThemeToggle />
-              <button onClick={() => setIsMenuOpen(v => !v)} className="rounded-md border p-2" style={{ borderColor: 'var(--border)', color: 'var(--ink-600)' }}>
-                {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-              </button>
-            </div>
+        <div className="flex lg:hidden items-center h-full">
+          <ThemeToggle />
+          <button onClick={() => setIsMenuOpen(v => !v)} className="rounded-md border p-1.5 ml-1" style={{ borderColor: 'var(--border)', color: 'var(--ink-600)' }}>
+            {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+        </div>
           </div>
 
-          {isMenuOpen && (
-            <div className="pb-3 lg:hidden animate-fade-in">
-              <div className="rounded-xl border p-3" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
-                <div className="flex flex-col gap-0.5">
-                  {primaryNav.map(item => <NavLink key={item.to} to={item.to} className={navClass} onClick={() => setIsMenuOpen(false)}>{item.label}</NavLink>)}
-                  {user && <NavLink to="/dashboard" className={navClass} onClick={() => setIsMenuOpen(false)}>Dashboard</NavLink>}
-                </div>
-                <div className="mt-2 flex flex-col gap-1.5 border-t pt-2" style={{ borderColor: 'var(--border)' }}>
-                  {installAvailable && <button onClick={() => { handleInstall(); setIsMenuOpen(false); }} className="btn-outline w-full text-[13px]">Install app</button>}
+  {isMenuOpen && (
+    <div className="lg:hidden animate-fade-in" style={{ paddingBottom: '0.5rem' }}>
+      <div className="rounded-lg border p-2.5" style={{ borderColor: 'var(--border)', background: 'var(--surface)', boxShadow: 'var(--shadow-md)' }}>
+        <div className="flex flex-col gap-0.5">
+          {primaryNav.map(item => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) => `text-[13px] px-2.5 py-2 rounded-md transition-colors ${
+                isActive ? 'bg-[var(--brand-50)] text-[var(--brand-700)]' : 'text-[var(--ink-600)] hover:bg-[var(--surface-soft)]'
+              }`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {item.label}
+            </NavLink>
+          ))}
+          {user && <NavLink to="/dashboard" className={({ isActive }) => `text-[13px] px-2.5 py-2 rounded-md transition-colors ${
+            isActive ? 'bg-[var(--brand-50)] text-[var(--brand-700)]' : 'text-[var(--ink-600)] hover:bg-[var(--surface-soft)]'}`} onClick={() => setIsMenuOpen(false)}>Dashboard</NavLink>}
+        </div>
+        <div className="mt-2 pt-2 border-t" style={{ borderColor: 'var(--border)' }}>
+          {installAvailable && <button onClick={() => { handleInstall(); setIsMenuOpen(false); }} className="btn-outline w-full text-[12px] py-1.5">Install app</button>}
                   {user ? <button onClick={() => { setShowLogoutConfirm(true); setIsMenuOpen(false); }} className="btn-dark w-full text-[13px]">Logout</button>
                   : <button onClick={() => { signInWithGoogle(); setIsMenuOpen(false); }} className="btn-primary w-full text-[13px]">Sign in with Google</button>}
                 </div>
