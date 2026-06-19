@@ -28,9 +28,9 @@ export default function TermsOfService() {
         </p>
       </div>
 
-      <div className="mt-8 rounded-2xl border border-yellow-200 bg-yellow-50 p-4 text-sm leading-7 text-yellow-900">
+      <div className="mt-8 rounded-2xl border border-[var(--border-medium)] bg-[var(--surface-soft)] p-4 text-sm leading-7 text-[var(--ink-900)]">
         <div className="flex items-start gap-3">
-          <AlertTriangle className="mt-1 h-5 w-5 flex-none" />
+          <AlertTriangle className="mt-1 h-5 w-5 flex-none text-[var(--brand-600)]" />
           <p>
             By using SwiftDL, you agree to these terms. If you do not agree with
             them, do not use the service.
@@ -46,8 +46,7 @@ export default function TermsOfService() {
           <p className="mt-4 leading-7">
             SwiftDL is a browser-based tool for supported media workflows across
             many yt-dlp-compatible platforms. It may include public-link
-            downloads, audio extraction, account-based features, and optional
-            session-based downloads through Cookies Mode.
+            downloads, audio extraction, and account-based features.
           </p>
         </section>
 
@@ -60,10 +59,13 @@ export default function TermsOfService() {
               </h2>
             </div>
             <ul className="mt-4 list-disc pl-5 leading-7">
-              <li>Downloading media you own or are clearly authorized to use</li>
+              <li>
+                Downloading media you own or are clearly authorized to use
+              </li>
               <li>Personal offline viewing and internal reference workflows</li>
-              <li>Authorized session-based downloads through your own current cookies.txt export</li>
-              <li>Fair-use or research scenarios where applicable law allows it</li>
+              <li>
+                Fair-use or research scenarios where applicable law allows it
+              </li>
             </ul>
           </article>
 
@@ -75,9 +77,16 @@ export default function TermsOfService() {
               </h2>
             </div>
             <ul className="mt-4 list-disc pl-5 leading-7">
-              <li>Downloading or redistributing copyrighted content without permission</li>
-              <li>Using SwiftDL to bypass access you do not already have</li>
-              <li>Automated scraping, abuse, or attempts to degrade the service</li>
+              <li>
+                Downloading or redistributing copyrighted content without
+                permission
+              </li>
+              <li>
+                Using SwiftDL to bypass access you do not already have
+              </li>
+              <li>
+                Automated scraping, abuse, or attempts to degrade the service
+              </li>
               <li>Illegal, deceptive, or impersonation-related use</li>
             </ul>
           </article>
@@ -92,10 +101,6 @@ export default function TermsOfService() {
               You are responsible for ensuring that your use of downloaded media
               complies with copyright law, platform rules, privacy rights, and
               any permission requirements tied to the original content.
-            </p>
-            <p>
-              If you use Cookies Mode, you must only submit your own current
-              session data for content you are already authorized to access.
             </p>
           </div>
         </section>
@@ -125,7 +130,10 @@ export default function TermsOfService() {
           <p className="mt-4 leading-7">
             SwiftDL respects copyright and responds to valid takedown notices.
             If you believe your rights have been violated, use the{' '}
-            <Link to="/dmca" className="text-[var(--brand-700)] hover:underline">
+            <Link
+              to="/dmca"
+              className="text-[var(--brand-700)] hover:underline"
+            >
               DMCA page
             </Link>{' '}
             or contact support.

@@ -189,8 +189,48 @@ export default function PricingPolicy() {
     }
   }, [config, loadRazorpay, user]);
 
+  const planCards = [
+    {
+      icon: Sparkles,
+      title: 'Free',
+      subtitle: 'Best for casual use',
+      price: '$0',
+      features: [
+        `Guest limit: ${config.guestDailyLimit}/day`,
+        `Logged-in limit: ${config.userDailyLimit}/day`,
+        'No required app install',
+        'Video or audio workflow when supported',
+      ],
+    },
+    {
+      icon: CreditCard,
+      title: 'Monthly',
+      subtitle: 'Ad-free plan',
+      price: config.monthlyDisplay,
+      features: [
+        `Daily limit: ${config.monthlyDailyLimit <= 0 ? 'Unlimited' : `${config.monthlyDailyLimit}/day`}`,
+        'No ads while active',
+        'Login required to purchase',
+      ],
+    },
+    {
+      icon: ShieldCheck,
+      title: 'Lifetime',
+      subtitle: 'One-time ad-free access',
+      price: config.lifetimeDisplay,
+      features: [
+        `Daily limit: ${config.lifetimeDailyLimit <= 0 ? 'Unlimited' : `${config.lifetimeDailyLimit}/day`}`,
+        'No recurring charge',
+        'Login required to purchase',
+      ],
+    },
+  ];
+
   return (
-    <div className="section-shell max-w-6xl py-8">
+    <div
+      className="section-shell"
+      style={{ maxWidth: 1080, margin: '0 auto', padding: '48px 16px 64px' }}
+    >
       <Helmet>
         <title>Pricing | {siteConfig.name}</title>
         <meta
@@ -200,77 +240,427 @@ export default function PricingPolicy() {
         <link rel="canonical" href={siteUrl('/pricing')} />
       </Helmet>
 
-      <div className="mx-auto max-w-3xl text-center">
+      {/* Header */}
+      <div style={{ textAlign: 'center', maxWidth: 560, margin: '0 auto' }}>
         <span className="section-eyebrow">Pricing</span>
-        <h1 className="mt-4 text-3xl font-black text-[var(--ink-900)] md:text-3xl">
-          Free tier plus optional ad-free plans
+        <h1
+          style={{
+            marginTop: 12,
+            fontSize: 32,
+            fontWeight: 800,
+            color: 'var(--ink-950)',
+            letterSpacing: '-0.03em',
+            lineHeight: 1.15,
+          }}
+        >
+          Simple, transparent pricing
         </h1>
-        <p className="mt-4 text-base leading-8 text-[var(--ink-600)]">
+        <p
+          style={{
+            marginTop: 12,
+            fontSize: 15,
+            lineHeight: 1.65,
+            color: 'var(--ink-600)',
+          }}
+        >
           SwiftDL keeps a free browser workflow for public links and offers
           optional paid plans for people who want higher or unlimited limits and
           an ad-free experience.
         </p>
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-3">
-        <article className="feature-card">
-          <Sparkles className="mb-3 h-5 w-5 text-[var(--brand-600)]" />
-          <h2 className="text-xl font-black text-[var(--ink-900)]">Free</h2>
-          <p className="mt-2 text-sm text-[var(--ink-500)]">Best for most casual use</p>
-          <div className="mt-3 text-3xl font-black text-[var(--ink-900)]">$0</div>
-          <ul className="mt-3 space-y-2 text-sm leading-7 text-[var(--ink-600)]">
-            <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />Guest limit: {config.guestDailyLimit}/day</li>
-            <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />Logged-in limit: {config.userDailyLimit}/day</li>
-            <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />No required app install</li>
-            <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />Video or audio workflow when supported</li>
+      {/* Pricing grid */}
+      <div
+        style={{
+          marginTop: 40,
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 20,
+          alignItems: 'start',
+        }}
+      >
+        {/* Free card */}
+        <div
+          className="card"
+          style={{
+            padding: '28px 24px',
+            border: '1px solid var(--border-soft)',
+            textAlign: 'center',
+          }}
+        >
+          <div
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 12,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'var(--surface-soft)',
+              color: 'var(--brand-800)',
+              margin: '0 auto',
+            }}
+          >
+            <Sparkles size={20} />
+          </div>
+          <h2
+            style={{
+              marginTop: 16,
+              fontSize: 20,
+              fontWeight: 800,
+              color: 'var(--ink-950)',
+            }}
+          >
+            Free
+          </h2>
+          <p style={{ marginTop: 4, fontSize: 13, color: 'var(--ink-500)' }}>
+            {planCards[0].subtitle}
+          </p>
+          <div
+            style={{
+              marginTop: 16,
+              fontSize: 36,
+              fontWeight: 800,
+              color: 'var(--ink-950)',
+              lineHeight: 1,
+              letterSpacing: '-0.02em',
+            }}
+          >
+            {planCards[0].price}
+          </div>
+          <ul style={{ marginTop: 20, listStyle: 'none', padding: 0, margin: '20px 0 0', textAlign: 'left' }}>
+            {planCards[0].features.map((feat) => (
+              <li
+                key={feat}
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 10,
+                  padding: '7px 0',
+                  fontSize: 13,
+                  lineHeight: 1.5,
+                  color: 'var(--ink-600)',
+                }}
+              >
+                <CheckCircle2
+                  size={15}
+                  style={{ marginTop: 2, flexShrink: 0, color: 'var(--accent-600)' }}
+                />
+                {feat}
+              </li>
+            ))}
           </ul>
-        </article>
+        </div>
 
-        <article className="feature-card border-[var(--border-strong)]">
-          <CreditCard className="mb-3 h-5 w-5 text-[var(--brand-600)]" />
-          <h2 className="text-xl font-black text-[var(--ink-900)]">Monthly</h2>
-          <p className="mt-2 text-sm text-[var(--ink-500)]">Ad-free plan</p>
-          <div className="mt-3 text-3xl font-black text-[var(--ink-900)]">{config.monthlyDisplay}</div>
-          <ul className="mt-3 space-y-2 text-sm leading-7 text-[var(--ink-600)]">
-            <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />Daily limit: {config.monthlyDailyLimit <= 0 ? 'Unlimited' : `${config.monthlyDailyLimit}/day`}</li>
-            <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />No ads while active</li>
-            <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />Login required to purchase</li>
+        {/* Monthly card (highlighted) */}
+        <div
+          className="card"
+          style={{
+            padding: '28px 24px',
+            border: '2px solid var(--brand-800)',
+            textAlign: 'center',
+            position: 'relative',
+            boxShadow: 'var(--shadow-lg)',
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              top: -1,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              background: 'linear-gradient(135deg, var(--brand-800), var(--accent-600))',
+              color: '#fff',
+              fontSize: 10,
+              fontWeight: 700,
+              padding: '4px 14px',
+              borderRadius: '0 0 8px 8px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+            }}
+          >
+            Most Popular
+          </div>
+          <div
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 12,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'var(--surface-soft)',
+              color: 'var(--brand-800)',
+              margin: '0 auto',
+            }}
+          >
+            <CreditCard size={20} />
+          </div>
+          <h2
+            style={{
+              marginTop: 16,
+              fontSize: 20,
+              fontWeight: 800,
+              color: 'var(--ink-950)',
+            }}
+          >
+            Monthly
+          </h2>
+          <p style={{ marginTop: 4, fontSize: 13, color: 'var(--ink-500)' }}>
+            {planCards[1].subtitle}
+          </p>
+          <div
+            style={{
+              marginTop: 16,
+              fontSize: 36,
+              fontWeight: 800,
+              color: 'var(--ink-950)',
+              lineHeight: 1,
+              letterSpacing: '-0.02em',
+            }}
+          >
+            {planCards[1].price}
+          </div>
+          <ul style={{ marginTop: 20, listStyle: 'none', padding: 0, margin: '20px 0 0', textAlign: 'left' }}>
+            {planCards[1].features.map((feat) => (
+              <li
+                key={feat}
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 10,
+                  padding: '7px 0',
+                  fontSize: 13,
+                  lineHeight: 1.5,
+                  color: 'var(--ink-600)',
+                }}
+              >
+                <CheckCircle2
+                  size={15}
+                  style={{ marginTop: 2, flexShrink: 0, color: 'var(--accent-600)' }}
+                />
+                {feat}
+              </li>
+            ))}
           </ul>
-          <button type="button" onClick={buyMonthly} disabled={isMonthlyLoading || config.paymentConfigured === false} className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[var(--brand-600)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--brand-700)] disabled:opacity-70">
-            {isMonthlyLoading ? <LoadingIndicator label="Starting checkout..." compact tone="light" /> : 'Buy monthly'}
+          <button
+            type="button"
+            onClick={buyMonthly}
+            disabled={isMonthlyLoading || config.paymentConfigured === false}
+            style={{
+              marginTop: 24,
+              width: '100%',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              padding: '12px 24px',
+              borderRadius: 9999,
+              fontSize: 14,
+              fontWeight: 600,
+              color: '#fff',
+              background: 'linear-gradient(135deg, var(--brand-800), var(--accent-600))',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'opacity 0.15s',
+              boxShadow: 'var(--shadow-sm)',
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.opacity = '0.9';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.opacity = '1';
+            }}
+          >
+            {isMonthlyLoading ? (
+              <LoadingIndicator label="Starting checkout..." compact tone="light" />
+            ) : (
+              'Buy monthly'
+            )}
           </button>
-        </article>
+        </div>
 
-        <article className="feature-card">
-          <ShieldCheck className="mb-3 h-5 w-5 text-[var(--brand-600)]" />
-          <h2 className="text-xl font-black text-[var(--ink-900)]">Lifetime</h2>
-          <p className="mt-2 text-sm text-[var(--ink-500)]">One-time ad-free access</p>
-          <div className="mt-3 text-3xl font-black text-[var(--ink-900)]">{config.lifetimeDisplay}</div>
-          <ul className="mt-3 space-y-2 text-sm leading-7 text-[var(--ink-600)]">
-            <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />Daily limit: {config.lifetimeDailyLimit <= 0 ? 'Unlimited' : `${config.lifetimeDailyLimit}/day`}</li>
-            <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />No recurring charge</li>
-            <li className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />Login required to purchase</li>
+        {/* Lifetime card */}
+        <div
+          className="card"
+          style={{
+            padding: '28px 24px',
+            border: '1px solid var(--border-soft)',
+            textAlign: 'center',
+          }}
+        >
+          <div
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 12,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'var(--surface-soft)',
+              color: 'var(--brand-800)',
+              margin: '0 auto',
+            }}
+          >
+            <ShieldCheck size={20} />
+          </div>
+          <h2
+            style={{
+              marginTop: 16,
+              fontSize: 20,
+              fontWeight: 800,
+              color: 'var(--ink-950)',
+            }}
+          >
+            Lifetime
+          </h2>
+          <p style={{ marginTop: 4, fontSize: 13, color: 'var(--ink-500)' }}>
+            {planCards[2].subtitle}
+          </p>
+          <div
+            style={{
+              marginTop: 16,
+              fontSize: 36,
+              fontWeight: 800,
+              color: 'var(--ink-950)',
+              lineHeight: 1,
+              letterSpacing: '-0.02em',
+            }}
+          >
+            {planCards[2].price}
+          </div>
+          <ul style={{ marginTop: 20, listStyle: 'none', padding: 0, margin: '20px 0 0', textAlign: 'left' }}>
+            {planCards[2].features.map((feat) => (
+              <li
+                key={feat}
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 10,
+                  padding: '7px 0',
+                  fontSize: 13,
+                  lineHeight: 1.5,
+                  color: 'var(--ink-600)',
+                }}
+              >
+                <CheckCircle2
+                  size={15}
+                  style={{ marginTop: 2, flexShrink: 0, color: 'var(--accent-600)' }}
+                />
+                {feat}
+              </li>
+            ))}
           </ul>
-          <button type="button" onClick={buyLifetime} disabled={isLifetimeLoading || config.paymentConfigured === false} className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[var(--ink-900)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--ink-700)] disabled:opacity-70">
-            {isLifetimeLoading ? <LoadingIndicator label="Starting checkout..." compact tone="light" /> : 'Buy lifetime'}
+          <button
+            type="button"
+            onClick={buyLifetime}
+            disabled={isLifetimeLoading || config.paymentConfigured === false}
+            className="btn-dark"
+            style={{
+              marginTop: 24,
+              width: '100%',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              padding: '12px 24px',
+            }}
+          >
+            {isLifetimeLoading ? (
+              <LoadingIndicator label="Starting checkout..." compact tone="light" />
+            ) : (
+              'Buy lifetime'
+            )}
           </button>
-        </article>
+        </div>
       </div>
 
-      <section className="mt-8 rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-soft)] p-5 md:p-6">
-        <h2 className="text-3xl font-black text-[var(--ink-900)]">Billing notes</h2>
-        <ul className="mt-3 space-y-2 text-sm leading-7 text-[var(--ink-600)]">
-          <li>Payments are handled by Razorpay when payment configuration is enabled on this deployment.</li>
-          <li>SwiftDL does not position free use and paid plans as the same thing. Paid plans are optional add-ons, not hidden conversions.</li>
-          <li>If a deployment is missing server-side billing configuration, checkout buttons will stay limited and the site will remain on the free workflow.</li>
+      {/* Billing notes */}
+      <section
+        style={{
+          marginTop: 40,
+          borderRadius: 16,
+          border: '1px solid var(--border-soft)',
+          background: 'var(--surface-soft)',
+          padding: '24px 28px',
+        }}
+      >
+        <h2
+          style={{
+            fontSize: 18,
+            fontWeight: 800,
+            color: 'var(--ink-950)',
+          }}
+        >
+          Billing notes
+        </h2>
+        <ul
+          style={{
+            marginTop: 12,
+            listStyle: 'none',
+            padding: 0,
+          }}
+        >
+          {[
+            'Payments are handled by Razorpay when payment configuration is enabled on this deployment.',
+            'SwiftDL does not position free use and paid plans as the same thing. Paid plans are optional add-ons, not hidden conversions.',
+            'If a deployment is missing server-side billing configuration, checkout buttons will stay limited and the site will remain on the free workflow.',
+          ].map((note) => (
+            <li
+              key={note}
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: 10,
+                padding: '8px 0',
+                fontSize: 13,
+                lineHeight: 1.55,
+                color: 'var(--ink-600)',
+              }}
+            >
+              <span
+                style={{
+                  marginTop: 6,
+                  width: 5,
+                  height: 5,
+                  borderRadius: '50%',
+                  background: 'var(--ink-400)',
+                  flexShrink: 0,
+                }}
+              />
+              {note}
+            </li>
+          ))}
         </ul>
       </section>
 
-      <div className="mt-8 flex flex-wrap gap-3">
-        <Link to="/refund-policy" className="rounded-full bg-[var(--ink-900)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--ink-700)]">
+      {/* Action links */}
+      <div
+        style={{
+          marginTop: 32,
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 10,
+        }}
+      >
+        <Link
+          to="/refund-policy"
+          className="btn-dark"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+          }}
+        >
           Refund policy
         </Link>
-        <Link to="/contact-us" className="rounded-full border border-[var(--border-soft)] bg-white px-5 py-3 text-sm font-semibold text-[var(--ink-700)] transition hover:border-[var(--brand-300)] hover:text-[var(--brand-700)]">
+        <Link
+          to="/contact-us"
+          className="btn-outline"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+          }}
+        >
           Contact support
         </Link>
       </div>

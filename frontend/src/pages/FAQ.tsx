@@ -40,7 +40,7 @@ const faqs = [
     category: 'general',
     question: 'Do I need to create an account?',
     answer:
-      'No. You can use the downloader as a guest. Logging in is mainly useful for higher limits on some deployments, purchases, or saving premium cookie-vault entries to your account.',
+      'No. You can use the downloader as a guest. Logging in is mainly useful for higher limits on some deployments, purchases, or saving premium features to your account.',
   },
   {
     id: 3,
@@ -68,7 +68,7 @@ const faqs = [
     category: 'instagram',
     question: 'Can SwiftDL help with private Instagram links?',
     answer:
-      'Public links are the default path. For some login-required links, premium Cookies Mode may help if you already have permission to view the content and provide your own current cookies.txt export.',
+      'Public links are the default path. For login-required links, you would need to be already authorized to view the content.',
   },
   {
     id: 7,
@@ -96,7 +96,7 @@ const faqs = [
     category: 'facebook',
     question: 'What about private groups or friends-only posts?',
     answer:
-      'Those links usually require an authenticated session. Premium Cookies Mode may help only if you are already authorized to view the content.',
+      'Those links usually require an authenticated session. They may help only if you are already authorized to view the content.',
   },
   {
     id: 11,
@@ -143,7 +143,7 @@ const faqs = [
   {
     id: 17,
     category: 'policy',
-    question: 'What is Cookies Mode for?',
+    question: 'What about advanced authentication workflows?',
     answer:
       'It is an advanced workflow for links that require authentication. You should only use it with your own session and only when you are already allowed to view that media.',
   },
@@ -159,6 +159,7 @@ const faqs = [
 export default function FAQ() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
+  const [openItem, setOpenItem] = useState<number | null>(null);
 
   const filteredFaqs = faqs.filter((faq) => {
     const matchesSearch =
@@ -175,7 +176,7 @@ export default function FAQ() {
         <title>FAQ | {siteConfig.name}</title>
         <meta
           name="description"
-          content="Find answers about supported links, Cookies Mode, download limits, audio extraction, and responsible use."
+          content="Find answers about supported links, download limits, audio extraction, and responsible use."
         />
         <link rel="canonical" href={siteUrl('/faq')} />
       </Helmet>
@@ -191,32 +192,31 @@ export default function FAQ() {
         </p>
       </div>
 
-      <div className="mx-auto mt-6 max-w-3xl rounded-2xl border border-[var(--border-soft)] bg-white p-4 shadow-[0_18px_40px_rgba(31,34,51,0.06)]">
-        <div className="relative">
+      <div className="mx-auto mt-6 max-w-3xl">
+        <div className="relative mb-5">
           <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ink-500)]" />
           <input
             type="text"
             placeholder="Search questions..."
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
-            className="w-full rounded-[22px] border border-[var(--border-soft)] bg-[var(--surface-soft)] py-3 pl-11 pr-4 text-sm text-[var(--ink-900)] focus:border-[var(--brand-500)] focus:ring-4 focus:ring-[rgba(240,95,107,0.12)]"
+            className="input-field w-full pl-11"
           />
         </div>
 
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           {categories.map((category) => {
             const Icon = category.icon;
             const isActive = activeCategory === category.id;
-
             return (
               <button
                 key={category.id}
                 type="button"
                 onClick={() => setActiveCategory(category.id)}
-                className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition ${
+                className={`pill-soft transition ${
                   isActive
-                    ? 'bg-[var(--brand-600)] text-white'
-                    : 'bg-[var(--surface-soft)] text-[var(--ink-700)]'
+                    ? 'bg-[var(--brand-600)] text-white border-[var(--brand-600)]'
+                    : ''
                 }`}
               >
                 <Icon className="h-3.5 w-3.5" />
@@ -227,32 +227,59 @@ export default function FAQ() {
         </div>
       </div>
 
-      <div className="mx-auto mt-6 max-w-3xl space-y-4">
+      <div className="mx-auto mt-6 max-w-3xl space-y-3">
         {filteredFaqs.length > 0 ? (
-          filteredFaqs.map((faq) => (
-            <details
-              key={faq.id}
-              className="group overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-white shadow-[0_12px_28px_rgba(31,34,51,0.04)] open:border-[var(--border-strong)]"
-            >
-              <summary className="flex cursor-pointer list-none items-start justify-between gap-4 px-5 py-4 text-left">
-                <span className="text-sm font-semibold leading-6 text-[var(--ink-900)] md:text-base">
-                  {faq.question}
-                </span>
-                <ChevronDown className="mt-1 h-5 w-5 flex-none text-[var(--brand-600)] transition group-open:rotate-180" />
-              </summary>
-              <p className="border-t border-[var(--border-soft)] px-5 py-4 text-sm leading-7 text-[var(--ink-600)]">
-                {faq.answer}
-              </p>
-            </details>
-          ))
+          filteredFaqs.map((faq) => {
+            const isOpen = openItem === faq.id;
+            return (
+              <article
+                key={faq.id}
+                className={`feature-card overflow-hidden transition-all duration-300 ${
+                  isOpen
+                    ? 'border-[var(--brand-300)] shadow-xl shadow-[var(--brand-500)]/5'
+                    : ''
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenItem(isOpen ? null : faq.id)}
+                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                >
+                  <span className="text-sm font-semibold leading-6 text-[var(--ink-900)] md:text-base">
+                    {faq.question}
+                  </span>
+                  <ChevronDown
+                    className={`mt-1 h-5 w-5 flex-none text-[var(--brand-600)] transition-transform duration-300 ${
+                      isOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`grid transition-all duration-300 ease-in-out ${
+                    isOpen
+                      ? 'grid-rows-[1fr] opacity-100'
+                      : 'grid-rows-[0fr] opacity-0'
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="border-t border-[var(--border-soft)] px-5 py-4">
+                      <p className="text-sm leading-7 text-[var(--ink-600)]">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            );
+          })
         ) : (
-          <div className="rounded-2xl border border-[var(--border-soft)] bg-white px-6 py-10 text-center text-sm text-[var(--ink-500)]">
+          <div className="feature-card px-6 py-10 text-center text-sm text-[var(--ink-500)]">
             No questions matched your search. Try a broader keyword.
           </div>
         )}
       </div>
 
-      <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-soft)] p-6 text-center">
+      <div className="mx-auto mt-8 max-w-3xl feature-card p-6 text-center">
         <h2 className="text-xl font-black text-[var(--ink-900)]">
           Still need help?
         </h2>
@@ -261,16 +288,10 @@ export default function FAQ() {
           and whether the media was public or session-protected.
         </p>
         <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-          <Link
-            to="/contact-us"
-            className="rounded-full bg-[var(--ink-900)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--ink-700)]"
-          >
+          <Link to="/contact-us" className="btn-dark">
             Contact support
           </Link>
-          <Link
-            to="/how-to-download-instagram-reels"
-            className="rounded-full border border-[var(--border-soft)] bg-white px-5 py-3 text-sm font-semibold text-[var(--ink-700)] transition hover:border-[var(--brand-300)] hover:text-[var(--brand-700)]"
-          >
+          <Link to="/how-to-download-instagram-reels" className="btn-outline">
             Read guides
           </Link>
         </div>

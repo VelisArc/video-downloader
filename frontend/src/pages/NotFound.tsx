@@ -26,17 +26,14 @@ export default function NotFound() {
         not exist on this deployment.
       </p>
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 rounded-full bg-[var(--brand-600)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--brand-700)]"
-        >
+        <Link to="/" className="btn-brand inline-flex items-center gap-2">
           <Home className="h-4 w-4" />
           Go Home
         </Link>
         <button
           type="button"
           onClick={() => window.history.back()}
-          className="inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] bg-white px-5 py-3 text-sm font-semibold text-[var(--ink-700)] transition hover:border-[var(--brand-300)] hover:text-[var(--brand-700)]"
+          className="btn-outline inline-flex items-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" />
           Go Back

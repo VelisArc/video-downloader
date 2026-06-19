@@ -39,10 +39,14 @@ const Register = () => {
         <link rel="canonical" href="https://swiftdownlod.online/register" />
       </Helmet>
       <div className="w-full max-w-xs card p-5">
-        <h2 className="text-base font-bold text-center mb-4" style={{ color: 'var(--ink-900)' }}>Register for SwiftDL</h2>
+        <h2 className="text-base font-bold text-center mb-4 text-[var(--ink-900)]">
+          Register for SwiftDL
+        </h2>
         <form onSubmit={handleRegister} className="space-y-3">
           <div>
-            <label className="block text-[11px] mb-1" style={{ color: 'var(--ink-600)' }}>Email Address</label>
+            <label className="block text-[11px] mb-1 text-[var(--ink-600)]">
+              Email Address
+            </label>
             <input
               type="email"
               required
@@ -52,7 +56,9 @@ const Register = () => {
             />
           </div>
           <div>
-            <label className="block text-[11px] mb-1" style={{ color: 'var(--ink-600)' }}>Password</label>
+            <label className="block text-[11px] mb-1 text-[var(--ink-600)]">
+              Password
+            </label>
             <input
               type="password"
               required
@@ -62,7 +68,9 @@ const Register = () => {
             />
           </div>
           <div>
-            <label className="block text-[11px] mb-1" style={{ color: 'var(--ink-600)' }}>Confirm Password</label>
+            <label className="block text-[11px] mb-1 text-[var(--ink-600)]">
+              Confirm Password
+            </label>
             <input
               type="password"
               required
@@ -76,11 +84,22 @@ const Register = () => {
             disabled={loading}
             className="btn-brand w-full"
           >
-            {loading ? <LoadingIndicator label="Creating account..." compact tone="light" /> : 'Register'}
+            {loading ? (
+              <LoadingIndicator
+                label="Creating account..."
+                compact
+                tone="light"
+              />
+            ) : (
+              'Register'
+            )}
           </button>
         </form>
-        <div className="mt-3 text-center text-[11px]" style={{ color: 'var(--ink-500)' }}>
-          Already have an account? <Link to="/login" className="hover:underline" style={{ color: 'var(--brand-700)' }}>Login</Link>
+        <div className="mt-3 text-center text-[11px] text-[var(--ink-500)]">
+          Already have an account?{' '}
+          <Link to="/login" className="hover:underline text-[var(--brand-700)]">
+            Login
+          </Link>
         </div>
       </div>
     </div>

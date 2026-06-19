@@ -34,10 +34,14 @@ const Login = () => {
         <link rel="canonical" href="https://swiftdownlod.online/login" />
       </Helmet>
       <div className="w-full max-w-xs card p-5">
-        <h2 className="text-base font-bold text-center mb-4" style={{ color: 'var(--ink-900)' }}>Login to SwiftDL</h2>
+        <h2 className="text-base font-bold text-center mb-4 text-[var(--ink-900)]">
+          Login to SwiftDL
+        </h2>
         <form onSubmit={handleLogin} className="space-y-3">
           <div>
-            <label className="block text-[11px] mb-1" style={{ color: 'var(--ink-600)' }}>Email Address</label>
+            <label className="block text-[11px] mb-1 text-[var(--ink-600)]">
+              Email Address
+            </label>
             <input
               type="email"
               required
@@ -47,7 +51,9 @@ const Login = () => {
             />
           </div>
           <div>
-            <label className="block text-[11px] mb-1" style={{ color: 'var(--ink-600)' }}>Password</label>
+            <label className="block text-[11px] mb-1 text-[var(--ink-600)]">
+              Password
+            </label>
             <input
               type="password"
               required
@@ -61,11 +67,18 @@ const Login = () => {
             disabled={loading}
             className="btn-brand w-full"
           >
-            {loading ? <LoadingIndicator label="Logging in..." compact tone="light" /> : 'Login'}
+            {loading ? (
+              <LoadingIndicator label="Logging in..." compact tone="light" />
+            ) : (
+              'Login'
+            )}
           </button>
         </form>
-        <div className="mt-3 text-center text-[11px]" style={{ color: 'var(--ink-500)' }}>
-          Don't have an account? <Link to="/register" className="hover:underline" style={{ color: 'var(--brand-700)' }}>Register</Link>
+        <div className="mt-3 text-center text-[11px] text-[var(--ink-500)]">
+          Don't have an account?{' '}
+          <Link to="/register" className="hover:underline text-[var(--brand-700)]">
+            Register
+          </Link>
         </div>
       </div>
     </div>

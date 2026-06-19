@@ -13,7 +13,6 @@ import {
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import { useEntitlement } from '../context/EntitlementContext';
-import LoadingIndicator from '../components/LoadingIndicator';
 import { siteConfig, siteUrl } from '../lib/site';
 import {
   loadDownloadHistory,
@@ -50,19 +49,76 @@ export default function Dashboard() {
 
   if (!user) {
     return (
-      <div className="section-shell max-w-3xl py-12 text-center">
+      <div
+        className="section-shell"
+        style={{
+          maxWidth: 420,
+          margin: '0 auto',
+          padding: '80px 16px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
         <Helmet>
           <title>Dashboard | {siteConfig.name}</title>
         </Helmet>
-        <div className="card p-8">
-          <div className="mx-auto rounded-xl p-3" style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)', display: 'inline-flex' }}>
-            <User className="h-6 w-6" />
+        <div
+          className="card"
+          style={{
+            padding: '48px 32px',
+            textAlign: 'center',
+            width: '100%',
+          }}
+        >
+          <div
+            style={{
+              margin: '0 auto',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 56,
+              height: 56,
+              borderRadius: 16,
+              background: 'var(--surface-soft)',
+              color: 'var(--brand-800)',
+            }}
+          >
+            <User size={24} />
           </div>
-          <h1 className="mt-4 text-2xl font-black" style={{ color: 'var(--ink-900)' }}>Login required</h1>
-          <p className="mt-2 text-xs leading-6" style={{ color: 'var(--ink-600)' }}>
-            Login with your Google account to access your dashboard and track your usage.
+          <h1
+            style={{
+              marginTop: 20,
+              fontSize: 24,
+              fontWeight: 800,
+              color: 'var(--ink-950)',
+              letterSpacing: '-0.02em',
+            }}
+          >
+            Login required
+          </h1>
+          <p
+            style={{
+              marginTop: 8,
+              fontSize: 14,
+              lineHeight: 1.6,
+              color: 'var(--ink-600)',
+              maxWidth: 300,
+              margin: '8px auto 0',
+            }}
+          >
+            Sign in with your Google account to access your dashboard and track your usage.
           </p>
-          <Link to="/" className="btn-brand mt-4 inline-flex">
+          <Link
+            to="/"
+            className="btn-brand"
+            style={{
+              marginTop: 24,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+            }}
+          >
             Go to Home
           </Link>
         </div>
@@ -72,28 +128,112 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="section-shell max-w-5xl py-10 animate-pulse">
-        <div className="h-10 w-64 rounded-xl bg-[var(--surface-soft)] mb-8"></div>
-        <div className="grid gap-6 lg:grid-cols-3">
-          <div className="card h-64 lg:col-span-1 bg-[var(--surface-soft)]"></div>
-          <div className="card h-64 lg:col-span-2 bg-[var(--surface-soft)]"></div>
+      <div
+        className="section-shell"
+        style={{ maxWidth: 960, margin: '0 auto', padding: '40px 16px' }}
+      >
+        <Helmet>
+          <title>Dashboard | {siteConfig.name}</title>
+        </Helmet>
+        {/* Title skeleton */}
+        <div
+          style={{
+            width: 200,
+            height: 14,
+            borderRadius: 8,
+            background: 'var(--surface-soft)',
+          }}
+        />
+        <div
+          style={{
+            marginTop: 12,
+            width: 280,
+            height: 28,
+            borderRadius: 12,
+            background: 'var(--surface-soft)',
+          }}
+        />
+        <div
+          style={{
+            marginTop: 32,
+            display: 'grid',
+            gridTemplateColumns: '280px 1fr',
+            gap: 24,
+          }}
+        >
+          {/* Sidebar skeleton */}
+          <div
+            className="card"
+            style={{
+              height: 360,
+              background: 'var(--surface-soft)',
+            }}
+          />
+          {/* Main content skeleton */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div
+                className="card"
+                style={{
+                  height: 100,
+                  background: 'var(--surface-soft)',
+                }}
+              />
+              <div
+                className="card"
+                style={{
+                  height: 100,
+                  background: 'var(--surface-soft)',
+                }}
+              />
+            </div>
+            <div
+              className="card"
+              style={{
+                flex: 1,
+                minHeight: 320,
+                background: 'var(--surface-soft)',
+              }}
+            />
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="section-shell max-w-4xl py-8">
+    <div
+      className="section-shell"
+      style={{ maxWidth: 960, margin: '0 auto', padding: '40px 16px' }}
+    >
       <Helmet>
         <title>Dashboard | {siteConfig.name}</title>
         <meta name="description" content="Manage your SwiftDL account, view usage, and track your downloads." />
         <link rel="canonical" href={siteUrl('/dashboard')} />
       </Helmet>
 
-      <div className="flex flex-wrap items-start justify-between gap-3">
+      {/* Header */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 12,
+        }}
+      >
         <div>
           <span className="section-eyebrow">Dashboard</span>
-          <h1 className="mt-2 text-2xl font-black md:text-3xl" style={{ color: 'var(--ink-900)' }}>
+          <h1
+            style={{
+              marginTop: 8,
+              fontSize: 28,
+              fontWeight: 800,
+              color: 'var(--ink-950)',
+              letterSpacing: '-0.025em',
+              lineHeight: 1.2,
+            }}
+          >
             Welcome back, {user.displayName?.split(' ')[0] || 'User'}
           </h1>
         </div>
@@ -101,140 +241,405 @@ export default function Dashboard() {
           type="button"
           onClick={() => setShowLogout(true)}
           className="btn-outline"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+          }}
         >
-          <LogOut className="h-3.5 w-3.5" />
+          <LogOut size={14} />
           Logout
         </button>
       </div>
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-3">
-        {/* Profile Card */}
-        <div className="card lg:col-span-1">
-          <div className="flex flex-col items-center text-center">
+      {/* Two-column layout */}
+      <div
+        style={{
+          marginTop: 28,
+          display: 'grid',
+          gridTemplateColumns: '280px 1fr',
+          gap: 24,
+          alignItems: 'start',
+        }}
+      >
+        {/* Profile sidebar */}
+        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+          <div
+            style={{
+              padding: '28px 24px 24px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+            }}
+          >
+            {/* Avatar */}
             {user.photoURL ? (
               <img
                 src={user.photoURL}
                 alt={user.displayName || 'User'}
-                className="h-16 w-16 rounded-full border-3 shadow-lg"
-                style={{ borderColor: 'var(--surface-soft)' }}
+                style={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '3px solid var(--surface-soft)',
+                  boxShadow: 'var(--shadow-md)',
+                }}
               />
             ) : (
               <div
-                className="flex h-16 w-16 items-center justify-center rounded-full"
-                style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}
+                style={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'var(--surface-soft)',
+                  color: 'var(--brand-800)',
+                  border: '3px solid var(--surface)',
+                }}
               >
-                <User className="h-6 w-6" />
+                <User size={28} />
               </div>
             )}
-            <h2 className="mt-3 text-sm font-black" style={{ color: 'var(--ink-900)' }}>
+
+            <h2
+              style={{
+                marginTop: 14,
+                fontSize: 15,
+                fontWeight: 700,
+                color: 'var(--ink-950)',
+                lineHeight: 1.3,
+              }}
+            >
               {user.displayName || 'User'}
             </h2>
-            <p className="mt-0.5 text-[11px]" style={{ color: 'var(--ink-500)' }}>
+            <p
+              style={{
+                marginTop: 2,
+                fontSize: 12,
+                color: 'var(--ink-500)',
+              }}
+            >
               {user.email}
             </p>
 
+            {/* Plan badge */}
             <div
-              className="mt-3 w-full rounded-xl p-3 text-white"
               style={{
+                marginTop: 16,
+                width: '100%',
+                borderRadius: 12,
+                padding: '12px 16px',
+                color: '#fff',
                 background: isPremium
-                  ? 'linear-gradient(135deg, #d84853, #f49c4d)'
-                  : 'var(--ink-900)',
+                  ? 'linear-gradient(135deg, var(--brand-800), var(--accent-600))'
+                  : 'var(--ink-950)',
               }}
             >
-              <div className="flex items-center justify-center gap-1.5">
-                {isPremium ? <Sparkles className="h-3.5 w-3.5" /> : <Shield className="h-3.5 w-3.5" />}
-                <span className="text-xs font-bold">{planLabel(activePlan)}</span>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 6,
+                }}
+              >
+                {isPremium ? (
+                  <Sparkles size={14} />
+                ) : (
+                  <Shield size={14} />
+                )}
+                <span style={{ fontSize: 12, fontWeight: 700 }}>
+                  {planLabel(activePlan)}
+                </span>
               </div>
-              <p className="mt-0.5 text-[10px] text-white/70">
+              <p
+                style={{
+                  marginTop: 4,
+                  fontSize: 11,
+                  lineHeight: 1.4,
+                  opacity: 0.75,
+                }}
+              >
                 {planDescription(activePlan)}
               </p>
             </div>
 
             {!isPremium && (
-              <Link to="/pricing" className="btn-brand mt-3 w-full">
-                <CreditCard className="h-3.5 w-3.5" />
+              <Link
+                to="/pricing"
+                className="btn-brand"
+                style={{
+                  marginTop: 16,
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 6,
+                }}
+              >
+                <CreditCard size={14} />
                 Upgrade to Premium
               </Link>
             )}
           </div>
         </div>
 
-        {/* Quick Stats */}
-        <div className="space-y-4 lg:col-span-2">
-          <div className="grid gap-3 sm:grid-cols-3 stagger-children">
-            <div className="card text-center">
-              <Download className="mx-auto h-4 w-4" style={{ color: 'var(--brand-600)' }} />
-              <p className="mt-2 text-xl font-black" style={{ color: 'var(--ink-900)' }}>
-                {entitlement.unlimited ? '∞' : (activePlan === 'user' ? '3' : '1')}
+        {/* Main content */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Stats row */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div
+              className="card"
+              style={{
+                padding: '20px 16px',
+                textAlign: 'center',
+              }}
+            >
+              <Download
+                size={18}
+                style={{ margin: '0 auto', color: 'var(--brand-600)' }}
+              />
+              <p
+                style={{
+                  marginTop: 10,
+                  fontSize: 28,
+                  fontWeight: 800,
+                  color: 'var(--ink-950)',
+                  lineHeight: 1,
+                }}
+              >
+                {entitlement.unlimited
+                  ? '∞'
+                  : activePlan === 'user'
+                    ? '3'
+                    : '1'}
               </p>
-              <p className="mt-0.5 text-[10px]" style={{ color: 'var(--ink-500)' }}>Daily Limit</p>
+              <p
+                style={{
+                  marginTop: 4,
+                  fontSize: 11,
+                  color: 'var(--ink-500)',
+                }}
+              >
+                Daily Limit
+              </p>
             </div>
-            <div className="card text-center">
-              <History className="mx-auto h-4 w-4" style={{ color: 'var(--brand-600)' }} />
-              <p className="mt-2 text-xl font-black" style={{ color: 'var(--ink-900)' }}>
+            <div
+              className="card"
+              style={{
+                padding: '20px 16px',
+                textAlign: 'center',
+              }}
+            >
+              <History
+                size={18}
+                style={{ margin: '0 auto', color: 'var(--brand-600)' }}
+              />
+              <p
+                style={{
+                  marginTop: 10,
+                  fontSize: 28,
+                  fontWeight: 800,
+                  color: 'var(--ink-950)',
+                  lineHeight: 1,
+                }}
+              >
                 {history.length}
               </p>
-              <p className="mt-0.5 text-[10px]" style={{ color: 'var(--ink-500)' }}>Recent Downloads</p>
+              <p
+                style={{
+                  marginTop: 4,
+                  fontSize: 11,
+                  color: 'var(--ink-500)',
+                }}
+              >
+                Recent Downloads
+              </p>
             </div>
           </div>
 
-          <div className="card">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black" style={{ color: 'var(--ink-900)' }}>
+          {/* Recent downloads */}
+          <div className="card" style={{ padding: 0 }}>
+            <div
+              style={{
+                padding: '16px 20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                borderBottom: '1px solid var(--border-soft)',
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: 'var(--ink-950)',
+                }}
+              >
                 Recent Downloads
               </h3>
               <button
                 type="button"
                 onClick={() => refresh().then(() => toast.success('Refreshed'))}
-                className="text-[11px] font-semibold transition hover:opacity-70"
-                style={{ color: 'var(--brand-700)' }}
+                style={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: 'var(--brand-700)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                }}
               >
                 Refresh
               </button>
             </div>
             {history.length > 0 ? (
-              <div className="mt-3 space-y-2">
+              <div style={{ padding: '8px 12px 12px' }}>
                 {history.slice(0, 5).map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center gap-2.5 rounded-xl p-2.5"
-                    style={{ background: 'var(--surface-soft)' }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 12,
+                      padding: '10px 12px',
+                      borderRadius: 10,
+                      transition: 'background 0.15s',
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLDivElement).style.background =
+                        'var(--surface-soft)';
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLDivElement).style.background =
+                        'transparent';
+                    }}
                   >
                     {item.thumbnail ? (
-                      <img src={item.thumbnail} alt="" className="h-8 w-8 rounded-lg object-cover" />
+                      <img
+                        src={item.thumbnail}
+                        alt=""
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: 8,
+                          objectFit: 'cover',
+                        }}
+                      />
                     ) : (
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: 'var(--surface)', color: 'var(--brand-700)' }}>
-                        <Download className="h-3.5 w-3.5" />
+                      <div
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: 8,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          background: 'var(--surface-soft)',
+                          color: 'var(--brand-700)',
+                          flexShrink: 0,
+                        }}
+                      >
+                        <Download size={14} />
                       </div>
                     )}
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-xs font-semibold" style={{ color: 'var(--ink-900)' }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 600,
+                          color: 'var(--ink-900)',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
                         {item.title}
                       </p>
-                      <p className="text-[10px]" style={{ color: 'var(--ink-500)' }}>
+                      <p style={{ fontSize: 10, color: 'var(--ink-500)' }}>
                         {item.date} · {item.ext.toUpperCase()}
                       </p>
                     </div>
                     <a
                       href={item.downloadUrl}
                       download={`${sanitizeFilename(item.title)}.${item.ext}`}
-                      className="rounded-full p-1.5 transition hover:bg-[var(--surface)]"
-                      style={{ color: 'var(--brand-700)' }}
+                      style={{
+                        width: 32,
+                        height: 32,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'var(--brand-700)',
+                        flexShrink: 0,
+                        transition: 'background 0.15s',
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLAnchorElement).style.background =
+                          'var(--surface-soft)';
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLAnchorElement).style.background =
+                          'transparent';
+                      }}
                       aria-label="Download item"
                     >
-                      <Download className="h-3.5 w-3.5" />
+                      <Download size={14} />
                     </a>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="mt-3 flex flex-col items-center rounded-xl py-8 text-center" style={{ background: 'var(--surface-soft)' }}>
-                <div className="mb-2 rounded-full bg-white p-2 shadow-sm">
-                   <Download className="h-5 w-5" style={{ color: 'var(--ink-400)' }} />
+              <div
+                style={{
+                  padding: '40px 20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                }}
+              >
+                <div
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'var(--surface-soft)',
+                    color: 'var(--ink-400)',
+                    marginBottom: 12,
+                  }}
+                >
+                  <Download size={18} />
                 </div>
-                <p className="text-xs font-medium" style={{ color: 'var(--ink-600)' }}>No recent downloads</p>
-                <p className="mt-0.5 text-[10px]" style={{ color: 'var(--ink-500)' }}>Your download history will appear here.</p>
-                <Link to="/" className="mt-3 btn-brand py-1.5 px-4 text-[11px]">
+                <p
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: 'var(--ink-600)',
+                  }}
+                >
+                  No recent downloads
+                </p>
+                <p style={{ fontSize: 11, color: 'var(--ink-500)', marginTop: 2 }}>
+                  Your download history will appear here.
+                </p>
+                <Link
+                  to="/"
+                  className="btn-brand"
+                  style={{
+                    marginTop: 16,
+                    fontSize: 12,
+                    padding: '8px 20px',
+                  }}
+                >
                   Start Downloading
                 </Link>
               </div>
@@ -243,37 +648,94 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Logout confirm modal */}
+      {/* Logout modal */}
       {showLogout && (
         <div
-          className="fixed inset-0 z-[110] flex items-center justify-center p-4 backdrop-blur-sm"
-          style={{ background: 'rgba(0,0,0,0.55)' }}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 110,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 16,
+            background: 'rgba(0,0,0,0.55)',
+            backdropFilter: 'blur(4px)',
+          }}
           onClick={() => setShowLogout(false)}
         >
           <div
-            className="w-full max-w-xs animate-scale-up rounded-2xl p-5 shadow-2xl"
-            style={{ background: 'var(--surface)' }}
+            className="card"
+            style={{
+              width: '100%',
+              maxWidth: 340,
+              padding: '24px',
+              boxShadow: 'var(--shadow-2xl)',
+            }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="mx-auto inline-flex rounded-xl p-2" style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}>
-              <LogOut className="h-5 w-5" />
+            <div
+              style={{
+                margin: '0 auto',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 44,
+                height: 44,
+                borderRadius: 12,
+                background: 'var(--surface-soft)',
+                color: 'var(--brand-800)',
+              }}
+            >
+              <LogOut size={20} />
             </div>
-            <h3 className="mt-3 text-center text-xl font-black" style={{ color: 'var(--ink-900)' }}>
+            <h3
+              style={{
+                marginTop: 16,
+                textAlign: 'center',
+                fontSize: 18,
+                fontWeight: 800,
+                color: 'var(--ink-950)',
+              }}
+            >
               Confirm logout
             </h3>
-            <p className="mt-2 text-center text-xs leading-6" style={{ color: 'var(--ink-600)' }}>
+            <p
+              style={{
+                marginTop: 8,
+                textAlign: 'center',
+                fontSize: 13,
+                lineHeight: 1.5,
+                color: 'var(--ink-600)',
+              }}
+            >
               Are you sure you want to logout?
             </p>
-            <div className="mt-4 flex gap-2">
-              <button type="button" onClick={() => setShowLogout(false)} className="btn-outline flex-1">
+            <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
+              <button
+                type="button"
+                onClick={() => setShowLogout(false)}
+                className="btn-outline"
+                style={{ flex: 1 }}
+              >
                 Cancel
               </button>
               <button
                 type="button"
-                onClick={async () => { await logout(); setShowLogout(false); }}
-                className="btn-dark flex-1"
+                onClick={async () => {
+                  await logout();
+                  setShowLogout(false);
+                }}
+                className="btn-dark"
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 6,
+                }}
               >
-                <LogOut className="h-3.5 w-3.5" />
+                <LogOut size={14} />
                 Logout
               </button>
             </div>

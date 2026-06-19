@@ -14,6 +14,8 @@ import {
   Menu,
   User,
   X,
+  ChevronRight,
+  ExternalLink,
 } from 'lucide-react';
 import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'react-hot-toast';
@@ -35,7 +37,6 @@ const DMCA = lazy(() => import('./pages/DMCA'));
 const AboutUs = lazy(() => import('./pages/AboutUs'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
 const SupportedPlatforms = lazy(() => import('./pages/SupportedPlatforms'));
-
 const HowToDownloadInstagramReels = lazy(() => import('./pages/HowToDownloadInstagramReels'));
 const HowToDownloadFacebookVideos = lazy(() => import('./pages/HowToDownloadFacebookVideos'));
 const FAQ = lazy(() => import('./pages/FAQ'));
@@ -47,9 +48,7 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 function PageLoader() {
   return (
     <div className="flex min-h-[50vh] items-center justify-center">
-      <div className="glass-panel flex items-center justify-center rounded-2xl px-5 py-4">
-        <LoadingIndicator label="Loading..." />
-      </div>
+      <LoadingIndicator label="Loading..." />
     </div>
   );
 }
@@ -61,6 +60,7 @@ function Navbar() {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { user, signInWithGoogle, logout } = useAuth();
 
   useEffect(() => {
@@ -79,8 +79,13 @@ function Navbar() {
 
     updateInstallAvailability();
     window.addEventListener('swiftdl-install-available', updateInstallAvailability);
+
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
     return () => {
       window.removeEventListener('swiftdl-install-available', updateInstallAvailability);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -113,10 +118,10 @@ function Navbar() {
   };
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `rounded-full px-3 py-1.5 text-[13px] font-semibold transition-all duration-200 ${
+    `rounded-lg px-3 py-1.5 text-[13px] font-medium transition-all duration-200 ${
       isActive
-        ? 'bg-[var(--surface-soft)] text-[var(--brand-700)]'
-        : 'text-[var(--ink-600)] hover:bg-[var(--surface-soft)] hover:text-[var(--brand-700)]'
+        ? 'bg-[var(--brand-100)] text-[var(--brand-700)]'
+        : 'text-[var(--ink-600)] hover:bg-[var(--surface-soft)] hover:text-[var(--ink-900)]'
     }`;
 
   const handleLogoutConfirm = async () => {
@@ -133,33 +138,31 @@ function Navbar() {
   return (
     <>
       <header
-        className="sticky top-0 z-50 border-b backdrop-blur-xl"
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          scrolled ? 'border-b shadow-sm' : ''
+        }`}
         style={{
           borderColor: 'var(--border-soft)',
-          background: 'var(--surface-glass)',
+          background: scrolled ? 'var(--surface-glass)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(20px) saturate(1.5)' : 'none',
         }}
       >
         <div className="section-shell">
           <div className="flex items-center justify-between py-3">
             <Link
               to="/"
-              className="flex items-center gap-2.5"
+              className="flex items-center gap-2.5 group"
               onClick={() => setIsMenuOpen(false)}
             >
-              <div className="rounded-xl bg-[linear-gradient(135deg,_#d84853,_#f49c4d)] p-2 text-white shadow-lg">
+              <div className="rounded-xl p-2 text-white transition-all duration-200 group-hover:scale-105" style={{ background: 'var(--gradient-brand)' }}>
                 <Download className="h-4 w-4" />
               </div>
-              <div>
-                <p className="text-base font-black" style={{ color: 'var(--ink-900)' }}>
-                  {siteConfig.name}
-                </p>
-                <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'var(--ink-500)' }}>
-                  Browser downloader
-                </p>
-              </div>
+              <span className="text-base font-bold tracking-tight" style={{ color: 'var(--ink-900)' }}>
+                {siteConfig.name}
+              </span>
             </Link>
 
-            <nav className="hidden items-center gap-1 lg:flex">
+            <nav className="hidden items-center gap-0.5 lg:flex">
               {primaryNav.map((item) => (
                 <NavLink key={item.to} to={item.to} className={navLinkClass}>
                   {item.label}
@@ -167,93 +170,84 @@ function Navbar() {
               ))}
             </nav>
 
-            <div className="hidden items-center gap-3 lg:flex">
+            <div className="hidden items-center gap-2 lg:flex">
               <ThemeToggle />
 
               {installAvailable && (
                 <button
                   type="button"
                   onClick={handleInstallClick}
-                  className="btn-outline"
+                  className="btn-ghost text-[13px]"
                 >
                   Install
                 </button>
               )}
 
               {user ? (
-                <div className="flex items-center gap-3">
-                  <Link to="/dashboard" className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
+                  <Link
+                    to="/dashboard"
+                    className="flex items-center gap-2 rounded-lg px-2 py-1.5 transition-all duration-200 hover:bg-[var(--surface-soft)]"
+                  >
                     {user.photoURL ? (
                       <img
                         src={user.photoURL}
                         alt={user.displayName || 'User'}
-                        className="h-8 w-8 rounded-full border-2 shadow-sm transition-transform hover:scale-105"
-                        style={{ borderColor: 'var(--surface-soft)' }}
+                        className="h-7 w-7 rounded-full ring-2 ring-[var(--border-soft)]"
                       />
                     ) : (
                       <span
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-full"
-                        style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}
+                        className="inline-flex h-7 w-7 items-center justify-center rounded-full"
+                        style={{ background: 'var(--surface-soft)', color: 'var(--brand-600)' }}
                       >
                         <User className="h-3.5 w-3.5" />
                       </span>
                     )}
-                  </Link>
-                  <Link to="/dashboard" className="btn-outline hidden xl:inline-flex">
-                    <LayoutDashboard className="h-4 w-4" />
-                    Dashboard
+                    <span className="text-[13px] font-medium hidden xl:inline" style={{ color: 'var(--ink-700)' }}>
+                      {user.displayName?.split(' ')[0] || 'Account'}
+                    </span>
                   </Link>
                   <button
                     type="button"
                     onClick={() => setShowLogoutConfirm(true)}
-                    className="btn-dark"
+                    className="btn-ghost text-[13px]"
                   >
-                    <LogOut className="h-4 w-4" />
-                    Logout
+                    <LogOut className="h-3.5 w-3.5" />
                   </button>
                 </div>
               ) : (
                 <button
                   type="button"
                   onClick={signInWithGoogle}
-                  className="btn-brand"
+                  className="btn-brand text-[13px]"
                 >
-                  <LogIn className="h-4 w-4" />
-                  Login
+                  <LogIn className="h-3.5 w-3.5" />
+                  Sign in
                 </button>
               )}
             </div>
 
-            {/* Mobile menu toggle */}
             <div className="flex items-center gap-1.5 lg:hidden">
               <ThemeToggle />
               <button
                 type="button"
-                onClick={() => setIsMenuOpen((value) => !value)}
-                className="rounded-xl border p-2 lg:hidden"
-                style={{
-                  borderColor: 'var(--border-soft)',
-                  background: 'var(--surface)',
-                  color: 'var(--ink-700)',
-                }}
+                onClick={() => setIsMenuOpen((v) => !v)}
+                className="rounded-lg border p-2 transition-colors hover:bg-[var(--surface-soft)]"
+                style={{ borderColor: 'var(--border-soft)', color: 'var(--ink-600)' }}
                 aria-label="Toggle menu"
               >
-                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
               </button>
             </div>
           </div>
 
-          {/* Mobile menu */}
           {isMenuOpen && (
             <div className="pb-3 lg:hidden animate-fade-in">
               <div
-                className="rounded-2xl border p-3 shadow-lg"
-                style={{
-                  borderColor: 'var(--border-soft)',
-                  background: 'var(--surface)',
-                }}
+                className="rounded-xl border p-3 shadow-lg"
+                style={{ borderColor: 'var(--border-soft)', background: 'var(--surface)' }}
               >
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-0.5">
                   {primaryNav.map((item) => (
                     <NavLink
                       key={item.to}
@@ -275,15 +269,12 @@ function Navbar() {
                   )}
                 </div>
 
-                <div className="mt-4 flex flex-col gap-2 border-t pt-4" style={{ borderColor: 'var(--border-soft)' }}>
+                <div className="mt-2 flex flex-col gap-1.5 border-t pt-2" style={{ borderColor: 'var(--border-soft)' }}>
                   {installAvailable && (
                     <button
                       type="button"
-                      onClick={() => {
-                        handleInstallClick();
-                        setIsMenuOpen(false);
-                      }}
-                      className="btn-outline w-full"
+                      onClick={() => { handleInstallClick(); setIsMenuOpen(false); }}
+                      className="btn-outline w-full text-[13px]"
                     >
                       Install app
                     </button>
@@ -291,24 +282,18 @@ function Navbar() {
                   {user ? (
                     <button
                       type="button"
-                      onClick={() => {
-                        setShowLogoutConfirm(true);
-                        setIsMenuOpen(false);
-                      }}
-                      className="btn-dark w-full"
+                      onClick={() => { setShowLogoutConfirm(true); setIsMenuOpen(false); }}
+                      className="btn-dark w-full text-[13px]"
                     >
                       Logout
                     </button>
                   ) : (
                     <button
                       type="button"
-                      onClick={() => {
-                        signInWithGoogle();
-                        setIsMenuOpen(false);
-                      }}
-                      className="btn-brand w-full"
+                      onClick={() => { signInWithGoogle(); setIsMenuOpen(false); }}
+                      className="btn-brand w-full text-[13px]"
                     >
-                      Login with Google
+                      Sign in with Google
                     </button>
                   )}
                 </div>
@@ -318,46 +303,45 @@ function Navbar() {
         </div>
       </header>
 
-      {/* Install help modal */}
       {showInstallHelp && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm"
-          style={{ background: 'rgba(0,0,0,0.55)' }}
+          style={{ background: 'rgba(0,0,0,0.5)' }}
           onClick={() => setShowInstallHelp(false)}
         >
           <div
             className="w-full max-w-xs animate-scale-up rounded-2xl p-5 shadow-2xl"
             style={{ background: 'var(--surface)' }}
-            onClick={(event) => event.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
-            <div className="mx-auto inline-flex rounded-xl p-2" style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}>
+            <div className="mx-auto inline-flex rounded-xl p-2.5" style={{ background: 'var(--gradient-brand)', color: 'white' }}>
               <Download className="h-5 w-5" />
             </div>
-            <h3 className="mt-3 text-center text-xl font-black" style={{ color: 'var(--ink-900)' }}>
+            <h3 className="mt-3 text-center text-lg font-bold" style={{ color: 'var(--ink-900)' }}>
               Install {siteConfig.name}
             </h3>
-            <p className="mt-2 text-center text-xs leading-6" style={{ color: 'var(--ink-600)' }}>
-              Add the app to your device for quicker access.
+            <p className="mt-1.5 text-center text-xs leading-5" style={{ color: 'var(--ink-600)' }}>
+              Add the app for quicker access from your home screen.
             </p>
-            <div className="mt-4 rounded-xl p-3 text-xs leading-6" style={{ background: 'var(--surface-soft)', color: 'var(--ink-600)' }}>
+            <div className="mt-4 rounded-xl p-3 text-xs leading-5" style={{ background: 'var(--surface-soft)', color: 'var(--ink-600)' }}>
               {isIOS ? (
-                <ol className="space-y-2">
-                  <li>1. Tap <strong>Share</strong> in Safari.</li>
-                  <li>2. Choose <strong>Add to Home Screen</strong>.</li>
-                  <li>3. Tap <strong>Add</strong> to finish.</li>
+                <ol className="space-y-1.5">
+                  <li>1. Tap <strong>Share</strong> in Safari</li>
+                  <li>2. Choose <strong>Add to Home Screen</strong></li>
+                  <li>3. Tap <strong>Add</strong> to finish</li>
                 </ol>
               ) : (
-                <ol className="space-y-2">
-                  <li>1. Open your browser menu.</li>
-                  <li>2. Choose <strong>Install App</strong> or <strong>Add to Home Screen</strong>.</li>
-                  <li>3. Confirm the prompt.</li>
+                <ol className="space-y-1.5">
+                  <li>1. Open your browser menu</li>
+                  <li>2. Choose <strong>Install App</strong> or <strong>Add to Home Screen</strong></li>
+                  <li>3. Confirm the prompt</li>
                 </ol>
               )}
             </div>
             <button
               type="button"
               onClick={() => setShowInstallHelp(false)}
-              className="btn-dark mt-5 w-full"
+              className="btn-dark mt-4 w-full text-[13px]"
             >
               Close
             </button>
@@ -365,48 +349,47 @@ function Navbar() {
         </div>
       )}
 
-      {/* Logout confirm modal */}
       {showLogoutConfirm && (
         <div
           className="fixed inset-0 z-[110] flex items-center justify-center p-4 backdrop-blur-sm"
-          style={{ background: 'rgba(0,0,0,0.55)' }}
+          style={{ background: 'rgba(0,0,0,0.5)' }}
           onClick={() => { if (!isLoggingOut) setShowLogoutConfirm(false); }}
         >
           <div
             className="w-full max-w-xs animate-scale-up rounded-2xl p-5 shadow-2xl"
             style={{ background: 'var(--surface)' }}
-            onClick={(event) => event.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
-            <div className="mx-auto inline-flex rounded-xl p-2" style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}>
+            <div className="mx-auto inline-flex rounded-xl p-2.5" style={{ background: 'var(--surface-soft)', color: 'var(--brand-600)' }}>
               <LogOut className="h-5 w-5" />
             </div>
-            <h3 className="mt-3 text-center text-xl font-black" style={{ color: 'var(--ink-900)' }}>
-              Confirm logout
+            <h3 className="mt-3 text-center text-lg font-bold" style={{ color: 'var(--ink-900)' }}>
+              Sign out
             </h3>
-            <p className="mt-2 text-center text-xs leading-6" style={{ color: 'var(--ink-600)' }}>
-              Are you sure you want to logout?
+            <p className="mt-1.5 text-center text-xs leading-5" style={{ color: 'var(--ink-600)' }}>
+              Are you sure you want to sign out?
             </p>
-            <div className="mt-6 flex gap-2">
+            <div className="mt-4 flex gap-2">
               <button
                 type="button"
                 onClick={() => setShowLogoutConfirm(false)}
                 disabled={isLoggingOut}
-                className="btn-outline flex-1"
+                className="btn-outline flex-1 text-[13px]"
               >
-                Stay logged in
+                Cancel
               </button>
               <button
                 type="button"
                 onClick={handleLogoutConfirm}
                 disabled={isLoggingOut}
-                className="btn-dark flex-1"
+                className="btn-dark flex-1 text-[13px]"
               >
                 {isLoggingOut ? (
-                  <LoadingIndicator label="Logging out..." compact tone="light" />
+                  <LoadingIndicator label="" compact tone="light" />
                 ) : (
-                  <span className="inline-flex items-center gap-2">
-                    <LogOut className="h-4 w-4" />
-                    Logout
+                  <span className="inline-flex items-center gap-1.5">
+                    <LogOut className="h-3.5 w-3.5" />
+                    Sign out
                   </span>
                 )}
               </button>
@@ -423,7 +406,7 @@ function AppShell() {
     <Router>
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[101] focus:rounded-full focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[101] focus:rounded-lg focus:px-3 focus:py-1.5 focus:text-xs focus:font-semibold focus:text-white"
         style={{ background: 'var(--ink-900)' }}
       >
         Skip to content
@@ -432,11 +415,19 @@ function AppShell() {
         <Toaster
           position="top-right"
           toastOptions={{
+            duration: 3000,
             style: {
               background: 'var(--surface)',
               color: 'var(--ink-900)',
               border: '1px solid var(--border-soft)',
-              borderRadius: '16px',
+              borderRadius: '12px',
+              fontSize: '13px',
+              fontWeight: 500,
+              boxShadow: 'var(--shadow-lg)',
+              padding: '10px 14px',
+            },
+            success: {
+              iconTheme: { primary: 'var(--brand-600)', secondary: 'white' },
             },
           }}
         />
@@ -445,7 +436,7 @@ function AppShell() {
         <InstallPrompt />
         <Navbar />
 
-        <main id="main-content" className="min-h-[60vh]">
+        <main id="main-content" className="min-h-[50vh]">
           <ErrorBoundary>
             <Suspense fallback={<PageLoader />}>
               <Routes>
@@ -477,37 +468,29 @@ function AppShell() {
         </main>
 
         <footer
-          className="border-t py-7"
-          style={{
-            borderColor: 'var(--border-soft)',
-            background: 'var(--surface-glass)',
-          }}
+          className="border-t"
+          style={{ borderColor: 'var(--border-soft)', background: 'var(--surface)' }}
         >
-          <div className="section-shell">
-            <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr]">
-              <div>
-                <div className="flex items-center gap-2.5">
-                  <div className="rounded-xl bg-[linear-gradient(135deg,_#d84853,_#f49c4d)] p-2 text-white shadow-lg">
+          <div className="section-shell py-10">
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="sm:col-span-2 lg:col-span-1">
+                <Link to="/" className="flex items-center gap-2">
+                  <div className="rounded-lg p-1.5 text-white" style={{ background: 'var(--gradient-brand)' }}>
                     <Download className="h-3.5 w-3.5" />
                   </div>
-                  <div>
-                    <p className="text-base font-black" style={{ color: 'var(--ink-900)' }}>
-                      {siteConfig.name}
-                    </p>
-                    <p className="text-[11px]" style={{ color: 'var(--ink-500)' }}>
-                      Multi-platform video downloader
-                    </p>
-                  </div>
-                </div>
-                <p className="mt-3 max-w-sm text-xs leading-6" style={{ color: 'var(--ink-600)' }}>
-                  Download videos and audio from many major platforms with a clean browser workflow.
+                  <span className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>
+                    {siteConfig.name}
+                  </span>
+                </Link>
+                <p className="mt-3 max-w-[260px] text-xs leading-5" style={{ color: 'var(--ink-600)' }}>
+                  Download videos and audio from many major platforms with a fast, clean browser workflow.
                 </p>
-                <p className="mt-3 text-xs" style={{ color: 'var(--ink-600)' }}>
+                <p className="mt-3 text-xs" style={{ color: 'var(--ink-500)' }}>
                   Support:{' '}
                   <a
                     href={siteConfig.supportMailto}
-                    className="font-semibold transition hover:underline"
-                    style={{ color: 'var(--brand-700)' }}
+                    className="font-medium transition hover:underline"
+                    style={{ color: 'var(--brand-600)' }}
                   >
                     {siteConfig.supportEmail}
                   </a>
@@ -516,15 +499,15 @@ function AppShell() {
 
               {footerGroups.map((group) => (
                 <div key={group.title}>
-                  <h2 className="text-xs font-black uppercase tracking-[0.16em]" style={{ color: 'var(--ink-900)' }}>
+                  <h3 className="text-[11px] font-semibold uppercase tracking-[0.16em]" style={{ color: 'var(--ink-500)' }}>
                     {group.title}
-                  </h2>
-                  <ul className="mt-3 space-y-2 text-xs">
+                  </h3>
+                  <ul className="mt-3 space-y-2">
                     {group.links.map((item) => (
                       <li key={item.to}>
                         <Link
                           to={item.to}
-                          className="transition hover:text-[var(--brand-700)]"
+                          className="text-xs transition hover:underline"
                           style={{ color: 'var(--ink-600)' }}
                         >
                           {item.label}
@@ -535,11 +518,16 @@ function AppShell() {
                 </div>
               ))}
             </div>
-            <div
-              className="mt-6 border-t pt-4 text-xs"
-              style={{ borderColor: 'var(--border-soft)', color: 'var(--ink-500)' }}
-            >
-              © 2026 {siteConfig.name}. All rights reserved.
+
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t pt-6" style={{ borderColor: 'var(--border-soft)' }}>
+              <p className="text-[11px]" style={{ color: 'var(--ink-500)' }}>
+                &copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+              </p>
+              <div className="flex items-center gap-4">
+                <Link to="/privacy-policy" className="text-[11px] transition hover:underline" style={{ color: 'var(--ink-500)' }}>Privacy</Link>
+                <Link to="/terms-of-service" className="text-[11px] transition hover:underline" style={{ color: 'var(--ink-500)' }}>Terms</Link>
+                <Link to="/dmca" className="text-[11px] transition hover:underline" style={{ color: 'var(--ink-500)' }}>DMCA</Link>
+              </div>
             </div>
           </div>
         </footer>
@@ -549,7 +537,6 @@ function AppShell() {
 }
 
 export default function App() {
-  // Apply saved theme on mount
   useEffect(() => {
     const saved = localStorage.getItem('swiftdl-theme');
     if (saved === 'dark' || saved === 'light') {

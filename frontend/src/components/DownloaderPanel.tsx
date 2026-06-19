@@ -36,57 +36,138 @@ export default function DownloaderPanel({
       window.requestAnimationFrame(() => inputRef.current?.focus());
     } catch (err: any) {
       if (err.name === 'NotAllowedError') {
-         toast.error('Please allow clipboard access to use this feature');
+        toast.error('Please allow clipboard access to use this feature');
       } else {
-         toast.error('Failed to read clipboard');
+        toast.error('Failed to read clipboard');
       }
     }
   };
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: 'var(--brand-700)' }}>
+          <span
+            style={{
+              fontSize: '10px',
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              letterSpacing: '0.16em',
+              color: 'var(--brand-700)',
+            }}
+          >
             Downloader
-          </p>
-          <h2 className="mt-1.5 text-xl font-black md:text-2xl" style={{ color: 'var(--ink-900)' }}>
+          </span>
+          <h2
+            style={{
+              marginTop: '0.375rem',
+              fontSize: 'clamp(1.25rem, 2vw, 1.5rem)',
+              fontWeight: 900,
+              color: 'var(--ink-900)',
+            }}
+          >
             Paste your link and download
           </h2>
-          <p className="mt-1 max-w-2xl text-xs leading-5" style={{ color: 'var(--ink-600)' }}>
+          <p style={{ marginTop: '0.25rem', fontSize: '0.8rem', lineHeight: 1.5, color: 'var(--ink-600)' }}>
             Works with public video links from major platforms.
           </p>
         </div>
-        <div className="inline-flex rounded-full border p-0.5 shadow-sm" style={{ borderColor: 'var(--border-soft)', background: 'var(--surface)' }}>
+
+        {/* Video / Audio toggle */}
+        <div
+          style={{
+            display: 'inline-flex',
+            borderRadius: 'var(--radius-full)',
+            padding: '3px',
+            background: 'var(--surface-soft)',
+            border: '1px solid var(--border-soft)',
+          }}
+        >
           <button
             type="button"
             onClick={() => setDownloadType('video')}
-            className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200"
-            style={downloadType === 'video' ? { background: 'var(--ink-900)', color: '#fff' } : { color: 'var(--ink-600)' }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              borderRadius: 'var(--radius-full)',
+              padding: '0.375rem 0.875rem',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              transition: 'all 200ms ease',
+              ...(downloadType === 'video'
+                ? {
+                    background: 'var(--gradient-brand)',
+                    color: 'white',
+                    boxShadow: '0 2px 8px rgba(225, 29, 72, 0.25)',
+                  }
+                : {
+                    background: 'transparent',
+                    color: 'var(--ink-600)',
+                  }),
+            }}
           >
-            <Video className="h-3 w-3" /> Video
+            <Video style={{ width: 12, height: 12 }} /> Video
           </button>
           <button
             type="button"
             onClick={() => setDownloadType('audio')}
-            className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200"
-            style={downloadType === 'audio' ? { background: 'var(--ink-900)', color: '#fff' } : { color: 'var(--ink-600)' }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              borderRadius: 'var(--radius-full)',
+              padding: '0.375rem 0.875rem',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              transition: 'all 200ms ease',
+              ...(downloadType === 'audio'
+                ? {
+                    background: 'var(--gradient-brand)',
+                    color: 'white',
+                    boxShadow: '0 2px 8px rgba(225, 29, 72, 0.25)',
+                  }
+                : {
+                    background: 'transparent',
+                    color: 'var(--ink-600)',
+                  }),
+            }}
           >
-            <FileAudio2 className="h-3 w-3" /> Audio
+            <FileAudio2 style={{ width: 12, height: 12 }} /> Audio
           </button>
         </div>
       </div>
 
-      <div className="mt-4 space-y-3">
+      {/* Input area */}
+      <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        {/* URL input */}
         <div
-          className="relative rounded-xl transition-all duration-300"
           style={{
-            boxShadow: isFocused ? '0 0 0 3px rgba(240,95,107,0.1), 0 6px 18px rgba(0,0,0,0.05)' : '0 3px 12px rgba(0,0,0,0.04)',
+            position: 'relative',
+            borderRadius: 'var(--radius-xl)',
+            boxShadow: isFocused
+              ? '0 0 0 3px rgba(225, 29, 72, 0.08), 0 6px 20px rgba(0, 0, 0, 0.06)'
+              : 'var(--shadow-md)',
+            transition: 'box-shadow 300ms ease',
           }}
         >
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3" style={{ color: 'var(--ink-500)' }}>
-            <Link2 className="h-4 w-4" />
+          {/* Link icon */}
+          <div
+            style={{
+              position: 'absolute',
+              left: '0.875rem',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              display: 'flex',
+              alignItems: 'center',
+              color: 'var(--ink-500)',
+              pointerEvents: 'none',
+            }}
+          >
+            <Link2 style={{ width: 16, height: 16 }} />
           </div>
+
           <input
             ref={inputRef}
             id="url-input"
@@ -97,49 +178,92 @@ export default function DownloaderPanel({
             onBlur={() => setIsFocused(false)}
             onKeyDown={(e) => { if (e.key === 'Enter' && !isLoading) onDownload(); }}
             placeholder="Paste a public video link..."
-            className="w-full rounded-xl border py-3 pl-10 pr-32 text-sm transition-all duration-200"
             style={{
+              width: '100%',
+              borderRadius: 'var(--radius-xl)',
+              border: '1px solid',
               borderColor: isFocused ? 'var(--brand-500)' : 'var(--border-soft)',
               background: 'var(--surface)',
               color: 'var(--ink-900)',
+              padding: '0.8125rem 8rem 0.8125rem 2.75rem',
+              fontSize: '0.875rem',
+              outline: 'none',
+              transition: 'border-color 200ms ease, box-shadow 200ms ease',
             }}
           />
-          <div className="absolute right-2 top-1/2 flex -translate-y-1/2 items-center gap-1">
+
+          {/* Action buttons */}
+          <div
+            style={{
+              position: 'absolute',
+              right: '0.5rem',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.25rem',
+            }}
+          >
             {url && (
               <button
                 type="button"
                 onClick={() => setUrl('')}
-                className="rounded-full p-1.5 transition hover:bg-[var(--surface-soft)]"
-                style={{ color: 'var(--ink-500)' }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '1.75rem',
+                  height: '1.75rem',
+                  borderRadius: 'var(--radius-full)',
+                  border: 'none',
+                  background: 'transparent',
+                  color: 'var(--ink-500)',
+                  cursor: 'pointer',
+                  transition: 'background 150ms ease',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--surface-soft)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                 aria-label="Clear link"
               >
-                <X className="h-3.5 w-3.5" />
+                <X style={{ width: 14, height: 14 }} />
               </button>
             )}
             <button
               type="button"
               onClick={handlePaste}
-              className="pill-soft gap-1 px-2.5 py-1.5 text-[10px] transition hover:bg-[var(--brand-200)]"
+              className="pill-soft"
+              style={{
+                gap: '0.25rem',
+                padding: '0.375rem 0.625rem',
+                fontSize: '10px',
+                cursor: 'pointer',
+                transition: 'background 150ms ease',
+              }}
               aria-label="Paste from clipboard"
             >
-              <Clipboard className="h-3 w-3" />
+              <Clipboard style={{ width: 12, height: 12 }} />
               Paste
             </button>
           </div>
         </div>
 
+        {/* Download button */}
         <button
           type="button"
           onClick={onDownload}
           disabled={isLoading}
-          className="btn-brand w-full py-3 text-sm"
-          style={isLoading ? { opacity: 0.75, cursor: 'not-allowed' } : {}}
+          className="btn-brand w-full"
+          style={{
+            padding: '0.8125rem',
+            fontSize: '0.875rem',
+            ...(isLoading ? { opacity: 0.75, cursor: 'not-allowed' } : {}),
+          }}
         >
           {isLoading ? (
             <LoadingIndicator label="Checking the link..." compact tone="light" />
           ) : (
             <>
-              <Download className="h-4 w-4" />
+              <Download style={{ width: 16, height: 16 }} />
               {`Download ${downloadType === 'video' ? 'video' : 'audio'}`}
             </>
           )}

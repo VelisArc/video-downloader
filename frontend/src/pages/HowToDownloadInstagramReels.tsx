@@ -6,9 +6,9 @@ import {
   ChevronDown,
   Download,
   Instagram,
-  Lock,
   Music4,
   Smartphone,
+  Shield,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { siteConfig, siteUrl } from '../lib/site';
@@ -19,20 +19,18 @@ const steps = [
   'Open SwiftDL in your web browser.',
   'Paste the copied link into the main input field.',
   'Select "Video" or "Audio" depending on what you want to extract.',
-  'If the content is age-restricted or private (and you follow the account), enable Cookies Mode.',
-  'Upload your fresh cookies.txt file if using Cookies Mode.',
   'Click the primary download button to start extraction.',
   'Wait a few seconds for our servers to process the Instagram URL.',
   'Check the preview card to ensure the title and thumbnail match what you expect.',
   'Click the final save button presented in the result card.',
-  'If the browser opens the video instead of saving it, use the browser\'s "Save Page As" or long-press context menu.',
+  "If the browser opens the video instead of saving it, use the browser's \"Save Page As\" or long-press context menu.",
 ];
 
 const faqs = [
   {
     question: 'Can I use this for private accounts?',
     answer:
-      'Public links are the main path. For some login-required links, Cookies Mode can help only if you already have permission to view the media and provide your own current cookies.txt export.',
+      'Public links are the main path. For login-required links, you would need to be already authorized to view the media.',
   },
   {
     question: 'Can I download audio only?',
@@ -52,7 +50,7 @@ const faqs = [
   {
     question: 'Can I download Instagram Stories?',
     answer:
-      'Downloading stories is highly unreliable because they expire quickly and often require authentication. If you try, you must use the exact story URL and Cookies Mode.',
+      'Downloading stories is highly unreliable because they expire quickly and often require authentication. If you try, you must use the exact story URL.',
   },
   {
     question: 'Are there limits on how many reels I can download?',
@@ -84,11 +82,6 @@ const faqs = [
     answer:
       'No. SwiftDL works entirely within your browser (Chrome, Safari, Firefox, etc.) without needing a dedicated mobile app.',
   },
-  {
-    question: 'Is it safe to use my Instagram cookies?',
-    answer:
-      'Cookies Mode is secure, but you should treat your cookies like a password. We encrypt them and only use them to access the media you request.',
-  },
 ];
 
 export default function HowToDownloadInstagramReels() {
@@ -100,7 +93,7 @@ export default function HowToDownloadInstagramReels() {
         <title>Instagram Download Guide | {siteConfig.name}</title>
         <meta
           name="description"
-          content="Learn the safest workflow for supported Instagram reels, post videos, audio extraction, and session-based links."
+          content="Learn the safest workflow for supported Instagram reels, post videos, and audio extraction."
         />
         <link rel="canonical" href={siteUrl('/how-to-download-instagram-reels')} />
       </Helmet>
@@ -117,28 +110,30 @@ export default function HowToDownloadInstagramReels() {
             A clearer workflow for public Instagram links, creator archives, and
             session-based links you are already allowed to view.
           </p>
-          <Link
-            to="/"
-            className="mt-4 inline-flex rounded-full bg-[var(--brand-600)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--brand-700)]"
-          >
+          <Link to="/" className="mt-4 btn-brand inline-flex">
             Open downloader
           </Link>
         </div>
       </section>
 
       <section className="mt-8 grid gap-5 lg:grid-cols-[1fr_0.92fr]">
-        <article className="rounded-2xl border border-[var(--border-soft)] bg-white p-5 shadow-[0_16px_40px_rgba(31,34,51,0.05)]">
+        <article className="feature-card p-5">
           <span className="section-eyebrow">Step by step</span>
           <h2 className="mt-4 text-2xl font-black text-[var(--ink-900)]">
             The simple workflow
           </h2>
           <div className="mt-4 space-y-3">
             {steps.map((step, index) => (
-              <div key={step} className="flex gap-3 rounded-[24px] bg-[var(--surface-soft)] p-3">
+              <div
+                key={step}
+                className="flex gap-3 rounded-[24px] bg-[var(--surface-soft)] p-3"
+              >
                 <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-white text-sm font-bold text-[var(--brand-700)] shadow-sm">
                   {index + 1}
                 </div>
-                <p className="text-sm leading-7 text-[var(--ink-600)]">{step}</p>
+                <p className="text-sm leading-7 text-[var(--ink-600)]">
+                  {step}
+                </p>
               </div>
             ))}
           </div>
@@ -161,15 +156,14 @@ export default function HowToDownloadInstagramReels() {
 
           <article className="feature-card">
             <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
-              <Lock className="h-5 w-5" />
+              <Shield className="h-5 w-5" />
             </div>
             <h2 className="text-xl font-black text-[var(--ink-900)]">
-              Session-protected links
+              Public links only
             </h2>
             <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-              Cookies Mode is not a bypass for content you cannot access. It is
-              only for links that already belong to your own authorized browser
-              session.
+              SwiftDL works best with public links. Content you are already
+              authorized to view may have additional options.
             </p>
           </article>
 
@@ -189,13 +183,15 @@ export default function HowToDownloadInstagramReels() {
 
           <article className="feature-card">
             <div className="mb-4 inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
-              <Lock className="h-5 w-5" />
+              <Download className="h-5 w-5" />
             </div>
             <h2 className="text-xl font-black text-[var(--ink-900)]">
               Watermark free
             </h2>
             <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-              Unlike the in-app download feature, extracting reels via the direct link usually provides the original video without an added Instagram watermark.
+              Unlike the in-app download feature, extracting reels via the
+              direct link usually provides the original video without an added
+              Instagram watermark.
             </p>
           </article>
 
@@ -207,7 +203,8 @@ export default function HowToDownloadInstagramReels() {
               Carousel Posts
             </h2>
             <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-              For posts containing multiple images or videos, only the first valid media element in the gallery is typically extracted.
+              For posts containing multiple images or videos, only the first
+              valid media element in the gallery is typically extracted.
             </p>
           </article>
 
@@ -219,13 +216,14 @@ export default function HowToDownloadInstagramReels() {
               Story Expiration
             </h2>
             <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-              Stories disappear after 24 hours. Attempting to download a story link after it has expired will always result in an error.
+              Stories disappear after 24 hours. Attempting to download a story
+              link after it has expired will always result in an error.
             </p>
           </article>
         </div>
       </section>
 
-      <section className="mt-8 rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-soft)] p-5">
+      <section className="mt-8 feature-card bg-[var(--surface-soft)] p-5">
         <div className="flex items-start gap-3">
           <AlertCircle className="mt-1 h-6 w-6 flex-none text-[var(--brand-700)]" />
           <div>
@@ -235,31 +233,38 @@ export default function HowToDownloadInstagramReels() {
             <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
               <li className="flex gap-3">
                 <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                Make sure you copied the direct reel or post link, not a partial share string.
+                Make sure you copied the direct reel or post link, not a partial
+                share string.
               </li>
               <li className="flex gap-3">
                 <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                If the post is login-required, refresh your authenticated session and export fresh cookies.
+                If the post is login-required, you may need to be already
+                authorized to view the content.
               </li>
               <li className="flex gap-3">
                 <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                If the platform rate-limits requests, wait a little and retry with fewer repeated submissions.
+                If the platform rate-limits requests, wait a little and retry
+                with fewer repeated submissions.
               </li>
               <li className="flex gap-3">
                 <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                Verify the video has not been deleted or taken down for copyright reasons.
+                Verify the video has not been deleted or taken down for copyright
+                reasons.
               </li>
               <li className="flex gap-3">
                 <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                Ensure you are not copying a profile link instead of a specific video link.
+                Ensure you are not copying a profile link instead of a specific
+                video link.
               </li>
               <li className="flex gap-3">
                 <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                Check if your premium plan daily limit has been reached in the Dashboard.
+                Check if your premium plan daily limit has been reached in the
+                Dashboard.
               </li>
               <li className="flex gap-3">
                 <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
-                Try opening the link in a private/incognito window to verify it is actually public.
+                Try opening the link in a private/incognito window to verify it
+                is actually public.
               </li>
             </ul>
           </div>
@@ -274,7 +279,7 @@ export default function HowToDownloadInstagramReels() {
           {faqs.map((faq, index) => (
             <article
               key={faq.question}
-              className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-white"
+              className="feature-card overflow-hidden"
             >
               <button
                 type="button"
@@ -285,19 +290,25 @@ export default function HowToDownloadInstagramReels() {
                   {faq.question}
                 </span>
                 <ChevronDown
-                  className={`mt-1 h-5 w-5 flex-none text-[var(--brand-600)] transition ${
+                  className={`mt-1 h-5 w-5 flex-none text-[var(--brand-600)] transition-transform duration-300 ${
                     openFaq === index ? 'rotate-180' : ''
                   }`}
                 />
               </button>
               <div
-                className={`overflow-hidden px-6 transition-all ${
-                  openFaq === index ? 'max-h-40 pb-5 opacity-100' : 'max-h-0 opacity-0'
+                className={`grid transition-all duration-300 ease-in-out ${
+                  openFaq === index
+                    ? 'grid-rows-[1fr] opacity-100'
+                    : 'grid-rows-[0fr] opacity-0'
                 }`}
               >
-                <p className="border-t border-[var(--border-soft)] pt-4 text-sm leading-7 text-[var(--ink-600)]">
-                  {faq.answer}
-                </p>
+                <div className="overflow-hidden">
+                  <div className="border-t border-[var(--border-soft)] px-5 py-4">
+                    <p className="text-sm leading-7 text-[var(--ink-600)]">
+                      {faq.answer}
+                    </p>
+                  </div>
+                </div>
               </div>
             </article>
           ))}

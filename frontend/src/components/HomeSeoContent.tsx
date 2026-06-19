@@ -14,7 +14,7 @@ import {
   Wifi,
   HardDrive,
   RefreshCw,
-  PlayCircle
+  PlayCircle,
 } from 'lucide-react';
 
 const capabilityCards = [
@@ -83,40 +83,40 @@ const capabilityCards = [
     description: 'Choose your destination folder and save mp4 or mp3 files directly to your internal storage, SD card, or external hard drive.',
     icon: HardDrive,
     imageUrl: 'https://images.unsplash.com/photo-1597839219216-a78fddc8e411?w=500&q=80',
-  }
+  },
 ];
 
 const workflowSteps = [
   {
     title: '1. Find Your Video',
     description: 'Open your favorite social media app or website. Find the video, reel, short, or song you want to save offline.',
-    imageUrl: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400&q=80',
   },
   {
     title: '2. Copy the Share Link',
     description: 'Tap the "Share" icon on the post and select "Copy Link". Make sure you have the direct URL to the specific post.',
-    imageUrl: 'https://images.unsplash.com/photo-1555421689-d68471e189f2?w=400&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1555421689-d68471e189f2?w=400&q=80',
   },
   {
     title: '3. Paste into SwiftDL',
     description: 'Come back to our website and paste the copied URL into the central search box. Our system instantly recognizes the link.',
-    imageUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80',
   },
   {
     title: '4. Choose Format',
     description: 'Decide if you want the full MP4 video or just the MP3 audio track. We provide options based on what the source supports.',
-    imageUrl: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=400&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=400&q=80',
   },
   {
     title: '5. Click Download',
     description: 'Hit the big download button. Our backend engines will begin extracting the highest quality media streams available.',
-    imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&q=80',
   },
   {
     title: '6. Save to Gallery',
     description: 'Once processed, click "Save File" to download it directly to your device storage, camera roll, or downloads folder.',
-    imageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&q=80'
-  }
+    imageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&q=80',
+  },
 ];
 
 const supportedContent = [
@@ -163,7 +163,7 @@ const supportedContent = [
       'Bloomberg Market Updates',
       'Khan Academy Educational Clips',
     ],
-  }
+  },
 ];
 
 const trustNotes = [
@@ -232,51 +232,77 @@ export default function HomeSeoContent() {
 
   return (
     <div className="section-shell py-12 md:py-16">
-      {/* Hero-ish SEO Intro */}
+      {/* Hero SEO Intro */}
       <section className="grid gap-8 lg:grid-cols-2 lg:items-center">
         <div className="space-y-5">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-[var(--brand-200)] bg-[var(--brand-50)] px-2.5 py-0.5 text-[10px] font-semibold text-[var(--brand-700)] dark:border-[var(--brand-800)] dark:bg-[var(--brand-900)] dark:text-[var(--brand-100)] shadow-sm">
+          <span className="section-eyebrow">
             <Sparkles className="h-3 w-3" />
-            <span>The Ultimate Downloader Toolkit</span>
-          </div>
+            The Ultimate Downloader Toolkit
+          </span>
           <h2 className="text-balance text-3xl font-black tracking-tight text-[var(--ink-900)] md:text-5xl leading-[1.1]">
-            Download Any Video. <br className="hidden md:block"/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-600)] to-[var(--brand-400)]">Anywhere, Anytime.</span>
+            Download Any Video.{' '}
+            <br className="hidden md:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-600)] to-[var(--brand-400)]">
+              Anywhere, Anytime.
+            </span>
           </h2>
           <div className="space-y-4 text-sm leading-relaxed text-[var(--ink-600)]">
             <p>
-              Welcome to the internet's most powerful, free video downloader. SwiftDL supports <strong>thousands of websites</strong>, from mainstream platforms like YouTube, Instagram, and TikTok, to niche video and audio platforms.
+              Welcome to the internet's most powerful, free video downloader.
+              SwiftDL supports <strong>thousands of websites</strong>, from
+              mainstream platforms like YouTube, Instagram, and TikTok, to niche
+              video and audio platforms.
             </p>
             <p>
-              Forget about sketchy apps, hidden fees, or malware. Our 100% cloud-based infrastructure ensures you get maximum quality—whether you need a 4K MP4 or a crystal-clear 320kbps MP3.
+              Forget about sketchy apps, hidden fees, or malware. Our 100%
+              cloud-based infrastructure ensures you get maximum quality—whether
+              you need a 4K MP4 or a crystal-clear 320kbps MP3.
             </p>
           </div>
         </div>
 
         <div className="relative">
-          <div className="absolute -inset-1 rounded-[32px] bg-gradient-to-tr from-[var(--brand-200)] to-[var(--brand-400)] opacity-20 blur-2xl"></div>
-          <div className="relative rounded-[28px] border border-[var(--border-soft)] bg-white/60 dark:bg-[#1a1c29]/60 backdrop-blur-xl p-5 shadow-2xl">
+          <div className="absolute -inset-1 rounded-[32px] bg-gradient-to-tr from-[var(--brand-200)] to-[var(--brand-400)] opacity-20 blur-2xl" />
+          <div className="card-inner relative rounded-[28px] p-5 shadow-2xl">
             <img
               src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80"
               alt="Social Media Apps on Smartphone"
               className="rounded-xl shadow-lg object-cover h-44 w-full mb-4"
             />
             <div className="flex items-center justify-between border-b border-[var(--border-soft)] pb-3 mb-3">
-               <div>
-                  <h3 className="font-bold text-sm text-[var(--ink-900)]">Universal Compatibility</h3>
-                  <p className="text-[11px] text-[var(--ink-600)]">Powered by advanced yt-dlp engines</p>
-               </div>
-               <div className="bg-[var(--brand-100)] dark:bg-[var(--brand-900)] p-2 rounded-full text-[var(--brand-600)] dark:text-[var(--brand-300)]">
-                  <CheckCircle2 className="h-5 w-5" />
-               </div>
+              <div>
+                <h3 className="font-bold text-sm text-[var(--ink-900)]">
+                  Universal Compatibility
+                </h3>
+                <p className="text-[11px] text-[var(--ink-600)]">
+                  Powered by advanced yt-dlp engines
+                </p>
+              </div>
+              <div className="bg-[var(--brand-100)] p-2 rounded-full text-[var(--brand-600)]">
+                <CheckCircle2 className="h-5 w-5" />
+              </div>
             </div>
             <div className="flex gap-3 items-center">
               <div className="flex -space-x-3">
-                <img className="w-8 h-8 border-2 border-white rounded-full dark:border-gray-800" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80" alt=""/>
-                <img className="w-8 h-8 border-2 border-white rounded-full dark:border-gray-800" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&q=80" alt=""/>
-                <img className="w-8 h-8 border-2 border-white rounded-full dark:border-gray-800" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt=""/>
+                <img
+                  className="w-8 h-8 border-2 border-white rounded-full"
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80"
+                  alt=""
+                />
+                <img
+                  className="w-8 h-8 border-2 border-white rounded-full"
+                  src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&q=80"
+                  alt=""
+                />
+                <img
+                  className="w-8 h-8 border-2 border-white rounded-full"
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80"
+                  alt=""
+                />
               </div>
-              <p className="text-[11px] font-medium text-[var(--ink-600)]">Trusted by 100k+ users daily.</p>
+              <p className="text-[11px] font-medium text-[var(--ink-600)]">
+                Trusted by 100k+ users daily.
+              </p>
             </div>
           </div>
         </div>
@@ -298,18 +324,22 @@ export default function HomeSeoContent() {
           {capabilityCards.map(({ title, description, icon: Icon, imageUrl }) => (
             <article
               key={title}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-white dark:bg-[var(--surface-elevated)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:border-[var(--brand-300)]"
+              className="feature-card group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:border-[var(--brand-300)]"
             >
               <div className="h-32 overflow-hidden relative">
-                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10" />
-                 <img src={imageUrl} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                 <div className="absolute bottom-3 right-3 z-20 bg-white/90 backdrop-blur rounded-lg p-2 text-[var(--brand-600)] shadow-lg transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
-                    <Icon className="h-5 w-5" />
-                 </div>
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10" />
+                <img
+                  src={imageUrl}
+                  alt={title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute bottom-3 right-3 z-20 bg-white/90 backdrop-blur rounded-lg p-2 text-[var(--brand-600)] shadow-lg transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
+                  <Icon className="h-5 w-5" />
+                </div>
               </div>
               <div className="p-4 flex-1 flex flex-col">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="rounded-lg bg-[var(--surface-soft)] p-1.5 text-[var(--brand-600)] group-hover:bg-[var(--brand-50)] transition-colors">
+                  <div className="rounded-lg bg-[var(--surface-soft)] p-1.5 text-[var(--brand-600)] group-hover:bg-[var(--brand-100)] transition-colors">
                     <Icon className="h-4 w-4" />
                   </div>
                   <h3 className="text-sm font-bold text-[var(--ink-900)]">
@@ -325,8 +355,8 @@ export default function HomeSeoContent() {
         </div>
       </section>
 
-      {/* Workflow Steps with Images */}
-      <section className="mt-16 rounded-[32px] border border-[var(--border-soft)] bg-gradient-to-b from-white to-[var(--surface-soft)] dark:from-[var(--surface-elevated)] dark:to-transparent px-5 py-10 shadow-sm md:px-10 md:py-12">
+      {/* Workflow Steps */}
+      <section className="mt-16 rounded-[32px] border border-[var(--border-soft)] bg-gradient-to-b from-white to-[var(--surface-soft)] px-5 py-10 shadow-sm md:px-10 md:py-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div className="max-w-2xl">
             <span className="section-eyebrow">Simple Workflow</span>
@@ -335,7 +365,8 @@ export default function HomeSeoContent() {
             </h2>
           </div>
           <p className="max-w-md text-xs leading-relaxed text-[var(--ink-600)]">
-            Our clean, 6-step process is engineered for speed. Whether you are on iPhone, Android, Mac, or PC, the steps remain identically simple.
+            Our clean, 6-step process is engineered for speed. Whether you are
+            on iPhone, Android, Mac, or PC, the steps remain identically simple.
           </p>
         </div>
 
@@ -343,13 +374,17 @@ export default function HomeSeoContent() {
           {workflowSteps.map((step, index) => (
             <article
               key={step.title}
-              className="relative rounded-2xl bg-white dark:bg-[#1a1c29] p-5 shadow-md border border-[var(--border-soft)] transition-transform hover:-translate-y-0.5"
+              className="card relative p-5 shadow-md transition-transform hover:-translate-y-0.5"
             >
-              <div className="absolute -top-4 -right-4 flex h-10 w-10 items-center justify-center rounded-full bg-[var(--brand-600)] text-sm font-black text-white shadow-xl shadow-[var(--brand-500)]/30 border-3 border-white dark:border-[#1a1c29]">
+              <div className="absolute -top-4 -right-4 flex h-10 w-10 items-center justify-center rounded-full bg-[var(--brand-600)] text-sm font-black text-white shadow-xl shadow-[var(--brand-500)]/30 border-3 border-white">
                 {index + 1}
               </div>
               <div className="h-28 rounded-xl overflow-hidden mb-4">
-                 <img src={step.imageUrl} alt={step.title} className="w-full h-full object-cover" />
+                <img
+                  src={step.imageUrl}
+                  alt={step.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <h3 className="text-sm font-bold text-[var(--ink-900)] mb-2">
                 {step.title}
@@ -365,19 +400,19 @@ export default function HomeSeoContent() {
       {/* Supported Platforms */}
       <section className="mt-16">
         <div className="text-center max-w-3xl mx-auto mb-8">
-           <span className="section-eyebrow">Unmatched Compatibility</span>
-           <h2 className="mt-3 text-2xl font-black text-[var(--ink-900)] md:text-3xl">
-             Download from Thousands of Platforms
-           </h2>
+          <span className="section-eyebrow">Unmatched Compatibility</span>
+          <h2 className="mt-3 text-2xl font-black text-[var(--ink-900)] md:text-3xl">
+            Download from Thousands of Platforms
+          </h2>
         </div>
         <div className="grid gap-5 md:grid-cols-2">
           {supportedContent.map((section) => (
             <article
               key={section.platform}
-              className="group rounded-2xl border border-[var(--border-soft)] bg-white dark:bg-[var(--surface-elevated)] p-5 transition-shadow hover:shadow-xl hover:shadow-[var(--brand-500)]/5"
+              className="feature-card group transition-shadow hover:shadow-xl hover:shadow-[var(--brand-500)]/5"
             >
               <div className="flex items-center gap-3 border-b border-[var(--border-soft)] pb-4 mb-4">
-                <div className="rounded-xl bg-[var(--brand-50)] dark:bg-[var(--brand-900)]/30 p-2.5 text-[var(--brand-600)] dark:text-[var(--brand-400)]">
+                <div className="rounded-xl bg-[var(--brand-100)] p-2.5 text-[var(--brand-600)]">
                   <PlayCircle className="h-5 w-5" />
                 </div>
                 <h3 className="text-lg font-black text-[var(--ink-900)]">
@@ -401,9 +436,9 @@ export default function HomeSeoContent() {
       </section>
 
       {/* Trust & Safety */}
-      <section className="mt-16 rounded-[32px] bg-gradient-to-br from-[#111827] via-[#1f2937] to-[#111827] px-6 py-12 text-white shadow-2xl overflow-hidden relative">
-        <div className="absolute top-0 right-0 -mt-16 -mr-16 w-64 h-64 bg-[var(--brand-600)] rounded-full blur-[80px] opacity-20"></div>
-        <div className="absolute bottom-0 left-0 -mb-16 -ml-16 w-64 h-64 bg-blue-600 rounded-full blur-[80px] opacity-20"></div>
+      <section className="mt-16 rounded-[32px] bg-gradient-to-br from-[var(--ink-950)] via-[var(--ink-900)] to-[var(--ink-950)] px-6 py-12 text-white shadow-2xl overflow-hidden relative">
+        <div className="absolute top-0 right-0 -mt-16 -mr-16 w-64 h-64 bg-[var(--brand-600)] rounded-full blur-[80px] opacity-20" />
+        <div className="absolute bottom-0 left-0 -mb-16 -ml-16 w-64 h-64 bg-blue-600 rounded-full blur-[80px] opacity-20" />
 
         <div className="relative z-10 max-w-4xl mx-auto text-center mb-8">
           <span className="inline-block rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md">
@@ -413,7 +448,8 @@ export default function HomeSeoContent() {
             Enterprise-Grade Security for Everyone.
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-slate-300">
-            We believe powerful tools should be inherently safe. SwiftDL processes millions of requests without compromising user privacy.
+            We believe powerful tools should be inherently safe. SwiftDL
+            processes millions of requests without compromising user privacy.
           </p>
         </div>
 
@@ -433,7 +469,7 @@ export default function HomeSeoContent() {
         </div>
       </section>
 
-      {/* Deep FAQ */}
+      {/* FAQ */}
       <section className="mt-16">
         <div className="mx-auto max-w-3xl text-center mb-8">
           <span className="section-eyebrow">Knowledge Base</span>
@@ -441,21 +477,21 @@ export default function HomeSeoContent() {
             Frequently Asked Questions
           </h2>
           <p className="mt-2 text-sm text-[var(--ink-600)]">
-            Everything you need to know about the internet's best free video downloader.
+            Everything you need to know about the internet's best free video
+            downloader.
           </p>
         </div>
 
         <div className="mx-auto max-w-3xl space-y-3">
           {faqs.map((faq, index) => {
             const isOpen = openFaq === index;
-
             return (
               <article
                 key={faq.question}
-                className={`group overflow-hidden rounded-2xl border transition-all duration-300 ${
+                className={`feature-card overflow-hidden transition-all duration-300 ${
                   isOpen
-                    ? 'border-[var(--brand-300)] bg-white dark:bg-[var(--surface-elevated)] shadow-xl shadow-[var(--brand-500)]/5 scale-[1.01]'
-                    : 'border-[var(--border-soft)] bg-[var(--surface-soft)] hover:bg-white dark:hover:bg-[var(--surface-elevated)]'
+                    ? 'border-[var(--brand-300)] shadow-xl shadow-[var(--brand-500)]/5 scale-[1.01]'
+                    : ''
                 }`}
               >
                 <button
@@ -466,7 +502,13 @@ export default function HomeSeoContent() {
                   <span className="text-sm font-bold leading-tight text-[var(--ink-900)]">
                     {faq.question}
                   </span>
-                  <div className={`flex-none rounded-full p-1.5 transition-colors ${isOpen ? 'bg-[var(--brand-50)] text-[var(--brand-600)] dark:bg-[var(--brand-900)]' : 'bg-transparent text-[var(--ink-400)] group-hover:bg-[var(--surface-soft)] group-hover:text-[var(--ink-900)]'}`}>
+                  <div
+                    className={`flex-none rounded-full p-1.5 transition-colors ${
+                      isOpen
+                        ? 'bg-[var(--brand-100)] text-[var(--brand-600)]'
+                        : 'bg-transparent text-[var(--ink-400)] group-hover:bg-[var(--surface-soft)] group-hover:text-[var(--ink-900)]'
+                    }`}
+                  >
                     <ChevronDown
                       className={`h-4 w-4 transition-transform duration-300 ${
                         isOpen ? 'rotate-180' : ''
@@ -476,7 +518,9 @@ export default function HomeSeoContent() {
                 </button>
                 <div
                   className={`grid transition-all duration-300 ease-in-out ${
-                    isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    isOpen
+                      ? 'grid-rows-[1fr] opacity-100'
+                      : 'grid-rows-[0fr] opacity-0'
                   }`}
                 >
                   <div className="overflow-hidden">

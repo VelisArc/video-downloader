@@ -4,11 +4,11 @@ import {
   AlertTriangle,
   ChevronDown,
   Download,
-  Lock,
   Monitor,
   PlayCircle,
   Share2,
   Wifi,
+  Lock,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { siteConfig, siteUrl } from '../lib/site';
@@ -20,12 +20,14 @@ const faqs = [
       'Many public reel and Watch-style links work well. Reliability still depends on the exact link and what Facebook is exposing at that time.',
   },
   {
-    question: 'Can I use SwiftDL for private groups or friends-only posts?',
+    question:
+      'Can I use SwiftDL for private groups or friends-only posts?',
     answer:
-      'Those links usually need authentication. Cookies Mode may help only when you are already authorized to view the content and provide your own current session export.',
+      'Those links usually need authentication. They may help only when you are already authorized to view the content.',
   },
   {
-    question: 'Why does Facebook sometimes return a broken or incomplete result?',
+    question:
+      'Why does Facebook sometimes return a broken or incomplete result?',
     answer:
       'The post may have changed privacy settings, the media may be region-restricted, or Facebook may be temporarily rate-limiting repeated requests.',
   },
@@ -67,12 +69,12 @@ const faqs = [
   {
     question: 'Can I download videos from Messenger?',
     answer:
-      'No. Links from private Messenger chats are completely walled off and cannot be accessed by our systems, even with Cookies Mode.',
+      'No. Links from private Messenger chats are completely walled off and cannot be accessed by our systems.',
   },
   {
     question: 'What do I do if I get a 403 Forbidden error?',
     answer:
-      'This means Facebook blocked the request. Trying again later or using Cookies Mode with a valid session are your best options.',
+      'This means Facebook blocked the request. Trying again later or using a valid session are your best options.',
   },
 ];
 
@@ -87,7 +89,10 @@ export default function HowToDownloadFacebookVideos() {
           name="description"
           content="Learn how to save supported Facebook videos, reels, Watch links, and session-based media with a cleaner workflow."
         />
-        <link rel="canonical" href={siteUrl('/how-to-download-facebook-videos')} />
+        <link
+          rel="canonical"
+          href={siteUrl('/how-to-download-facebook-videos')}
+        />
       </Helmet>
 
       <section className="rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,_#eef5ff,_#ffffff)] p-5 shadow-[0_20px_48px_rgba(31,34,51,0.06)] md:p-6">
@@ -123,11 +128,24 @@ export default function HowToDownloadFacebookVideos() {
             <li>1. Copy the direct Facebook or fb.watch link.</li>
             <li>2. Open SwiftDL in your browser.</li>
             <li>3. Paste it into the main input field.</li>
-            <li>4. Choose whether you want the full video or just the audio track.</li>
-            <li>5. If the link is session-protected and you already have access, use Cookies Mode with your own cookies.txt export.</li>
-            <li>6. Click the Download button to begin metadata extraction.</li>
-            <li>7. Wait for the server to process the URL and locate the best streams.</li>
-            <li>8. Review the preview card (checking title and duration) and save the media locally.</li>
+            <li>
+              4. Choose whether you want the full video or just the audio track.
+            </li>
+            <li>
+              5. If the link is session-protected and you already have access,
+              provide your own session data.
+            </li>
+            <li>
+              6. Click the Download button to begin metadata extraction.
+            </li>
+            <li>
+              7. Wait for the server to process the URL and locate the best
+              streams.
+            </li>
+            <li>
+              8. Review the preview card (checking title and duration) and save
+              the media locally.
+            </li>
           </ol>
         </article>
 
@@ -146,7 +164,6 @@ export default function HowToDownloadFacebookVideos() {
             <li>Embedded Facebook video links from external articles</li>
             <li>fb.gg gaming clips and highlights</li>
             <li>Mobile (m.facebook.com) formatted links</li>
-            <li>Some session-based links through Cookies Mode when already authorized</li>
           </ul>
         </article>
       </section>
@@ -154,53 +171,72 @@ export default function HowToDownloadFacebookVideos() {
       <section className="mt-8 grid gap-5 md:grid-cols-3">
         <article className="feature-card">
           <Monitor className="mb-4 h-5 w-5 text-[#2563eb]" />
-          <h2 className="text-xl font-black text-[var(--ink-900)]">Desktop tips</h2>
+          <h2 className="text-xl font-black text-[var(--ink-900)]">
+            Desktop tips
+          </h2>
           <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-            Open the video in its own page before copying the address bar URL. That usually produces the cleanest link.
+            Open the video in its own page before copying the address bar URL.
+            That usually produces the cleanest link.
           </p>
         </article>
         <article className="feature-card">
           <Lock className="mb-4 h-5 w-5 text-[#2563eb]" />
-          <h2 className="text-xl font-black text-[var(--ink-900)]">Private content</h2>
+          <h2 className="text-xl font-black text-[var(--ink-900)]">
+            Private content
+          </h2>
           <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-            Cookies Mode is meant for content you can already view. It is not a shortcut around permissions you do not have.
+            Advanced authentication workflows are meant for content you can
+            already view. It is not a shortcut around permissions you do not
+            have.
           </p>
         </article>
         <article className="feature-card">
           <Wifi className="mb-4 h-5 w-5 text-[#2563eb]" />
-          <h2 className="text-xl font-black text-[var(--ink-900)]">Rate limits</h2>
+          <h2 className="text-xl font-black text-[var(--ink-900)]">
+            Rate limits
+          </h2>
           <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-            If repeated attempts fail, pause for a while and retry later. Facebook sometimes throttles repeated media lookups.
+            If repeated attempts fail, pause for a while and retry later.
+            Facebook sometimes throttles repeated media lookups.
           </p>
         </article>
         <article className="feature-card">
           <Share2 className="mb-4 h-5 w-5 text-[#2563eb]" />
-          <h2 className="text-xl font-black text-[var(--ink-900)]">Mobile links</h2>
+          <h2 className="text-xl font-black text-[var(--ink-900)]">
+            Mobile links
+          </h2>
           <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-            If a link starts with "m.facebook", you can paste it directly. Our backend automatically normalizes mobile URLs for extraction.
+            If a link starts with "m.facebook", you can paste it directly. Our
+            backend automatically normalizes mobile URLs for extraction.
           </p>
         </article>
         <article className="feature-card">
           <AlertTriangle className="mb-4 h-5 w-5 text-[#2563eb]" />
-          <h2 className="text-xl font-black text-[var(--ink-900)]">Region locks</h2>
+          <h2 className="text-xl font-black text-[var(--ink-900)]">
+            Region locks
+          </h2>
           <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-            Videos locked to specific countries might fail unless your cookie export matches an account with access to that region.
+            Videos locked to specific countries might fail unless your session
+            matches an account with access to that region.
           </p>
         </article>
         <article className="feature-card">
           <PlayCircle className="mb-4 h-5 w-5 text-[#2563eb]" />
-          <h2 className="text-xl font-black text-[var(--ink-900)]">Browser previews</h2>
+          <h2 className="text-xl font-black text-[var(--ink-900)]">
+            Browser previews
+          </h2>
           <p className="mt-3 text-sm leading-7 text-[var(--ink-600)]">
-            If clicking the final button plays the video instead of downloading, right-click (or long-press) and select "Save video as".
+            If clicking the final button plays the video instead of downloading,
+            right-click (or long-press) and select "Save video as".
           </p>
         </article>
       </section>
 
-      <section className="mt-8 rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-soft)] p-5">
+      <section className="mt-8 feature-card bg-[var(--surface-soft)] p-5">
         <div className="flex items-start gap-3">
           <AlertTriangle className="mt-1 h-6 w-6 flex-none text-[#2563eb]" />
           <div>
-        <h2 className="text-2xl font-black text-[var(--ink-900)]">
+            <h2 className="text-2xl font-black text-[var(--ink-900)]">
               Common failure causes
             </h2>
             <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
@@ -209,9 +245,14 @@ export default function HowToDownloadFacebookVideos() {
               <li>The content needs an authenticated session.</li>
               <li>The platform temporarily rate-limited the request.</li>
               <li>The video is from a closed Facebook group.</li>
-              <li>The URL points to a live stream that is currently broadcasting.</li>
-              <li>Your uploaded cookies have expired and need to be refreshed.</li>
-              <li>Facebook changed their internal routing, requiring a backend update.</li>
+              <li>
+                The URL points to a live stream that is currently broadcasting.
+              </li>
+              <li>Your session has expired and needs to be refreshed.</li>
+              <li>
+                Facebook changed their internal routing, requiring a backend
+                update.
+              </li>
             </ul>
           </div>
         </div>
@@ -225,7 +266,7 @@ export default function HowToDownloadFacebookVideos() {
           {faqs.map((faq, index) => (
             <article
               key={faq.question}
-              className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-white"
+              className="feature-card overflow-hidden"
             >
               <button
                 type="button"
@@ -236,19 +277,25 @@ export default function HowToDownloadFacebookVideos() {
                   {faq.question}
                 </span>
                 <ChevronDown
-                  className={`mt-1 h-5 w-5 flex-none text-[#2563eb] transition ${
+                  className={`mt-1 h-5 w-5 flex-none text-[#2563eb] transition-transform duration-300 ${
                     openFaq === index ? 'rotate-180' : ''
                   }`}
                 />
               </button>
               <div
-                className={`overflow-hidden px-6 transition-all ${
-                  openFaq === index ? 'max-h-40 pb-5 opacity-100' : 'max-h-0 opacity-0'
+                className={`grid transition-all duration-300 ease-in-out ${
+                  openFaq === index
+                    ? 'grid-rows-[1fr] opacity-100'
+                    : 'grid-rows-[0fr] opacity-0'
                 }`}
               >
-                <p className="border-t border-[var(--border-soft)] pt-4 text-sm leading-7 text-[var(--ink-600)]">
-                  {faq.answer}
-                </p>
+                <div className="overflow-hidden">
+                  <div className="border-t border-[var(--border-soft)] px-6 py-5">
+                    <p className="text-sm leading-7 text-[var(--ink-600)]">
+                      {faq.answer}
+                    </p>
+                  </div>
+                </div>
               </div>
             </article>
           ))}

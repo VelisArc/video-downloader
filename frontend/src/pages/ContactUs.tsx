@@ -6,7 +6,6 @@ import { siteConfig, siteUrl } from '../lib/site';
 const helpTopics = [
   'Broken or unsupported links',
   'Billing or plan questions',
-  'Cookies Mode guidance',
   'Copyright or DMCA notices',
   'Feature requests and product feedback',
 ];
@@ -24,7 +23,7 @@ export default function ContactUs() {
       </Helmet>
 
       <div className="mx-auto max-w-3xl text-center">
-        <div className="mx-auto inline-flex rounded-xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
+        <div className="mx-auto inline-flex rounded-2xl bg-[var(--surface-soft)] p-3 text-[var(--brand-600)]">
           <MessageCircle className="h-7 w-7" />
         </div>
         <h1 className="mt-3 text-3xl font-black text-[var(--ink-900)] md:text-4xl">
@@ -44,7 +43,10 @@ export default function ContactUs() {
               <Mail className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
               <div>
                 <p className="font-semibold text-[var(--ink-900)]">Email</p>
-                <a href={siteConfig.supportMailto} className="text-[var(--brand-700)] hover:underline">
+                <a
+                  href={siteConfig.supportMailto}
+                  className="text-[var(--brand-700)] hover:underline"
+                >
                   {siteConfig.supportEmail}
                 </a>
               </div>
@@ -52,7 +54,9 @@ export default function ContactUs() {
             <div className="flex gap-3">
               <Clock3 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
               <div>
-                <p className="font-semibold text-[var(--ink-900)]">Support hours</p>
+                <p className="font-semibold text-[var(--ink-900)]">
+                  Support hours
+                </p>
                 <p>{siteConfig.supportHours}</p>
               </div>
             </div>
@@ -60,7 +64,10 @@ export default function ContactUs() {
               <Globe2 className="mt-1 h-4 w-4 flex-none text-[var(--brand-600)]" />
               <div>
                 <p className="font-semibold text-[var(--ink-900)]">Website</p>
-                <a href={siteConfig.baseUrl} className="text-[var(--brand-700)] hover:underline">
+                <a
+                  href={siteConfig.baseUrl}
+                  className="text-[var(--brand-700)] hover:underline"
+                >
                   {siteConfig.domain}
                 </a>
               </div>
@@ -74,7 +81,10 @@ export default function ContactUs() {
           </h2>
           <ul className="mt-5 space-y-3 text-sm leading-7 text-[var(--ink-600)]">
             {helpTopics.map((topic) => (
-              <li key={topic}>• {topic}</li>
+              <li key={topic} className="flex gap-2">
+                <span className="text-[var(--brand-600)]">&#8226;</span>
+                {topic}
+              </li>
             ))}
           </ul>
           <p className="mt-5 text-sm leading-7 text-[var(--ink-600)]">
@@ -82,16 +92,10 @@ export default function ContactUs() {
             media was public or session-protected, and what you already tried.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link
-              to="/faq"
-              className="rounded-full bg-[var(--ink-900)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--ink-700)]"
-            >
+            <Link to="/faq" className="btn-dark">
               Read FAQ
             </Link>
-            <Link
-              to="/dmca"
-              className="rounded-full border border-[var(--border-soft)] bg-white px-5 py-3 text-sm font-semibold text-[var(--ink-700)] transition hover:border-[var(--brand-300)] hover:text-[var(--brand-700)]"
-            >
+            <Link to="/dmca" className="btn-outline">
               Copyright / DMCA
             </Link>
           </div>

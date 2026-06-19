@@ -1,12 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import toast from 'react-hot-toast';
 import {
   CheckCircle2,
   Download,
-  FileAudio2,
   History,
-  Search,
   Shield,
   Sparkles,
   Trash2,
@@ -14,13 +12,10 @@ import {
 } from 'lucide-react';
 
 import { useAuth } from '../context/AuthContext';
-import { useEntitlement } from '../context/EntitlementContext';
 import HomeSeoContent from '../components/HomeSeoContent';
-import LoadingIndicator from '../components/LoadingIndicator';
 import DownloaderPanel from '../components/DownloaderPanel';
 import ResultCard from '../components/ResultCard';
 import {
-  copyText,
   DownloadHistoryItem,
   DownloadType,
   getOrCreateClientId,
@@ -64,7 +59,6 @@ const features = [
 
 export default function Home() {
   const { user } = useAuth();
-  const { entitlement } = useEntitlement();
 
   const [url, setUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -157,31 +151,120 @@ export default function Home() {
         <meta property="og:image" content={siteUrl('/logo.png')} />
       </Helmet>
 
-      <main className="pb-5 pt-6 md:pb-8 md:pt-8">
+      <main style={{ paddingBottom: '2rem', paddingTop: '1.5rem' }}>
         <div className="section-shell">
           {/* Hero Section */}
-          <section className="relative overflow-hidden rounded-[var(--radius-xl)] p-6 md:p-10 lg:p-12" style={{ background: 'var(--gradient-brand)' }}>
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute -top-16 -right-16 h-48 w-48 rounded-full bg-white blur-3xl" />
-              <div className="absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-white blur-3xl" />
+          <section
+            className="relative overflow-hidden"
+            style={{
+              borderRadius: 'var(--radius-2xl)',
+              background: 'var(--gradient-brand)',
+              padding: '2.5rem 1.5rem',
+            }}
+          >
+            {/* Mesh overlay */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: 'var(--gradient-mesh)',
+                opacity: 0.4,
+              }}
+            />
+            {/* Decorative orbs */}
+            <div className="absolute inset-0" style={{ opacity: 0.08 }}>
+              <div
+                className="absolute"
+                style={{
+                  top: '-4rem',
+                  right: '-4rem',
+                  width: '14rem',
+                  height: '14rem',
+                  borderRadius: '50%',
+                  background: 'white',
+                  filter: 'blur(80px)',
+                }}
+              />
+              <div
+                className="absolute"
+                style={{
+                  bottom: '-4rem',
+                  left: '-4rem',
+                  width: '14rem',
+                  height: '14rem',
+                  borderRadius: '50%',
+                  background: 'white',
+                  filter: 'blur(80px)',
+                }}
+              />
             </div>
-            <div className="relative z-10 mx-auto max-w-3xl text-center">
-              <span className="inline-block rounded-full bg-white/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/90">
+
+            <div className="relative z-10 mx-auto" style={{ maxWidth: '48rem', textAlign: 'center' }}>
+              <span
+                style={{
+                  display: 'inline-block',
+                  borderRadius: 'var(--radius-full)',
+                  background: 'rgba(255,255,255,0.18)',
+                  backdropFilter: 'blur(8px)',
+                  padding: '0.375rem 0.875rem',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.16em',
+                  color: 'rgba(255,255,255,0.9)',
+                }}
+              >
                 Browser-first downloader
               </span>
-              <h1 className="mt-4 text-balance text-3xl font-black leading-tight text-white md:text-5xl">
+
+              <h1
+                className="text-balance"
+                style={{
+                  marginTop: '1.25rem',
+                  fontSize: 'clamp(1.875rem, 4vw, 3rem)',
+                  fontWeight: 900,
+                  lineHeight: 1.1,
+                  color: 'white',
+                }}
+              >
                 Download from{' '}
-                <span className="text-white/80">
+                <span style={{ color: 'rgba(255,255,255,0.8)' }}>
                   any major platform
                 </span>
               </h1>
-              <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-white/80 md:text-base">
+
+              <p
+                className="mx-auto"
+                style={{
+                  marginTop: '0.875rem',
+                  maxWidth: '36rem',
+                  fontSize: '0.9rem',
+                  lineHeight: 1.7,
+                  color: 'rgba(255,255,255,0.78)',
+                }}
+              >
                 Paste a link, choose format, download. Works with YouTube, Instagram, Facebook, TikTok, and many more.
               </p>
-              <div className="mt-5 flex flex-wrap items-center justify-center gap-1.5">
+
+              <div
+                className="flex flex-wrap items-center justify-center"
+                style={{ marginTop: '1.25rem', gap: '0.5rem' }}
+              >
                 {platformHighlights.map((hl) => (
-                  <span key={hl} className="inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1.5 text-[11px] font-medium text-white shadow-sm backdrop-blur-sm">
-                    <CheckCircle2 className="h-3 w-3 text-white/70" />
+                  <span
+                    key={hl}
+                    className="inline-flex items-center gap-1"
+                    style={{
+                      borderRadius: 'var(--radius-full)',
+                      background: 'rgba(255,255,255,0.12)',
+                      backdropFilter: 'blur(8px)',
+                      border: '1px solid rgba(255,255,255,0.15)',
+                      padding: '0.375rem 0.75rem',
+                      fontSize: '11px',
+                      fontWeight: 500,
+                      color: 'white',
+                    }}
+                  >
+                    <CheckCircle2 style={{ width: 12, height: 12, opacity: 0.7 }} />
                     {hl}
                   </span>
                 ))}
@@ -189,9 +272,24 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Downloader Section */}
-          <section className="relative -mt-7 z-20 mx-auto max-w-4xl">
-            <div className="rounded-[var(--radius-xl)] border p-4 shadow-xl backdrop-blur-xl md:p-5" style={{ background: 'var(--glass-bg)', borderColor: 'var(--border-soft)' }}>
+          {/* Downloader Section — overlapping hero */}
+          <section
+            className="relative z-20 mx-auto"
+            style={{
+              marginTop: '-2.5rem',
+              maxWidth: '48rem',
+            }}
+          >
+            <div
+              style={{
+                borderRadius: 'var(--radius-2xl)',
+                background: 'var(--surface)',
+                border: '1px solid var(--border-soft)',
+                boxShadow: 'var(--shadow-xl)',
+                backdropFilter: 'blur(24px) saturate(1.5)',
+                padding: '1.25rem',
+              }}
+            >
               <DownloaderPanel
                 url={url}
                 setUrl={setUrl}
@@ -205,15 +303,28 @@ export default function Home() {
           </section>
 
           {/* Features */}
-          <section className="mt-14">
+          <section style={{ marginTop: '3.5rem' }}>
             <div className="grid gap-4 md:grid-cols-3">
               {features.map(({ title, description, icon: Icon }) => (
                 <article key={title} className="feature-card">
-                  <div className="mb-3 inline-flex rounded-xl p-2.5" style={{ background: 'var(--surface-soft)', color: 'var(--brand-600)' }}>
-                    <Icon className="h-4 w-4" />
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      borderRadius: 'var(--radius-md)',
+                      padding: '0.625rem',
+                      marginBottom: '0.75rem',
+                      background: 'var(--brand-100)',
+                      color: 'var(--brand-700)',
+                    }}
+                  >
+                    <Icon style={{ width: 16, height: 16 }} />
                   </div>
-                  <h2 className="text-base font-bold" style={{ color: 'var(--ink-900)' }}>{title}</h2>
-                  <p className="mt-1.5 text-xs leading-5" style={{ color: 'var(--ink-600)' }}>{description}</p>
+                  <h2 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--ink-900)' }}>
+                    {title}
+                  </h2>
+                  <p style={{ marginTop: '0.375rem', fontSize: '0.8rem', lineHeight: 1.6, color: 'var(--ink-600)' }}>
+                    {description}
+                  </p>
                 </article>
               ))}
             </div>
@@ -221,46 +332,87 @@ export default function Home() {
 
           {/* Download History */}
           {history.length > 0 && (
-            <section className="mt-12">
+            <section style={{ marginTop: '3rem' }}>
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <span className="section-eyebrow">Browser history</span>
-                  <h2 className="mt-2 text-2xl font-black" style={{ color: 'var(--ink-900)' }}>Recent downloads</h2>
+                  <h2 style={{ marginTop: '0.5rem', fontSize: '1.5rem', fontWeight: 900, color: 'var(--ink-900)' }}>
+                    Recent downloads
+                  </h2>
                 </div>
                 <button
                   type="button"
                   onClick={() => { setHistory([]); localStorage.removeItem('downloadHistory'); toast.success('History cleared'); }}
-                  className="btn-outline"
+                  className="btn-ghost"
+                  style={{ gap: '0.375rem', fontSize: '0.8rem' }}
                 >
-                  <Trash2 className="h-3.5 w-3.5" />
-                  Clear history
+                  <Trash2 style={{ width: 14, height: 14 }} />
+                  Clear
                 </button>
               </div>
-              <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3 stagger-children">
+
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3 stagger-children" style={{ marginTop: '1rem' }}>
                 {history.map((item) => (
-                  <article key={item.id} className="feature-card overflow-hidden p-0">
+                  <article
+                    key={item.id}
+                    className="feature-card"
+                    style={{ padding: 0, overflow: 'hidden' }}
+                  >
                     {item.thumbnail ? (
-                      <img src={item.thumbnail} alt={item.title} className="h-32 w-full object-cover" />
+                      <img
+                        src={item.thumbnail}
+                        alt={item.title}
+                        style={{
+                          width: '100%',
+                          height: '7.5rem',
+                          objectFit: 'cover',
+                        }}
+                      />
                     ) : (
-                      <div className="flex h-32 items-center justify-center" style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}>
-                        <Video className="h-6 w-6" />
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          height: '7.5rem',
+                          background: 'var(--surface-soft)',
+                          color: 'var(--brand-700)',
+                        }}
+                      >
+                        <Video style={{ width: 24, height: 24 }} />
                       </div>
                     )}
-                    <div className="space-y-3 p-4">
+
+                    <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                       <div>
-                        <div className="flex flex-wrap gap-1.5">
+                        <div className="flex flex-wrap" style={{ gap: '0.375rem' }}>
                           <span className="pill-soft">{item.ext.toUpperCase()}</span>
-                          {item.platform && <span className="pill-soft">{formatPlatformLabel(item.platform)}</span>}
+                          {item.platform && (
+                            <span className="pill-soft">{formatPlatformLabel(item.platform)}</span>
+                          )}
                         </div>
-                        <h3 className="mt-1.5 line-clamp-2 text-sm font-black" style={{ color: 'var(--ink-900)' }}>{item.title}</h3>
-                        <p className="mt-1 text-[11px]" style={{ color: 'var(--ink-500)' }}>Saved on {item.date}</p>
+                        <h3
+                          className="line-clamp-2"
+                          style={{
+                            marginTop: '0.5rem',
+                            fontSize: '0.85rem',
+                            fontWeight: 700,
+                            color: 'var(--ink-900)',
+                          }}
+                        >
+                          {item.title}
+                        </h3>
+                        <p style={{ marginTop: '0.25rem', fontSize: '11px', color: 'var(--ink-500)' }}>
+                          Saved on {item.date}
+                        </p>
                       </div>
                       <button
                         type="button"
                         onClick={() => handleFinalDownload(item.downloadUrl, item.title, item.ext)}
                         className="btn-dark w-full"
+                        style={{ fontSize: '0.8rem', padding: '0.5rem 0.75rem' }}
                       >
-                        <Download className="h-3.5 w-3.5" />
+                        <Download style={{ width: 14, height: 14 }} />
                         Download again
                       </button>
                     </div>
@@ -272,9 +424,7 @@ export default function Home() {
         </div>
       </main>
 
-      <div className="border-t border-[var(--border-soft)] bg-white dark:bg-[#0f111a] transition-colors duration-300">
-        <HomeSeoContent />
-      </div>
+      <HomeSeoContent />
     </>
   );
 }

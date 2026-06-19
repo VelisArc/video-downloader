@@ -51,74 +51,140 @@ export default function ResultCard({ videoData }: ResultCardProps) {
   };
 
   return (
-    <article className="card mt-4 animate-fade-in-up overflow-hidden shadow-lg">
-      <div className="flex flex-col gap-3 md:flex-row">
+    <article
+      className="animate-fade-in-up"
+      style={{
+        marginTop: '1rem',
+        borderRadius: 'var(--radius-2xl)',
+        background: 'var(--surface)',
+        border: '1px solid var(--border-soft)',
+        boxShadow: 'var(--shadow-lg)',
+        overflow: 'hidden',
+      }}
+    >
+      <div className="flex flex-col gap-3 md:flex-row" style={{ padding: '1rem' }}>
         {/* Thumbnail */}
-        <div className="relative w-full overflow-hidden rounded-xl md:w-44 md:flex-none">
+        <div
+          style={{
+            width: '100%',
+            borderRadius: 'var(--radius-xl)',
+            overflow: 'hidden',
+            flex: 'none',
+          }}
+          className="md:w-40"
+        >
           {videoData.thumbnail ? (
             <img
               src={videoData.thumbnail}
               alt={videoData.title}
-              className="h-36 w-full object-cover transition-transform duration-500 hover:scale-105"
+              style={{
+                width: '100%',
+                height: '9rem',
+                objectFit: 'cover',
+                borderRadius: 'var(--radius-xl)',
+                transition: 'transform 500ms ease',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
             />
           ) : (
             <div
-              className="flex h-36 items-center justify-center rounded-xl"
-              style={{ background: 'var(--surface-soft)', color: 'var(--brand-700)' }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                height: '9rem',
+                borderRadius: 'var(--radius-xl)',
+                background: 'var(--surface-soft)',
+                color: 'var(--brand-700)',
+              }}
             >
-              <Video className="h-7 w-7" />
+              <Video style={{ width: 28, height: 28 }} />
             </div>
           )}
-          <span className="pill-soft absolute left-2 top-2 backdrop-blur-sm">{videoData.ext.toUpperCase()}</span>
         </div>
 
         {/* Details */}
-        <div className="min-w-0 flex-1">
+        <div style={{ flex: 1, minWidth: 0 }}>
           {/* Tags */}
-          <div className="flex flex-wrap gap-1.5 text-[10px] font-medium" style={{ color: 'var(--ink-600)' }}>
+          <div
+            className="flex flex-wrap"
+            style={{ gap: '0.375rem', fontSize: '10px', fontWeight: 500, color: 'var(--ink-600)' }}
+          >
             {videoData.platform && (
               <span className="pill-soft">
-                <Sparkles className="h-3 w-3" style={{ color: 'var(--brand-600)' }} />
+                <Sparkles style={{ width: 12, height: 12, color: 'var(--brand-600)' }} />
                 {formatPlatformLabel(videoData.platform)}
               </span>
             )}
             {videoData.uploader && (
               <span className="pill-soft">
-                <User className="h-3 w-3" style={{ color: 'var(--brand-600)' }} />
+                <User style={{ width: 12, height: 12, color: 'var(--brand-600)' }} />
                 {videoData.uploader}
               </span>
             )}
             {videoData.duration && videoData.duration !== 'Unknown' && (
               <span className="pill-soft">
-                <Clock3 className="h-3 w-3" style={{ color: 'var(--brand-600)' }} />
+                <Clock3 style={{ width: 12, height: 12, color: 'var(--brand-600)' }} />
                 {videoData.duration}
               </span>
             )}
             {videoData.view_count && videoData.view_count !== 'N/A' && (
               <span className="pill-soft">
-                <Eye className="h-3 w-3" style={{ color: 'var(--brand-600)' }} />
+                <Eye style={{ width: 12, height: 12, color: 'var(--brand-600)' }} />
                 {videoData.view_count}
               </span>
             )}
           </div>
 
           {/* Title */}
-          <h3 className="mt-2 line-clamp-2 text-base font-black" style={{ color: 'var(--ink-900)' }}>
+          <h3
+            className="line-clamp-2"
+            style={{
+              marginTop: '0.625rem',
+              fontSize: '0.95rem',
+              fontWeight: 700,
+              color: 'var(--ink-900)',
+              lineHeight: 1.4,
+            }}
+          >
             {videoData.title}
           </h3>
 
           {/* Actions */}
-          <div className="mt-3 flex flex-col gap-1.5 sm:flex-row">
-            <button type="button" onClick={handleFinalDownload} className="btn-brand flex-1 py-2" aria-label="Save file to device">
-              <Download className="h-3.5 w-3.5" />
+          <div
+            className="flex flex-col gap-1.5 sm:flex-row"
+            style={{ marginTop: '0.875rem' }}
+          >
+            <button
+              type="button"
+              onClick={handleFinalDownload}
+              className="btn-brand flex-1"
+              style={{ padding: '0.5rem 0.875rem', fontSize: '0.8rem' }}
+              aria-label="Save file to device"
+            >
+              <Download style={{ width: 14, height: 14 }} />
               Save to device
             </button>
-            <button type="button" onClick={handleCopyLink} className="btn-outline" aria-label="Copy direct download link">
-              <Copy className="h-3.5 w-3.5" />
+            <button
+              type="button"
+              onClick={handleCopyLink}
+              className="btn-ghost"
+              style={{ fontSize: '0.8rem' }}
+              aria-label="Copy direct download link"
+            >
+              <Copy style={{ width: 14, height: 14 }} />
               Copy link
             </button>
-            <button type="button" onClick={handleShare} className="btn-outline" aria-label="Share this download">
-              <Share2 className="h-3.5 w-3.5" />
+            <button
+              type="button"
+              onClick={handleShare}
+              className="btn-ghost"
+              style={{ fontSize: '0.8rem' }}
+              aria-label="Share this download"
+            >
+              <Share2 style={{ width: 14, height: 14 }} />
               Share
             </button>
           </div>
