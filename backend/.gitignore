@@ -1,0 +1,14 @@
+__pycache__
+*.py[cod]
+*.local.*
+serviceAccountKey*.json
+rzp-key*.csv
+.env
+.env.*
+!.env.example
+.DS_Store
+*.swp
+*.swo
+*~
+Thumbs.db
+user_data/

@@ -1,0 +1,11 @@
+node_modules
+dist
+dist-ssr
+.env
+.env.*
+!.env.example
+.DS_Store
+*.swp
+*.swo
+*~
+Thumbs.db
