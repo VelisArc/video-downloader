@@ -7,31 +7,6 @@ export interface DownloadQuota {
   remaining?: number | null;
 }
 
-export interface CookieVaultItem {
-  id: string;
-  label: string;
-  platform: string;
-  domains: string[];
-  expiresAtEpoch?: number | null;
-  updatedAtEpoch?: number | null;
-  createdAtEpoch?: number | null;
-  lastUsedAtEpoch?: number | null;
-  expired?: boolean;
-}
-
-export interface CookieVaultState {
-  requiresLogin?: boolean;
-  canUseCookies?: boolean;
-  plan?: string;
-  hasCookies: boolean;
-  items: CookieVaultItem[];
-  totalCount: number;
-  activeCount: number;
-  expiredCount: number;
-  maxCount?: number | null;
-  remainingSlots?: number | null;
-}
-
 export interface DownloadHistoryItem {
   id: string;
   thumbnail: string;
@@ -43,9 +18,7 @@ export interface DownloadHistoryItem {
   uploader?: string;
   duration?: string;
   view_count?: string;
-  quota?: DownloadQuota;
   platform?: string;
-  cookieMatch?: CookieVaultItem | null;
 }
 
 export const STORAGE_KEYS = {

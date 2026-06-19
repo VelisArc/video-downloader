@@ -8,7 +8,7 @@ export const siteConfig = {
   supportHours: 'Monday to Friday, 9:00 AM to 6:00 PM IST',
   defaultTitle: 'SwiftDL | Multi-Platform Video Downloader',
   defaultDescription:
-    'Download video and audio from many major platforms with a fast browser workflow, plus a saved cookie vault for authorized links.',
+    'Download video and audio from many major platforms with a fast browser workflow.',
 };
 
 export const primaryNav = [
@@ -48,7 +48,6 @@ export const footerGroups = [
       { label: 'Shipping & Delivery', to: '/shipping-delivery' },
       { label: 'Pricing', to: '/pricing' },
       { label: 'DMCA', to: '/dmca' },
-      { label: 'Cookie Policy', to: '/cookie-policy' },
     ],
   },
 ];
@@ -56,8 +55,7 @@ export const footerGroups = [
 export const platformHighlights = [
   'Broad yt-dlp-powered coverage across major social and video platforms',
   'Video and audio extraction when the source exposes a compatible stream',
-  'Saved cookie vault for logged-in users, with larger limits on premium plans',
-  'Automatic cookie matching to reduce account-session mixups',
+  'Direct downloads in your browser without app installations',
 ];
 
 export function siteUrl(path = '/') {

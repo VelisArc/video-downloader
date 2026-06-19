@@ -1,4 +1,4 @@
-import { Clock3, Cookie, Copy, Download, Eye, Share2, Sparkles, User, Video } from 'lucide-react';
+import { Clock3, Copy, Download, Eye, Share2, Sparkles, User, Video } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { DownloadHistoryItem } from '../lib/downloads';
 import { copyText, sanitizeFilename } from '../lib/downloads';
@@ -22,7 +22,6 @@ export default function ResultCard({ videoData }: ResultCardProps) {
   const handleFinalDownload = () => {
     const link = document.createElement('a');
     link.href = videoData.downloadUrl;
-    // Set target blank in case cross-origin prevents actual download attribute from working
     link.target = '_blank';
     link.download = `${sanitizeFilename(videoData.title)}.${videoData.ext || 'mp4'}`;
     document.body.appendChild(link);
@@ -83,12 +82,6 @@ export default function ResultCard({ videoData }: ResultCardProps) {
                 {formatPlatformLabel(videoData.platform)}
               </span>
             )}
-            {videoData.cookieMatch && (
-              <span className="pill-soft" style={{ borderColor: 'var(--brand-300)', background: 'var(--brand-100)' }}>
-                <Cookie className="h-3.5 w-3.5" />
-                {videoData.cookieMatch.label}
-              </span>
-            )}
             {videoData.uploader && (
               <span className="pill-soft">
                 <User className="h-3.5 w-3.5" style={{ color: 'var(--brand-600)' }} />
@@ -113,14 +106,6 @@ export default function ResultCard({ videoData }: ResultCardProps) {
           <h3 className="mt-3 line-clamp-2 text-xl font-black" style={{ color: 'var(--ink-900)' }}>
             {videoData.title}
           </h3>
-
-          {/* Cookie match info */}
-          {videoData.cookieMatch && (
-            <p className="mt-3 rounded-2xl px-4 py-3 text-sm leading-6" style={{ background: 'var(--surface-soft)', color: 'var(--ink-600)' }}>
-              Auto-matched <strong style={{ color: 'var(--ink-900)' }}>{videoData.cookieMatch.label}</strong> for{' '}
-              {formatPlatformLabel(videoData.cookieMatch.platform)}.
-            </p>
-          )}
 
           {/* Actions */}
           <div className="mt-5 flex flex-col gap-2 sm:flex-row">

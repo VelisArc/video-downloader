@@ -3,7 +3,6 @@ import {
   AlertTriangle,
   CheckCircle2,
   ChevronDown,
-  Cookie,
   Globe2,
     MonitorSmartphone,
   Music4,
@@ -54,12 +53,6 @@ const capabilityCards = [
     description: 'Save content without annoying platform logos or watermarks ruining the visual experience. Clean, pristine downloads every time.',
     icon: Sparkles,
     imageUrl: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=500&q=80',
-  },
-  {
-    title: 'Secure Cookie Vault',
-    description: 'Need to download private or restricted content? Our secure cookie vault lets you safely use your own session data to authorize downloads.',
-    icon: Cookie,
-    imageUrl: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=500&q=80',
   },
   {
     title: '100% Secure & Private',
@@ -194,7 +187,7 @@ const trustNotes = [
 const faqs = [
   {
     question: 'Is SwiftDL a free video downloader?',
-    answer: 'Yes! SwiftDL offers a generous free tier that allows anyone to download videos and audio from hundreds of supported platforms without paying a dime. We also offer premium tiers for heavy users who need higher daily limits or advanced cookie-vault features.',
+    answer: 'Yes! SwiftDL offers a generous free tier that allows anyone to download videos and audio from hundreds of supported platforms without paying a dime. We also offer premium tiers for heavy users who need higher daily limits.',
   },
   {
     question: 'How do I download Instagram Reels?',
@@ -222,15 +215,7 @@ const faqs = [
   },
   {
     question: 'Why did my download fail?',
-    answer: 'Downloads can fail for a few reasons: the video might be private, the platform might have changed their code (requiring us to update our extractors), or the link might be broken. If a video is private, you can use our "Cookies Mode" if you have a premium account.',
-  },
-  {
-    question: 'What is Cookies Mode?',
-    answer: 'Cookies Mode is an advanced feature for users who need to download videos from private accounts they follow, or from age-restricted content. By providing your browser session cookies, SwiftDL can authenticate on your behalf to extract the video.',
-  },
-  {
-    question: 'Is it safe to use my cookies?',
-    answer: 'Yes. We encrypt your cookies and they are only used during the extraction process. They are never shared with third parties. However, we always recommend creating a "dummy" or secondary account for extra peace of mind when extracting authenticated content.',
+    answer: 'Downloads can fail for a few reasons: the video might be private, the platform might have changed their code (requiring us to update our extractors), or the link might be broken. SwiftDL works best with public, unrestricted links.',
   },
   {
     question: 'Can I download entire playlists?',
@@ -238,7 +223,7 @@ const faqs = [
   },
   {
     question: 'How do I download Facebook private videos?',
-    answer: 'You must use our Premium Cookies Mode. Export your Facebook cookies using a browser extension, add them to the SwiftDL Cookie Vault, and then paste the private video link. SwiftDL will use your access to download the file.',
+    answer: 'SwiftDL works with public Facebook videos. For private or restricted content, you may need to log in directly on the platform.',
   },
   {
     question: 'Are there any ads or popups?',

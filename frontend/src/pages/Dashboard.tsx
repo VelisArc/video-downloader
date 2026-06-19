@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import {
-  Cookie,
   CreditCard,
   Download,
   History,
@@ -33,7 +32,7 @@ function planDescription(plan: string) {
   if (plan === 'monthly') return 'You have unlimited downloads and no ads this month.';
   if (plan === 'lifetime') return "You have unlimited downloads and no ads — forever.";
   if (plan === 'user') return 'You have limited daily downloads with ads. Upgrade for more.';
-  return 'Login to save cookies and increase your daily limit.';
+  return 'Login to increase your daily download limit.';
 }
 
 export default function Dashboard() {
@@ -61,7 +60,7 @@ export default function Dashboard() {
           </div>
           <h1 className="mt-5 text-3xl font-black" style={{ color: 'var(--ink-900)' }}>Login required</h1>
           <p className="mt-3 text-sm leading-6" style={{ color: 'var(--ink-600)' }}>
-            Login with your Google account to access your dashboard, manage cookies, and track your usage.
+            Login with your Google account to access your dashboard and track your usage.
           </p>
           <Link to="/" className="btn-brand mt-6 inline-flex">
             Go to Home
@@ -87,7 +86,7 @@ export default function Dashboard() {
     <div className="section-shell max-w-5xl py-10">
       <Helmet>
         <title>Dashboard | {siteConfig.name}</title>
-        <meta name="description" content="Manage your SwiftDL account, view usage, and manage saved cookies." />
+        <meta name="description" content="Manage your SwiftDL account, view usage, and track your downloads." />
         <link rel="canonical" href={siteUrl('/dashboard')} />
       </Helmet>
 
@@ -171,13 +170,6 @@ export default function Dashboard() {
                 {entitlement.unlimited ? '∞' : (activePlan === 'user' ? '3' : '1')}
               </p>
               <p className="mt-1 text-xs" style={{ color: 'var(--ink-500)' }}>Daily Limit</p>
-            </div>
-            <div className="card text-center">
-              <Cookie className="mx-auto h-5 w-5" style={{ color: 'var(--brand-600)' }} />
-              <p className="mt-3 text-2xl font-black" style={{ color: 'var(--ink-900)' }}>
-                {isPremium ? '∞' : '2'}
-              </p>
-              <p className="mt-1 text-xs" style={{ color: 'var(--ink-500)' }}>Cookie Slots</p>
             </div>
             <div className="card text-center">
               <History className="mx-auto h-5 w-5" style={{ color: 'var(--brand-600)' }} />

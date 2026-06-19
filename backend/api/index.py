@@ -15,11 +15,6 @@ import datetime
 import random
 import uuid
 import tempfile
-try:
-    from cryptography.fernet import Fernet, InvalidToken
-except Exception:
-    Fernet = None
-    InvalidToken = None
 
 try:
     import firebase_admin
@@ -43,12 +38,10 @@ TMP_DIR = (os.getenv('TMP_DIR', '') or '').strip() or tempfile.gettempdir()
 _firebase_inited = None
 _firestore_client = None
 _razorpay_keys_cache = None
-# Replaces _usage_memory with file-based approach
 _rate_memory = {}
 _inflight = 0
 _info_cache = {}
 _cooldown_until = {}
-_cookies_cache = {}
 
 USAGE_DIR = os.path.join(TMP_DIR, 'user_data', 'usage')
 
@@ -229,7 +222,6 @@ def _pick_thumbnail(info):
             best_score = score
             best_url = url
     
-    # Fallback to 'thumbnail' key if no good candidate found from list
     if best_url:
         return best_url
     return (info.get('thumbnail') or '').strip()
@@ -244,7 +236,6 @@ def _safe_image_url(u):
             'facebook.com',
             'instagram.com',
         )
-        # Check if the host ends with the allowed domain, or is exactly the allowed domain
         for h in allowed:
             if host == h or host.endswith('.' + h):
                 return True
@@ -263,375 +254,6 @@ def _read_text_env(b64_name, txt_name):
     if raw_txt:
         return raw_txt
     return ''
-
-def _write_cookiefile(cookie_text):
-    if not cookie_text or not str(cookie_text).strip():
-        return ''
-    max_len = _int_env('MAX_COOKIE_TXT_LEN', 1048576)
-    cookie_text = str(cookie_text)
-    if max_len > 0 and len(cookie_text) > max_len:
-        raise RuntimeError('Cookies file is too large')
-    os.makedirs(TMP_DIR, exist_ok=True)
-    path = os.path.join(TMP_DIR, f"cookies_{uuid.uuid4().hex}.txt")
-    with open(path, 'w', encoding='utf-8') as f:
-        f.write(cookie_text)
-    return path
-
-def _load_cookies_for_url(url):
-    u = (url or '').lower()
-    if 'instagram.com' in u:
-        return _read_text_env('INSTAGRAM_COOKIES_B64', 'INSTAGRAM_COOKIES_TXT')
-    if 'facebook.com' in u or 'fb.watch' in u:
-        return _read_text_env('FACEBOOK_COOKIES_B64', 'FACEBOOK_COOKIES_TXT')
-    return ''
-
-def _cookie_expiry_epoch(cookie_text):
-    try:
-        max_exp = 0
-        lines = (cookie_text or '').splitlines()
-        for ln in lines:
-            ln = (ln or '').strip()
-            if not ln or ln.startswith('#'):
-                continue
-            parts = ln.split('\t')
-            if len(parts) < 7:
-                continue
-            raw_exp = parts[4].strip()
-            try:
-                exp = int(raw_exp)
-            except Exception:
-                exp = 0
-            if exp > max_exp:
-                max_exp = exp
-        return max_exp or 0
-    except Exception:
-        return 0
-
-def _validate_cookie_text(cookie_text):
-    normalized = (cookie_text or '').strip()
-    if not normalized:
-        raise RuntimeError('Cookies are required')
-    max_len = _int_env('MAX_COOKIE_TXT_LEN', 1048576)
-    if max_len > 0 and len(normalized.encode('utf-8')) > max_len:
-        raise RuntimeError('Cookies file is too large. Maximum size is 1 MB.')
-    return normalized
-
-def _fernet():
-    if Fernet is None:
-        raise RuntimeError('Encryption library not available')
-    key = (os.getenv('COOKIES_FERNET_KEY', '') or os.getenv('COOKIES_ENCRYPTION_KEY', '')).strip()
-    if not key:
-        raise RuntimeError('Missing COOKIES_FERNET_KEY in Environment Variables')
-    return Fernet(key.encode('utf-8'))
-
-def _encrypt_text(plain_text):
-    f = _fernet()
-    token = f.encrypt(plain_text.encode('utf-8'))
-    return token.decode('utf-8')
-
-def _decrypt_text(token_text):
-    f = _fernet()
-    try:
-        plain = f.decrypt(token_text.encode('utf-8'))
-        return plain.decode('utf-8')
-    except Exception:
-        raise RuntimeError('Could not decrypt cookies. Please upload again.')
-
-# --- Local Cookie Storage Helpers ---
-COOKIES_DIR = os.path.join(TMP_DIR, 'user_data', 'cookies')
-COOKIE_VAULT_VERSION = 2
-PLATFORM_HOST_PATTERNS = {
-    'instagram': ('instagram.com', 'cdninstagram.com'),
-    'facebook': ('facebook.com', 'fb.watch', 'fbcdn.net', 'messenger.com'),
-    'youtube': ('youtube.com', 'youtu.be', 'googlevideo.com', 'ytimg.com'),
-    'tiktok': ('tiktok.com', 'tiktokcdn.com'),
-    'twitter': ('twitter.com', 'x.com', 'twimg.com'),
-    'reddit': ('reddit.com', 'redd.it', 'redditmedia.com'),
-    'vimeo': ('vimeo.com', 'vimeocdn.com'),
-    'dailymotion': ('dailymotion.com', 'dmcdn.net'),
-    'twitch': ('twitch.tv', 'ttvnw.net'),
-}
-
-def _get_local_cookie_path(uid):
-    if not uid:
-        return None
-    safe_uid = "".join(c for c in uid if c.isalnum() or c in ('-', '_'))
-    return os.path.join(COOKIES_DIR, f"{safe_uid}.json")
-
-def _normalize_cookie_domain(raw_domain):
-    domain = (raw_domain or '').strip().lower()
-    if not domain:
-        return ''
-    if domain.startswith('#http_only_'):
-        domain = domain[len('#http_only_'):]
-    return domain.lstrip('.')
-
-def _cookie_domains(cookie_text):
-    domains = set()
-    try:
-        for ln in (cookie_text or '').splitlines():
-            ln = (ln or '').strip()
-            if not ln:
-                continue
-            parts = ln.split('\t')
-            if len(parts) < 7:
-                continue
-            domain = _normalize_cookie_domain(parts[0])
-            if domain:
-                domains.add(domain)
-    except Exception:
-        return []
-    return sorted(domains)
-
-def _detect_platform_from_host(host):
-    normalized = _normalize_cookie_domain(host)
-    if not normalized:
-        return 'generic'
-    for platform, patterns in PLATFORM_HOST_PATTERNS.items():
-        if any(normalized == p or normalized.endswith('.' + p) for p in patterns):
-            return platform
-    return normalized.split(':', 1)[0]
-
-def _detect_platform_from_domains(domains):
-    for domain in domains or []:
-        platform = _detect_platform_from_host(domain)
-        if platform and platform != 'generic':
-            return platform
-    if domains:
-        return _detect_platform_from_host(domains[0])
-    return 'generic'
-
-def _is_cookie_expired(item, now=None):
-    now = int(now or time.time())
-    exp = int((item or {}).get('expiresAtEpoch') or 0)
-    return bool(exp and exp > 0 and now >= exp)
-
-def _cookie_summary(item, now=None):
-    summary = {
-        'id': item.get('id'),
-        'label': item.get('label') or 'Saved cookies',
-        'platform': item.get('platform') or 'generic',
-        'domains': item.get('domains') or [],
-        'expiresAtEpoch': item.get('expiresAtEpoch'),
-        'updatedAtEpoch': item.get('updatedAtEpoch'),
-        'createdAtEpoch': item.get('createdAtEpoch'),
-        'lastUsedAtEpoch': item.get('lastUsedAtEpoch'),
-        'expired': _is_cookie_expired(item, now),
-    }
-    return summary
-
-def _sort_cookie_items(items):
-    return sorted(
-        items or [],
-        key=lambda item: (
-            int((item or {}).get('lastUsedAtEpoch') or 0),
-            int((item or {}).get('updatedAtEpoch') or 0),
-            int((item or {}).get('createdAtEpoch') or 0),
-        ),
-        reverse=True,
-    )
-
-def _read_cookie_vault(uid):
-    if not uid:
-        return []
-    cached = _cookies_cache.get(uid)
-    if isinstance(cached, dict) and isinstance(cached.get('items'), list):
-        return cached.get('items')
-
-    path = _get_local_cookie_path(uid)
-    if not path or not os.path.exists(path):
-        return []
-
-    try:
-        with open(path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-
-        items = []
-        now = int(time.time())
-
-        # Migrate legacy single-cookie payloads into the new vault structure.
-        if isinstance(data, dict) and data.get('cookie_text'):
-            cookie_text = data.get('cookie_text') or ''
-            exp = int(data.get('expiresAtEpoch') or 0)
-            updated = int(data.get('updatedAtEpoch') or now)
-            domains = _cookie_domains(cookie_text)
-            items.append({
-                'id': uuid.uuid4().hex,
-                'label': 'Imported cookie',
-                'platform': _detect_platform_from_domains(domains),
-                'domains': domains,
-                'cookie_text': cookie_text,
-                'expiresAtEpoch': exp if exp > 0 else None,
-                'createdAtEpoch': updated,
-                'updatedAtEpoch': updated,
-                'lastUsedAtEpoch': None,
-            })
-        else:
-            for raw_item in (data.get('items') or []):
-                if not isinstance(raw_item, dict):
-                    continue
-                cookie_text = (raw_item.get('cookie_text') or '').strip()
-                if not cookie_text:
-                    continue
-                domains = raw_item.get('domains')
-                if not isinstance(domains, list) or not domains:
-                    domains = _cookie_domains(cookie_text)
-                created = int(raw_item.get('createdAtEpoch') or raw_item.get('updatedAtEpoch') or now)
-                updated = int(raw_item.get('updatedAtEpoch') or created)
-                items.append({
-                    'id': raw_item.get('id') or uuid.uuid4().hex,
-                    'label': (raw_item.get('label') or 'Saved cookies').strip()[:80],
-                    'platform': raw_item.get('platform') or _detect_platform_from_domains(domains),
-                    'domains': domains,
-                    'cookie_text': cookie_text,
-                    'expiresAtEpoch': int(raw_item.get('expiresAtEpoch') or 0) or None,
-                    'createdAtEpoch': created,
-                    'updatedAtEpoch': updated,
-                    'lastUsedAtEpoch': int(raw_item.get('lastUsedAtEpoch') or 0) or None,
-                })
-
-        items = _sort_cookie_items(items)
-        _cookies_cache[uid] = {'items': items}
-        return items
-    except Exception as e:
-        logger.error(f"Failed to read local cookies for {uid}: {e}")
-        return []
-
-def _write_cookie_vault(uid, items):
-    if not uid:
-        raise RuntimeError('Login required')
-    path = _get_local_cookie_path(uid)
-    if not path:
-        raise RuntimeError('Invalid User ID')
-
-    try:
-        os.makedirs(COOKIES_DIR, exist_ok=True)
-        payload = {
-            'version': COOKIE_VAULT_VERSION,
-            'uid': uid,
-            'updatedAtEpoch': int(time.time()),
-            'items': _sort_cookie_items(items),
-        }
-        with open(path, 'w', encoding='utf-8') as f:
-            json.dump(payload, f, indent=2)
-        _cookies_cache[uid] = {'items': payload['items']}
-        return payload['items']
-    except Exception as e:
-        logger.error(f"Failed to save cookies locally: {e}")
-        raise RuntimeError(f"Could not save cookies: {str(e)}")
-
-def _get_user_cookies(uid):
-    items = _read_cookie_vault(uid)
-    now = int(time.time())
-    for item in items:
-        if not _is_cookie_expired(item, now):
-            return item.get('cookie_text'), int(item.get('expiresAtEpoch') or 0), int(item.get('updatedAtEpoch') or 0)
-    return None
-
-def _save_user_cookie(uid, cookie_text, label=None, max_items=0):
-    if not uid:
-        raise RuntimeError('Login required')
-    cookie_text = _validate_cookie_text(cookie_text)
-
-    items = _read_cookie_vault(uid)
-    if max_items and max_items > 0 and len(items) >= max_items:
-        raise RuntimeError(f'Cookie vault limit reached. You can save up to {max_items} cookies on this plan. Delete one first or upgrade for more slots.')
-    now = int(time.time())
-    domains = _cookie_domains(cookie_text)
-    label = (label or '').strip()[:80]
-    if not label:
-        platform_label = _detect_platform_from_domains(domains)
-        label = f"{platform_label.title()} cookie {len(items) + 1}"
-
-    entry = {
-        'id': uuid.uuid4().hex,
-        'label': label,
-        'platform': _detect_platform_from_domains(domains),
-        'domains': domains,
-        'cookie_text': cookie_text,
-        'expiresAtEpoch': _cookie_expiry_epoch(cookie_text) or None,
-        'createdAtEpoch': now,
-        'updatedAtEpoch': now,
-        'lastUsedAtEpoch': None,
-    }
-    items.insert(0, entry)
-    _write_cookie_vault(uid, items)
-    return entry
-
-def _delete_user_cookies(uid, entry_id=None, expired_only=False):
-    if not uid:
-        raise RuntimeError('Login required')
-    items = _read_cookie_vault(uid)
-    if not items:
-        return 0
-
-    now = int(time.time())
-    if expired_only:
-        next_items = [item for item in items if not _is_cookie_expired(item, now)]
-    elif entry_id:
-        next_items = [item for item in items if item.get('id') != entry_id]
-    else:
-        next_items = []
-
-    removed = max(len(items) - len(next_items), 0)
-    if next_items:
-        _write_cookie_vault(uid, next_items)
-    else:
-        path = _get_local_cookie_path(uid)
-        if path and os.path.exists(path):
-            try:
-                os.remove(path)
-            except Exception:
-                pass
-        _cookies_cache.pop(uid, None)
-    return removed
-
-def _mark_user_cookie_used(uid, entry_id):
-    if not uid or not entry_id:
-        return
-    items = _read_cookie_vault(uid)
-    changed = False
-    now = int(time.time())
-    for item in items:
-        if item.get('id') == entry_id:
-            item['lastUsedAtEpoch'] = now
-            item['updatedAtEpoch'] = now
-            changed = True
-            break
-    if changed:
-        try:
-            _write_cookie_vault(uid, items)
-        except Exception:
-            return
-
-def _cookie_matches_host(item, host):
-    normalized_host = _normalize_cookie_domain(host)
-    if not normalized_host:
-        return False
-    for domain in item.get('domains') or []:
-        normalized_domain = _normalize_cookie_domain(domain)
-        if not normalized_domain:
-            continue
-        if normalized_host == normalized_domain or normalized_host.endswith('.' + normalized_domain):
-            return True
-    return False
-
-def _get_matching_user_cookies(uid, url):
-    parsed = urllib.parse.urlparse(url or '')
-    host = _normalize_cookie_domain(parsed.netloc or '')
-    platform = _detect_platform_from_host(host)
-    now = int(time.time())
-    items = [item for item in _read_cookie_vault(uid) if not _is_cookie_expired(item, now)]
-    if not items:
-        return []
-
-    exact = [item for item in items if _cookie_matches_host(item, host)]
-    platform_matches = [
-        item for item in items
-        if item not in exact and (item.get('platform') or '') == platform
-    ]
-    fallback = [item for item in items if item not in exact and item not in platform_matches]
-    return _sort_cookie_items(exact) + _sort_cookie_items(platform_matches) + _sort_cookie_items(fallback)
 
 def _payment_currency():
     cur = os.getenv('PAYMENT_CURRENCY', '').strip().upper()
@@ -686,7 +308,6 @@ def _ensure_firebase_admin():
                 except Exception as e:
                     logger.error(f"Firebase admin JSON base64 decode failed: {e}")
             
-            # Fallback to local file if no env var
             if not admin_json:
                 local_key_path = os.path.join(CURRENT_DIR, 'serviceAccountKey.local.json')
                 if os.path.exists(local_key_path):
@@ -756,34 +377,6 @@ def _load_razorpay_keys():
     _razorpay_keys_cache = (None, None)
     return _razorpay_keys_cache
 
-def _cookies_feature_enabled(entitlement):
-    plan = (entitlement or {}).get('plan') or 'guest'
-    return plan in ('user', 'monthly', 'lifetime')
-
-def _cookie_vault_limit(entitlement):
-    plan = (entitlement or {}).get('plan') or 'guest'
-    if plan == 'user':
-        return 2
-    if plan in ('monthly', 'lifetime'):
-        return _int_env('PREMIUM_COOKIE_VAULT_LIMIT', 0)
-    return 0
-
-def _is_auth_related_error(error_msg):
-    msg = (error_msg or '').lower()
-    needles = [
-        'login required',
-        'this video is private',
-        'private video',
-        'sign in',
-        'cookies-from-browser',
-        '--cookies',
-        'pass cookies',
-        'authentication',
-        'requested content is not available',
-        'members only',
-    ]
-    return any(needle in msg for needle in needles)
-
 def _rzp_request(method, path, payload=None, query=None):
     key_id, key_secret = _load_razorpay_keys()
     if not key_id or not key_secret:
@@ -822,6 +415,26 @@ def _utc_now():
 
 def _utc_today_key():
     return _utc_now().strftime('%Y-%m-%d')
+
+def _detect_platform_from_host(host):
+    normalized = (host or '').strip().lower()
+    if not normalized:
+        return 'generic'
+    platform_map = {
+        'instagram': ('instagram.com', 'cdninstagram.com'),
+        'facebook': ('facebook.com', 'fb.watch', 'fbcdn.net', 'messenger.com'),
+        'youtube': ('youtube.com', 'youtu.be', 'googlevideo.com', 'ytimg.com'),
+        'tiktok': ('tiktok.com', 'tiktokcdn.com'),
+        'twitter': ('twitter.com', 'x.com', 'twimg.com'),
+        'reddit': ('reddit.com', 'redd.it', 'redditmedia.com'),
+        'vimeo': ('vimeo.com', 'vimeocdn.com'),
+        'dailymotion': ('dailymotion.com', 'dmcdn.net'),
+        'twitch': ('twitch.tv', 'ttvnw.net'),
+    }
+    for platform, patterns in platform_map.items():
+        if any(normalized == p or normalized.endswith('.' + p) for p in patterns):
+            return platform
+    return normalized.split(':', 1)[0]
 
 def _get_allowed_origin(request_origin=None):
     allowed = (os.getenv('ALLOWED_ORIGINS', '') or '').strip()
@@ -865,54 +478,6 @@ class handler(BaseHTTPRequestHandler):
                 return self._handle_create_order(data)
             if route.endswith('/verify-payment'):
                 return self._handle_verify_payment(data)
-            if route.endswith('/cookies'):
-                ip = self._get_client_ip()
-                if not _rate_limit_ok(ip):
-                    self.send_error_json(429, 'Too many requests. Please wait and try again.')
-                    return
-                auth_ctx = self._require_user()
-                if not auth_ctx:
-                    return
-                entitlement = self._get_entitlement(auth_ctx.get('uid'))
-                if not _cookies_feature_enabled(entitlement):
-                    self.send_error_json(403, 'Login is required to save cookies.')
-                    return
-                cookie_limit = _cookie_vault_limit(entitlement)
-                cookies_b64 = (data.get('cookiesB64') or '').strip()
-                cookies_txt = (data.get('cookiesTxt') or '').strip()
-                label = (data.get('label') or '').strip()
-                cookie_text = ''
-                if cookies_b64:
-                    try:
-                        cookie_text = base64.b64decode(cookies_b64).decode('utf-8', errors='ignore')
-                    except Exception:
-                        self.send_error_json(400, 'Invalid cookiesB64')
-                        return
-                else:
-                    cookie_text = cookies_txt
-                try:
-                    cookie_text = _validate_cookie_text(cookie_text)
-                except Exception as e:
-                    self.send_error_json(400, str(e))
-                    return
-
-                try:
-                    item = _save_user_cookie(auth_ctx['uid'], cookie_text, label=label, max_items=cookie_limit)
-                except Exception as e:
-                    self.send_error_json(400, str(e))
-                    return
-                items = _read_cookie_vault(auth_ctx['uid'])
-                active_count = len([entry for entry in items if not _is_cookie_expired(entry)])
-                remaining_slots = None if cookie_limit <= 0 else max(cookie_limit - len(items), 0)
-                self.send_json({
-                    'ok': True,
-                    'item': _cookie_summary(item),
-                    'count': len(items),
-                    'activeCount': active_count,
-                    'maxCount': None if cookie_limit <= 0 else cookie_limit,
-                    'remainingSlots': remaining_slots,
-                })
-                return
 
             if route not in ('/api', '/api/'):
                 self.send_error_json(404, 'Not Found')
@@ -929,7 +494,6 @@ class handler(BaseHTTPRequestHandler):
 
             url = data.get('url', '').strip()
             download_type = data.get('type', 'video').lower()
-            use_cookies = bool(data.get('useCookies'))
 
             if not url:
                 self.send_error_json(400, 'URL is required')
@@ -953,138 +517,55 @@ class handler(BaseHTTPRequestHandler):
             auth_ctx = self._get_auth_context()
             entitlement = self._get_entitlement(auth_ctx.get('uid') if auth_ctx else None)
             is_unlimited = bool(entitlement.get('unlimited'))
-            cookies_enabled = _cookies_feature_enabled(entitlement)
             limit = self._daily_limit_for_entitlement(entitlement, auth_ctx.get('uid') if auth_ctx else None)
             allowed, remaining = self._reserve_quota(auth_ctx.get('uid') if auth_ctx else None, limit)
             if not allowed:
                 self.send_error_json(429, 'Daily download limit reached. Please login or upgrade to Premium.')
                 return
-            if use_cookies and not cookies_enabled:
-                self.send_error_json(403, 'Login is required before using saved cookies.')
-                return
-            url_for_extract = url.split('#', 1)[0].strip()
-            cookie_candidates = []
-            try:
-                if use_cookies:
-                    cookies_b64 = (data.get('cookiesB64') or '').strip()
-                    cookies_txt = (data.get('cookiesTxt') or '').strip()
-                    cookie_text = ''
-                    if cookies_b64:
-                        try:
-                            cookie_text = base64.b64decode(cookies_b64).decode('utf-8', errors='ignore')
-                        except Exception:
-                            cookie_text = ''
-                    elif cookies_txt:
-                        cookie_text = cookies_txt
-                    if cookie_text:
-                        cookie_text = _validate_cookie_text(cookie_text)
-                        cookie_candidates.append({
-                            'id': None,
-                            'label': 'Temporary session',
-                            'platform': _detect_platform_from_host(urllib.parse.urlparse(url_for_extract).netloc or ''),
-                            'domains': _cookie_domains(cookie_text),
-                            'cookie_text': cookie_text,
-                            'expiresAtEpoch': _cookie_expiry_epoch(cookie_text) or None,
-                            'createdAtEpoch': int(time.time()),
-                            'updatedAtEpoch': int(time.time()),
-                            'lastUsedAtEpoch': None,
-                        })
-                    if auth_ctx and auth_ctx.get('uid'):
-                        cookie_candidates.extend(_get_matching_user_cookies(auth_ctx.get('uid'), url_for_extract))
-                    env_cookie_text = _load_cookies_for_url(url_for_extract)
-                    if env_cookie_text:
-                        cookie_candidates.append({
-                            'id': None,
-                            'label': 'Environment cookie',
-                            'platform': _detect_platform_from_host(urllib.parse.urlparse(url_for_extract).netloc or ''),
-                            'domains': _cookie_domains(env_cookie_text),
-                            'cookie_text': env_cookie_text,
-                            'expiresAtEpoch': _cookie_expiry_epoch(env_cookie_text) or None,
-                            'createdAtEpoch': int(time.time()),
-                            'updatedAtEpoch': int(time.time()),
-                            'lastUsedAtEpoch': None,
-                        })
-                    if not cookie_candidates:
-                        self.send_error_json(400, 'No saved or uploaded cookies matched this link. Add cookies for this platform first.')
-                        return
-            except Exception as e:
-                self.send_error_json(400, str(e))
-                return
-            
-            # Determine Format Strategy
-            if download_type == 'audio':
-                format_str = 'bestaudio[ext=m4a]/bestaudio[ext=mp3]/bestaudio/best[acodec!=none]'
-            else:
-                format_str = 'best[vcodec!=none][acodec!=none][ext=mp4]/best[vcodec!=none][acodec!=none][ext=webm]/best[vcodec!=none][acodec!=none]/best'
 
-            opts = {
-                'quiet': True,
-                'no_warnings': True,
-                'format': format_str,
-                'socket_timeout': 30,
-                'retries': 10,
-                'fragment_retries': 10,
-                'nocheckcertificate': True,
-                'user_agent': _random_user_agent(),
-                'cachedir': os.path.join(TMP_DIR, 'yt-dlp-cache'),
-                'http_headers': {
-                    'Accept': '*/*',
-                    'Accept-Language': 'en-US,en;q=0.9',
-                },
-                'extractor_args': {
-                    'instagram': {
-                        'skip': ['dash'],
-                    }
-                },
-                'geo_bypass': True,
-                'geo_bypass_country': 'US',
-                'sleep_interval': 1,
-                'max_sleep_interval': 3,
-                'ignore_no_formats_error': True,
-            }
-            if 'instagram.com' in (url_for_extract or ''):
-                opts['http_headers']['Referer'] = 'https://www.instagram.com/'
-            if 'facebook.com' in (url_for_extract or '') or 'fb.watch' in (url_for_extract or ''):
-                opts['http_headers']['Referer'] = 'https://www.facebook.com/'
+            url_for_extract = url.split('#', 1)[0].strip()
+            
             if not _inflight_try_acquire():
                 self.send_error_json(429, 'Server is busy. Please retry in a few seconds.')
                 return
             info = None
-            selected_cookie = None
-            last_cookie_error = None
             try:
-                attempts = [None] + cookie_candidates if use_cookies else [None]
-                for attempt in attempts:
-                    request_cookiefile = ''
-                    run_opts = dict(opts)
-                    run_opts['http_headers'] = dict(opts.get('http_headers') or {})
-                    if attempt and attempt.get('cookie_text'):
-                        request_cookiefile = _write_cookiefile(attempt.get('cookie_text'))
-                        run_opts['cookiefile'] = request_cookiefile
-                    try:
-                        with yt_dlp.YoutubeDL(run_opts) as ydl:
-                            info = ydl.extract_info(url_for_extract, download=False)
-                        selected_cookie = attempt
-                        if auth_ctx and auth_ctx.get('uid') and attempt and attempt.get('id'):
-                            _mark_user_cookie_used(auth_ctx.get('uid'), attempt.get('id'))
-                        break
-                    except yt_dlp.utils.DownloadError as e:
-                        last_cookie_error = e
-                        if use_cookies and _is_auth_related_error(str(e)):
-                            continue
-                        raise
-                    finally:
-                        if request_cookiefile:
-                            try:
-                                os.remove(request_cookiefile)
-                            except Exception:
-                                pass
-                if info is None and last_cookie_error:
-                    raise last_cookie_error
+                opts = {
+                    'quiet': True,
+                    'no_warnings': True,
+                    'format': ('bestaudio[ext=m4a]/bestaudio[ext=mp3]/bestaudio/best[acodec!=none]'
+                               if download_type == 'audio'
+                               else 'best[vcodec!=none][acodec!=none][ext=mp4]/best[vcodec!=none][acodec!=none][ext=webm]/best[vcodec!=none][acodec!=none]/best'),
+                    'socket_timeout': 30,
+                    'retries': 10,
+                    'fragment_retries': 10,
+                    'nocheckcertificate': True,
+                    'user_agent': _random_user_agent(),
+                    'cachedir': os.path.join(TMP_DIR, 'yt-dlp-cache'),
+                    'http_headers': {
+                        'Accept': '*/*',
+                        'Accept-Language': 'en-US,en;q=0.9',
+                    },
+                    'extractor_args': {
+                        'instagram': {
+                            'skip': ['dash'],
+                        }
+                    },
+                    'geo_bypass': True,
+                    'geo_bypass_country': 'US',
+                    'sleep_interval': 1,
+                    'max_sleep_interval': 3,
+                    'ignore_no_formats_error': True,
+                }
+                if 'instagram.com' in (url_for_extract or ''):
+                    opts['http_headers']['Referer'] = 'https://www.instagram.com/'
+                if 'facebook.com' in (url_for_extract or '') or 'fb.watch' in (url_for_extract or ''):
+                    opts['http_headers']['Referer'] = 'https://www.facebook.com/'
+                with yt_dlp.YoutubeDL(opts) as ydl:
+                    info = ydl.extract_info(url_for_extract, download=False)
             finally:
                 _inflight_release()
 
-            # --- Extraction & Fallback Strategy ---
             video_url = info.get('url')
             file_ext = info.get('ext', 'mp4') if download_type == 'video' else info.get('ext', 'm4a')
             protocol = str(info.get('protocol', ''))
@@ -1134,7 +615,6 @@ class handler(BaseHTTPRequestHandler):
                 self.send_error_json(500, msg)
                 return
 
-            # Extract additional metadata
             duration_seconds = info.get('duration')
             duration_string = str(datetime.timedelta(seconds=duration_seconds)) if duration_seconds else 'Unknown'
             
@@ -1149,7 +629,6 @@ class handler(BaseHTTPRequestHandler):
             else:
                 view_count_str = 'N/A'
 
-            # Better Title Extraction
             title = (info.get('title') or '').strip()
             if not title or title.lower() in ('video', 'untitled'):
                 title = (info.get('fulltitle') or '').strip()
@@ -1158,12 +637,9 @@ class handler(BaseHTTPRequestHandler):
             if not title:
                 title = f"Video-{info.get('id', 'download')}"
 
-            # Force correct extension for audio
             if download_type == 'audio':
-                # Map common audio codecs/extensions to user-friendly ones if needed
-                # But mostly just trust the extracted ext, ensuring it's audio-like
                 if file_ext not in ('mp3', 'm4a', 'wav', 'aac'):
-                    file_ext = 'mp3' # Fallback attempt, though actual content might differ
+                    file_ext = 'mp3'
 
             thumbnail_url = _pick_thumbnail(info)
             response_data = {
@@ -1180,7 +656,6 @@ class handler(BaseHTTPRequestHandler):
                 'uploader': info.get('uploader', 'Unknown Author'),
                 'duration': duration_string,
                 'view_count': view_count_str,
-                'cookieMatch': _cookie_summary(selected_cookie) if selected_cookie else None,
                 'quota': {
                     'plan': entitlement.get('plan', 'free'),
                     'unlimited': is_unlimited,
@@ -1205,11 +680,8 @@ class handler(BaseHTTPRequestHandler):
             if 'rate-limit reached' in error_msg or 'rate limit reached' in error_msg:
                 self.send_error_json(429, 'The source platform rate limit was reached. Please wait and try again.')
                 return
-            if 'cookies-from-browser' in error_msg or '--cookies' in error_msg or 'pass cookies' in error_msg:
-                self.send_error_json(403, 'This link requires login. Enable Cookies Mode and add your cookies.txt file (Netscape format).')
-                return
             if 'login required' in error_msg:
-                self.send_error_json(403, 'This link appears to require login. If you are already allowed to view it, try Cookies Mode with a fresh cookies.txt export.')
+                self.send_error_json(403, 'This link requires login. Only public, unrestricted links are supported.')
             elif 'unavailable for certain audiences' in error_msg or 'may be inappropriate' in error_msg or 'inappropriate' in error_msg or 'age-restricted' in error_msg or 'age restricted' in error_msg:
                 self.send_error_json(403, 'This video is unavailable due to age/audience restrictions. Only public, unrestricted links are supported.')
             elif 'not available in your country' in error_msg or 'not available in your region' in error_msg or 'geo' in error_msg and 'blocked' in error_msg:
@@ -1233,14 +705,11 @@ class handler(BaseHTTPRequestHandler):
             if 'rate-limit reached' in error_msg or 'rate limit reached' in error_msg:
                 self.send_error_json(429, 'The source platform rate limit was reached. Please wait and try again.')
                 return
-            if 'cookies-from-browser' in error_msg or '--cookies' in error_msg or 'pass cookies' in error_msg:
-                self.send_error_json(403, 'This link requires login. Enable Cookies Mode and add your cookies.txt file (Netscape format).')
-                return
             if 'unavailable for certain audiences' in error_msg or 'may be inappropriate' in error_msg or 'inappropriate' in error_msg or 'age-restricted' in error_msg or 'age restricted' in error_msg:
                 self.send_error_json(403, 'This video is unavailable due to age/audience restrictions. Only public, unrestricted links are supported.')
                 return
             if 'login required' in error_msg:
-                self.send_error_json(403, 'This link appears to require login. If you are already allowed to view it, try Cookies Mode with a fresh cookies.txt export.')
+                self.send_error_json(403, 'This link appears to require login. Only public, unrestricted links are supported.')
                 return
             if 'not available in your country' in error_msg or 'not available in your region' in error_msg or ('geo' in error_msg and 'blocked' in error_msg):
                 self.send_error_json(403, 'This video is not available in this region. Try a different public link.')
@@ -1270,63 +739,6 @@ class handler(BaseHTTPRequestHandler):
                 self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
                 self.wfile.write(body)
-                return
-            if route.endswith('/cookies'):
-                ip = self._get_client_ip()
-                if not _rate_limit_ok(ip):
-                    self.send_error_json(429, 'Too many requests. Please wait and try again.')
-                    return
-                decoded, err = self._verify_bearer_token()
-                if err or not decoded or not decoded.get('uid'):
-                    self.send_json({
-                        'requiresLogin': True,
-                        'canUseCookies': False,
-                        'plan': 'guest',
-                        'hasCookies': False,
-                        'items': [],
-                        'totalCount': 0,
-                        'activeCount': 0,
-                        'expiredCount': 0,
-                        'maxCount': 0,
-                        'remainingSlots': 0,
-                    })
-                    return
-                uid = decoded.get('uid')
-                entitlement = self._get_entitlement(uid)
-                can_use_cookies = _cookies_feature_enabled(entitlement)
-                cookie_limit = _cookie_vault_limit(entitlement)
-                if not can_use_cookies:
-                    self.send_json({
-                        'requiresLogin': False,
-                        'canUseCookies': False,
-                        'plan': entitlement.get('plan', 'user'),
-                        'hasCookies': False,
-                        'items': [],
-                        'totalCount': 0,
-                        'activeCount': 0,
-                        'expiredCount': 0,
-                        'maxCount': 0,
-                        'remainingSlots': 0,
-                    })
-                    return
-
-                items = _read_cookie_vault(uid)
-                now = int(time.time())
-                summaries = [_cookie_summary(item, now) for item in items]
-                active_count = len([item for item in items if not _is_cookie_expired(item, now)])
-                expired_count = len(summaries) - active_count
-                self.send_json({
-                    'requiresLogin': False,
-                    'canUseCookies': True,
-                    'plan': entitlement.get('plan', 'user'),
-                    'hasCookies': bool(summaries),
-                    'items': summaries,
-                    'totalCount': len(summaries),
-                    'activeCount': active_count,
-                    'expiredCount': expired_count,
-                    'maxCount': None if cookie_limit <= 0 else cookie_limit,
-                    'remainingSlots': None if cookie_limit <= 0 else max(cookie_limit - len(summaries), 0),
-                })
                 return
             if route.endswith('/config'):
                 key_id, _ = _load_razorpay_keys()
@@ -1387,46 +799,6 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Razorpay-Signature')
         self.end_headers()
 
-    def do_DELETE(self):
-        try:
-            route = (self.path or '').split('?', 1)[0]
-            if not route.endswith('/cookies'):
-                self.send_error_json(404, 'Not Found')
-                return
-            ip = self._get_client_ip()
-            if not _rate_limit_ok(ip):
-                self.send_error_json(429, 'Too many requests. Please wait and try again.')
-                return
-            auth_ctx = self._require_user()
-            if not auth_ctx:
-                return
-            parsed = urllib.parse.urlparse(self.path or '')
-            query = dict(urllib.parse.parse_qsl(parsed.query, keep_blank_values=True))
-            entry_id = (query.get('id') or '').strip()
-            expired_only = (query.get('expiredOnly') or '').strip().lower() in ('1', 'true', 'yes')
-            try:
-                removed = _delete_user_cookies(auth_ctx['uid'], entry_id=entry_id or None, expired_only=expired_only)
-            except Exception as e:
-                self.send_error_json(500, str(e))
-                return
-            items = _read_cookie_vault(auth_ctx['uid'])
-            now = int(time.time())
-            active_count = len([item for item in items if not _is_cookie_expired(item, now)])
-            entitlement = self._get_entitlement(auth_ctx['uid'])
-            cookie_limit = _cookie_vault_limit(entitlement)
-            self.send_json({
-                'ok': True,
-                'removed': removed,
-                'items': [_cookie_summary(item, now) for item in items],
-                'totalCount': len(items),
-                'activeCount': active_count,
-                'expiredCount': len(items) - active_count,
-                'maxCount': None if cookie_limit <= 0 else cookie_limit,
-                'remainingSlots': None if cookie_limit <= 0 else max(cookie_limit - len(items), 0),
-            })
-        except Exception as e:
-            self.send_error_json(500, f'Server error: {str(e)}')
-
     def _cors_origin(self):
         origin = self.headers.get('Origin', '') if hasattr(self, 'headers') else ''
         return _get_allowed_origin(origin)
@@ -1441,7 +813,6 @@ class handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def send_error_json(self, code, msg):
-        # Prevent leaking sensitive internal python paths or auth errors
         safe_msg = str(msg)
         if 'File "' in safe_msg or 'line ' in safe_msg or 'Traceback' in safe_msg:
             logger.error(f"Suppressed internal error trace: {msg}")
@@ -1550,7 +921,6 @@ class handler(BaseHTTPRequestHandler):
         today = _utc_today_key()
         is_user = bool(uid)
         
-        # Firestore logic (unchanged essentially, just cleaner check)
         if fs:
             key = (f"user:{uid}:{today}" if is_user else f"guest:{ip}:{today}")
             doc_ref = fs.collection('usage').document(key)
@@ -1577,21 +947,15 @@ class handler(BaseHTTPRequestHandler):
             try:
                 return txn(tx)
             except Exception:
-                # If transaction fails, fallback to allow or deny? 
-                # Let's fallback to local check if Firestore fails
                 pass
 
-        # --- Local File-Based Logic (Fallback / Primary) ---
-        # Key for filename
         safe_key = ""
         if is_user:
             safe_key = f"user_{uid}_{today}"
         else:
-            # Sanitize IP for filename
             safe_ip = ip.replace(':', '_').replace('.', '_')
             safe_key = f"guest_{safe_ip}_{today}"
         
-        # Ensure alphanumeric only for safety
         safe_key = "".join(c for c in safe_key if c.isalnum() or c in ('_', '-'))
         
         try:
@@ -1606,7 +970,6 @@ class handler(BaseHTTPRequestHandler):
                         if data.get('date') == today:
                             current = int(data.get('count', 0))
                         else:
-                            # Old file, reset
                             current = 0
                 except Exception:
                     current = 0
@@ -1614,7 +977,6 @@ class handler(BaseHTTPRequestHandler):
             if current >= limit:
                 return False, 0
             
-            # Increment and Save
             new_count = current + 1
             with open(path, 'w', encoding='utf-8') as f:
                 json.dump({
@@ -1627,17 +989,11 @@ class handler(BaseHTTPRequestHandler):
             return True, max(limit - new_count, 0)
         except Exception as e:
             logger.error(f"Failed to update local usage: {e}")
-            # Fail open or closed? detailed error suggests fail open usually, 
-            # but for strict limits, we might want to fail closed? 
-            # Let's fail open to avoid blocking users on disk errors, 
-            # but log heavily.
             return True, 0
 
     def _require_user(self):
         decoded, err = self._verify_bearer_token()
         if err:
-            # For local dev, if verifying fails but we are in local mode, maybe fallback?
-            # But _verify_bearer_token handles the bypass now.
             if err in ('missing', 'invalid_header', 'empty_token'):
                 self.send_error_json(401, 'Login required')
             else:
@@ -1924,14 +1280,12 @@ class handler(BaseHTTPRequestHandler):
         event = (payload.get('event') or '').lower()
         fs = _get_firestore_client()
 
-        # Log all webhook events
         if fs:
             fs.collection('rzpWebhooks').document(f"{int(time.time())}_{uuid.uuid4().hex[:6]}").set({
                 'event': event,
                 'createdAt': firestore.SERVER_TIMESTAMP
             }, merge=True)
 
-        # Handle subscription renewal (subscription.charged)
         if event in ('subscription.charged', 'subscription.activated') and fs:
             try:
                 entity = ((payload.get('payload') or {}).get('subscription') or {}).get('entity') or {}
@@ -1950,7 +1304,6 @@ class handler(BaseHTTPRequestHandler):
             except Exception as e:
                 logger.error(f"Webhook renewal processing failed: {e}")
 
-        # Handle subscription cancellation
         if event in ('subscription.cancelled', 'subscription.completed') and fs:
             try:
                 entity = ((payload.get('payload') or {}).get('subscription') or {}).get('entity') or {}

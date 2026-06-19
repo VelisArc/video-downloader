@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Clipboard, Cookie, Download, FileAudio2, Link2, Video, X } from 'lucide-react';
+import { Clipboard, Download, FileAudio2, Link2, Video, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import LoadingIndicator from './LoadingIndicator';
 import type { DownloadType } from '../lib/downloads';
@@ -9,9 +9,6 @@ interface DownloaderPanelProps {
   setUrl: (url: string) => void;
   downloadType: DownloadType;
   setDownloadType: (t: DownloadType) => void;
-  useCookies: boolean;
-  onCookiesToggle: () => void;
-  cookiesFeatureAvailable: boolean;
   isLoading: boolean;
   onDownload: () => void;
 }
@@ -21,9 +18,6 @@ export default function DownloaderPanel({
   setUrl,
   downloadType,
   setDownloadType,
-  useCookies,
-  onCookiesToggle,
-  cookiesFeatureAvailable,
   isLoading,
   onDownload,
 }: DownloaderPanelProps) {
@@ -60,7 +54,7 @@ export default function DownloaderPanel({
             Paste your link and download
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-6" style={{ color: 'var(--ink-600)' }}>
-            Works with public links. Enable Cookies Mode for login-restricted content.
+            Works with public video links from major platforms.
           </p>
         </div>
         <div className="inline-flex rounded-full border p-1 shadow-sm" style={{ borderColor: 'var(--border-soft)', background: 'var(--surface)' }}>
@@ -103,7 +97,7 @@ export default function DownloaderPanel({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             onKeyDown={(e) => { if (e.key === 'Enter' && !isLoading) onDownload(); }}
-            placeholder="Paste a public or authorized video link..."
+            placeholder="Paste a public video link..."
             className="w-full rounded-[22px] border py-4 pl-12 pr-36 text-base transition-all duration-200"
             style={{
               borderColor: isFocused ? 'var(--brand-500)' : 'var(--border-soft)',
@@ -135,40 +129,23 @@ export default function DownloaderPanel({
           </div>
         </div>
 
-        {/* Cookies toggle + Download */}
-        <div className="flex flex-wrap items-center gap-3">
-          {cookiesFeatureAvailable && (
-            <button
-              type="button"
-              onClick={onCookiesToggle}
-              className="inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] transition-all duration-200"
-              style={{
-                borderColor: useCookies ? 'var(--brand-500)' : 'var(--border-soft)',
-                background: useCookies ? 'var(--brand-100)' : 'var(--surface)',
-                color: useCookies ? 'var(--brand-700)' : 'var(--ink-600)',
-              }}
-            >
-              <Cookie className="h-3.5 w-3.5" />
-              Cookies {useCookies ? 'ON' : 'OFF'}
-            </button>
+        {/* Download button */}
+        <button
+          type="button"
+          onClick={onDownload}
+          disabled={isLoading}
+          className="btn-brand w-full py-4 text-base"
+          style={isLoading ? { opacity: 0.75, cursor: 'not-allowed' } : {}}
+        >
+          {isLoading ? (
+            <LoadingIndicator label="Checking the link..." compact tone="light" />
+          ) : (
+            <>
+              <Download className="h-5 w-5" />
+              {`Download ${downloadType === 'video' ? 'video' : 'audio'}`}
+            </>
           )}
-          <button
-            type="button"
-            onClick={onDownload}
-            disabled={isLoading}
-            className="btn-brand flex-1 py-4 text-base"
-            style={isLoading ? { opacity: 0.75, cursor: 'not-allowed' } : {}}
-          >
-            {isLoading ? (
-              <LoadingIndicator label="Checking the link..." compact tone="light" />
-            ) : (
-              <>
-                <Download className="h-5 w-5" />
-                {`Download ${downloadType === 'video' ? 'video' : 'audio'}`}
-              </>
-            )}
-          </button>
-        </div>
+        </button>
       </div>
     </div>
   );

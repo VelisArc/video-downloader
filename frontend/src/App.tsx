@@ -35,7 +35,7 @@ const DMCA = lazy(() => import('./pages/DMCA'));
 const AboutUs = lazy(() => import('./pages/AboutUs'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
 const SupportedPlatforms = lazy(() => import('./pages/SupportedPlatforms'));
-const CookiePolicy = lazy(() => import('./pages/CookiePolicy'));
+
 const HowToDownloadInstagramReels = lazy(() => import('./pages/HowToDownloadInstagramReels'));
 const HowToDownloadFacebookVideos = lazy(() => import('./pages/HowToDownloadFacebookVideos'));
 const FAQ = lazy(() => import('./pages/FAQ'));
@@ -457,7 +457,6 @@ function AppShell() {
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/contact-us" element={<ContactUs />} />
                 <Route path="/supported-platforms" element={<SupportedPlatforms />} />
-                <Route path="/cookie-policy" element={<CookiePolicy />} />
                 <Route path="/how-to-download-instagram-reels" element={<HowToDownloadInstagramReels />} />
                 <Route path="/how-to-download-facebook-videos" element={<HowToDownloadFacebookVideos />} />
                 <Route path="/faq" element={<FAQ />} />
@@ -471,7 +470,6 @@ function AppShell() {
                 <Route path="/terms-of-service.html" element={<TermsOfService />} />
                 <Route path="/privacy-policy.html" element={<PrivacyPolicy />} />
                 <Route path="/dmca.html" element={<DMCA />} />
-                <Route path="/cookie-policy.html" element={<CookiePolicy />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
@@ -502,7 +500,7 @@ function AppShell() {
                   </div>
                 </div>
                 <p className="mt-4 max-w-sm text-sm leading-7" style={{ color: 'var(--ink-600)' }}>
-                  Download videos and audio from many major platforms with a clean browser workflow and saved cookie vault.
+                  Download videos and audio from many major platforms with a clean browser workflow.
                 </p>
                 <p className="mt-4 text-sm" style={{ color: 'var(--ink-600)' }}>
                   Support:{' '}
