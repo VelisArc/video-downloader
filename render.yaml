@@ -15,6 +15,10 @@ services:
         value: 1
       - key: USER_DAILY_LIMIT
         value: 3
+      - key: MONTHLY_DAILY_LIMIT
+        value: 75
+      - key: LIFETIME_DAILY_LIMIT
+        value: 150
       - key: INFO_CACHE_TTL_SEC
         value: "15"
       - key: YTDLP_COOKIES_B64

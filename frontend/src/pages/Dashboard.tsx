@@ -43,8 +43,9 @@ export default function Dashboard() {
   const activePlan = entitlement.plan || (user ? 'user' : 'guest');
   const isPremium = entitlement.unlimited;
   const expiryDays = daysUntil(entitlement.expiresAt);
-  const limitText = entitlement.unlimited ? 'Unlimited' : String(entitlement.dailyLimit ?? (activePlan === 'user' ? 3 : 1));
-  const remainingText = entitlement.unlimited ? 'Unlimited' : entitlement.remaining == null ? 'Not loaded' : String(entitlement.remaining);
+  const limitValue = entitlement.dailyLimit ?? (activePlan === 'monthly' ? 75 : activePlan === 'lifetime' ? 150 : activePlan === 'user' ? 3 : 1);
+  const limitText = limitValue && limitValue > 0 ? `${limitValue}/day` : 'Unlimited';
+  const remainingText = limitValue && limitValue > 0 ? (entitlement.remaining == null ? 'Not loaded' : String(entitlement.remaining)) : 'Unlimited';
   const premiumStatus = statusLabel(entitlement.premiumStatus);
 
   const premiumRows = useMemo(() => [
@@ -113,7 +114,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-1.5 text-xs font-bold">{isPremium ? <Sparkles size={14} /> : <Shield size={14} />}{planLabel(activePlan)}</div>
                 <span className="rounded-md bg-white/15 px-2 py-1 text-[10px] font-bold">{premiumStatus}</span>
               </div>
-              <p className="mt-2 text-[11px] leading-5 opacity-80">{isPremium ? 'Premium access is enabled for this account.' : 'Free access is active. Upgrade for unlimited downloads.'}</p>
+              <p className="mt-2 text-[11px] leading-5 opacity-80">{isPremium ? 'Premium access is enabled for this account.' : 'Free access is active. Upgrade for premium fair-use limits.'}</p>
             </div>
             {!isPremium && <Link to="/pricing" className="btn-primary w-full mt-4 text-xs"><CreditCard size={14} /> Upgrade to Premium</Link>}
           </div>
@@ -161,7 +162,7 @@ export default function Dashboard() {
                   <AlertCircle size={18} style={{ color: 'var(--warning-600)' }} />
                   <div>
                     <p className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>Premium expired</p>
-                    <p className="mt-1 text-xs" style={{ color: 'var(--ink-600)' }}>Renew from pricing to restore unlimited access.</p>
+                    <p className="mt-1 text-xs" style={{ color: 'var(--ink-600)' }}>Renew from pricing to restore premium fair-use access.</p>
                   </div>
                 </div>
               )}

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Clock3, Copy, Download, Eye, Share2, Sparkles, User, Video } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { DownloadHistoryItem } from '../lib/downloads';
@@ -15,6 +16,9 @@ interface Props {
 }
 
 export default function ResultCard({ videoData }: Props) {
+  const [imageFailed, setImageFailed] = useState(false);
+  const hasThumbnail = Boolean(videoData.thumbnail) && !imageFailed;
+
   const download = () => {
     const anchor = document.createElement('a');
     anchor.href = videoData.downloadUrl;
@@ -47,8 +51,8 @@ export default function ResultCard({ videoData }: Props) {
     <article className="animate-fade-up mt-4 overflow-hidden rounded-lg border" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
       <div className="grid gap-4 p-3 sm:grid-cols-[156px_1fr] sm:p-4">
         <div className="overflow-hidden rounded-md border" style={{ borderColor: 'var(--border)' }}>
-          {videoData.thumbnail ? (
-            <img src={videoData.thumbnail} alt="" className="h-40 w-full object-cover sm:h-full" />
+          {hasThumbnail ? (
+            <img src={videoData.thumbnail} alt="" className="h-40 w-full object-cover sm:h-full" loading="lazy" referrerPolicy="no-referrer" onError={() => setImageFailed(true)} />
           ) : (
             <div className="flex h-40 items-center justify-center" style={{ background: 'var(--brand-50)', color: 'var(--brand-700)' }}>
               <Video className="h-8 w-8" />

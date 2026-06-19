@@ -161,7 +161,7 @@ export default function PricingPolicy() {
       <div className="text-center max-w-lg mx-auto mb-10">
         <span className="tag">Pricing</span>
         <h1 className="text-3xl font-bold mt-3" style={{ color: 'var(--ink-900)' }}>Simple, transparent pricing</h1>
-        <p className="mt-3 text-sm leading-relaxed" style={{ color: 'var(--ink-600)' }}>Free tier for basic use. Paid plans unlock higher limits and an ad-free account experience.</p>
+        <p className="mt-3 text-sm leading-relaxed" style={{ color: 'var(--ink-600)' }}>Free tier for basic use. Paid plans unlock higher fair-use limits and an ad-free account experience.</p>
         {user && entitlement.plan !== 'guest' && (
           <div className="mt-5 inline-flex flex-wrap items-center justify-center gap-2 rounded-lg border px-4 py-2 text-xs font-semibold" style={{ borderColor: 'var(--border)', background: 'var(--surface-soft)', color: 'var(--ink-700)' }}>
             Current plan: <span style={{ color: 'var(--brand-700)' }}>{entitlement.plan === 'monthly' ? 'Monthly Premium' : entitlement.plan === 'lifetime' ? 'Lifetime Premium' : 'Free Account'}</span>
@@ -193,7 +193,7 @@ export default function PricingPolicy() {
       <div className="mt-8 rounded-lg p-5" style={{ background: 'var(--surface-soft)', border: '1px solid var(--border)' }}>
         <h3 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>Billing notes</h3>
         <ul className="mt-3 space-y-2">
-          {['Payments are handled securely by Razorpay.', 'Monthly access stores purchase and expiry dates on your account.', 'Failed media requests do not consume your daily download limit.'].map(n => <li key={n} className="flex items-start gap-2 text-xs" style={{ color: 'var(--ink-600)' }}><span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ background: 'var(--ink-400)' }} />{n}</li>)}
+          {['Payments are handled securely by Razorpay.', 'Monthly access stores purchase and expiry dates on your account.', 'Failed media requests do not consume your daily limit, and premium plans include fair-use caps to prevent abuse.'].map(n => <li key={n} className="flex items-start gap-2 text-xs" style={{ color: 'var(--ink-600)' }}><span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ background: 'var(--ink-400)' }} />{n}</li>)}
         </ul>
       </div>
 

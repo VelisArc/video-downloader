@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler
 import base64
 import hashlib
 import hmac
+import ipaddress
 import json
 import os
 import time
@@ -267,6 +268,22 @@ def _select_direct_download(info, download_type):
 
     return '', preferred_ext
 
+def _looks_like_image_url(u):
+    try:
+        parsed = urllib.parse.urlparse(u or '')
+        host = (parsed.hostname or '').lower()
+        path = (parsed.path or '').lower()
+        if host.startswith('video.') or '.video.' in host or 'googlevideo.com' in host:
+            return False
+        if any(token in path for token in ('.mp4', '.m3u8', '.mpd', '.mov', '.webm')):
+            return False
+        if any(token in path for token in ('.jpg', '.jpeg', '.png', '.webp', '.gif')):
+            return True
+        image_hosts = ('cdninstagram.com', 'fbcdn.net', 'fbsbx.com', 'instagram.com', 'cdninstagram.com', 'ytimg.com', 'twimg.com')
+        return any(host == h or host.endswith('.' + h) for h in image_hosts)
+    except Exception:
+        return False
+
 def _pick_thumbnail(info):
     if not isinstance(info, dict):
         return ''
@@ -277,7 +294,7 @@ def _pick_thumbnail(info):
         if not isinstance(t, dict):
             continue
         url = (t.get('url') or '').strip()
-        if not url:
+        if not url or not _looks_like_image_url(url):
             continue
         w = t.get('width') or 0
         h = t.get('height') or 0
@@ -288,25 +305,49 @@ def _pick_thumbnail(info):
         if score > best_score:
             best_score = score
             best_url = url
-    
+
     if best_url:
         return best_url
-    return (info.get('thumbnail') or '').strip()
+    fallback = (info.get('thumbnail') or '').strip()
+    return fallback if _looks_like_image_url(fallback) else ''
 
 def _safe_image_url(u):
     try:
+        if not _looks_like_image_url(u):
+            return False
         parsed = urllib.parse.urlparse(u or '')
-        host = (parsed.netloc or '').lower()
+        host = (parsed.hostname or '').lower()
         allowed = (
             'cdninstagram.com',
             'fbcdn.net',
+            'fbsbx.com',
             'facebook.com',
             'instagram.com',
+            'ytimg.com',
+            'twimg.com',
         )
         for h in allowed:
             if host == h or host.endswith('.' + h):
                 return True
         return False
+    except Exception:
+        return False
+
+def _is_public_media_url(value):
+    try:
+        parsed = urllib.parse.urlparse((value or '').strip())
+        if parsed.scheme not in ('http', 'https') or not parsed.hostname:
+            return False
+        if len(value or '') > _int_env('MAX_URL_LENGTH', 2000):
+            return False
+        host = parsed.hostname.strip().lower().rstrip('.')
+        if host in ('localhost',) or host.endswith(('.localhost', '.local', '.internal', '.test')):
+            return False
+        try:
+            ip = ipaddress.ip_address(host)
+            return not (ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast or ip.is_unspecified)
+        except ValueError:
+            return True
     except Exception:
         return False
 
@@ -667,12 +708,18 @@ class handler(BaseHTTPRequestHandler):
     def _copy_cookies(self):
         return
 
+    def _absolute_api_url(self, path):
+        base = (os.getenv('PUBLIC_API_BASE_URL', '') or '').strip().rstrip('/')
+        if not base:
+            proto = (self.headers.get('X-Forwarded-Proto') or 'https').split(',', 1)[0].strip() or 'https'
+            host = (self.headers.get('X-Forwarded-Host') or self.headers.get('Host') or '').split(',', 1)[0].strip()
+            base = f"{proto}://{host}" if host else ''
+        if not base:
+            return path
+        return base + (path if path.startswith('/') else '/' + path)
+
     def _is_valid_url(self, url):
-        try:
-            parsed = urllib.parse.urlparse((url or '').strip())
-            return parsed.scheme in ('http', 'https') and bool(parsed.netloc)
-        except Exception:
-            return False
+        return _is_public_media_url(url)
 
     def do_POST(self):
         try:
@@ -715,7 +762,7 @@ class handler(BaseHTTPRequestHandler):
                 return
 
             if not self._is_valid_url(url):
-                self.send_error_json(400, 'Please enter a valid public video URL.')
+                self.send_error_json(400, 'Please enter a valid public media URL. Private, local, and internal URLs are not allowed.')
                 return
 
             normalized_url = _normalize_media_url(url)
@@ -903,7 +950,7 @@ class handler(BaseHTTPRequestHandler):
             response_data = {
                 'title': title[:150],
                 'thumbnail': (
-                    ('/api/thumb?src=' + urllib.parse.quote(thumbnail_url, safe=''))
+                    self._absolute_api_url('/api/thumb?src=' + urllib.parse.quote(thumbnail_url, safe=''))
                     if thumbnail_url and _safe_image_url(thumbnail_url)
                     else thumbnail_url
                 ),
@@ -998,14 +1045,22 @@ class handler(BaseHTTPRequestHandler):
                 if not src or not _safe_image_url(src):
                     self.send_error_json(400, 'Invalid thumbnail URL')
                     return
-                req = urllib.request.Request(src, headers={'User-Agent': 'Mozilla/5.0'})
+                req = urllib.request.Request(src, headers={
+                    'User-Agent': _random_user_agent(),
+                    'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+                    'Referer': 'https://www.instagram.com/' if 'instagram' in urllib.parse.urlparse(src).hostname.lower() else 'https://www.facebook.com/',
+                })
                 with urllib.request.urlopen(req, timeout=15) as resp:
-                    body = resp.read()
-                    ctype = resp.headers.get('Content-Type') or 'image/jpeg'
+                    body = resp.read(5 * 1024 * 1024)
+                    ctype = (resp.headers.get('Content-Type') or 'image/jpeg').split(';', 1)[0].strip().lower()
+                if not ctype.startswith('image/'):
+                    self.send_error_json(415, 'Thumbnail source is not an image')
+                    return
                 self.send_response(200)
                 self.send_header('Content-Type', ctype)
-                self.send_header('Cache-Control', 'public, max-age=300')
+                self.send_header('Cache-Control', 'public, max-age=1800')
                 self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Cross-Origin-Resource-Policy', 'cross-origin')
                 self.end_headers()
                 self.wfile.write(body)
                 return
@@ -1035,8 +1090,8 @@ class handler(BaseHTTPRequestHandler):
                     'lifetimeDisplay': _format_money_safe(lifetime_amount, currency),
                     'guestDailyLimit': _int_env('GUEST_DAILY_LIMIT', 1),
                     'userDailyLimit': _int_env('USER_DAILY_LIMIT', 3),
-                    'monthlyDailyLimit': _int_env('MONTHLY_DAILY_LIMIT', 0),
-                    'lifetimeDailyLimit': _int_env('LIFETIME_DAILY_LIMIT', 0),
+                    'monthlyDailyLimit': _int_env('MONTHLY_DAILY_LIMIT', 75),
+                    'lifetimeDailyLimit': _int_env('LIFETIME_DAILY_LIMIT', 150),
                     'youtubeCookiesConfigured': bool(youtube_cookie_env),
                     'youtubeCookieSource': youtube_cookie_env,
                     'youtubeProxyConfigured': bool(youtube_proxy_env),
@@ -1184,9 +1239,9 @@ class handler(BaseHTTPRequestHandler):
     def _daily_limit_for_entitlement(self, entitlement, uid):
         plan = (entitlement or {}).get('plan') or ('user' if uid else 'guest')
         if plan == 'lifetime':
-            return _int_env('LIFETIME_DAILY_LIMIT', 0)
+            return _int_env('LIFETIME_DAILY_LIMIT', 150)
         if plan == 'monthly':
-            return _int_env('MONTHLY_DAILY_LIMIT', 0)
+            return _int_env('MONTHLY_DAILY_LIMIT', 75)
         if uid:
             return _int_env('USER_DAILY_LIMIT', 3)
         return _int_env('GUEST_DAILY_LIMIT', 1)
@@ -1381,7 +1436,7 @@ class handler(BaseHTTPRequestHandler):
             'interval': 1,
             'item': {
                 'name': 'SwiftDL Monthly Unlimited',
-                'description': 'Unlimited downloads for 1 month',
+                'description': 'Premium fair-use downloads for 1 month',
                 'amount': monthly_amount,
                 'currency': currency
             }
