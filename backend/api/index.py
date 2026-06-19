@@ -606,6 +606,7 @@ class handler(BaseHTTPRequestHandler):
                         'retries': 10,
                         'fragment_retries': 10,
                         'nocheckcertificate': True,
+                        'js_runtimes': {'node': {}},
                         'user_agent': _random_user_agent(),
                         'cachedir': os.path.join(TMP_DIR, 'yt-dlp-cache'),
                         'http_headers': {
