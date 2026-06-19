@@ -138,6 +138,12 @@ How to get it:
 Important:
 - Service account must be from the same Firebase project used by the frontend (authDomain/projectId).
 
+### Optional but recommended for YouTube on Render
+- `YTDLP_COOKIES_B64`: base64 of a Netscape-format YouTube cookies.txt file.
+- `YTDLP_PROXY`: outbound proxy URL, for example `http://user:pass@host:port`.
+
+YouTube may challenge or block datacenter IPs. If Render returns a "Direct link not found" YouTube error, configure one of these values and redeploy the backend.
+
 Tips (Windows):
 - One-line JSON clipboard:
   - `Get-Content .\\swiftdownlod-firebase-adminsdk-xxxxx.json -Raw | ConvertFrom-Json | ConvertTo-Json -Compress | Set-Clipboard`

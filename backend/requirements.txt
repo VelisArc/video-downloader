@@ -1,4 +1,4 @@
-yt-dlp>=2024.0.0
+yt-dlp>=2026.6.9
 firebase-admin>=6.0.0
 cryptography>=41.0.0
 gunicorn>=22.0.0

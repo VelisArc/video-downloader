@@ -42,6 +42,7 @@ _rate_memory = {}
 _inflight = 0
 _info_cache = {}
 _cooldown_until = {}
+_ytdlp_cookie_file = None
 
 USAGE_DIR = os.path.join(TMP_DIR, 'user_data', 'usage')
 
@@ -296,6 +297,30 @@ def _read_text_env(b64_name, txt_name):
     if raw_txt:
         return raw_txt
     return ''
+
+def _get_ytdlp_cookie_file():
+    global _ytdlp_cookie_file
+    if _ytdlp_cookie_file and os.path.exists(_ytdlp_cookie_file):
+        return _ytdlp_cookie_file
+
+    cookie_text = _read_text_env('YTDLP_COOKIES_B64', 'YTDLP_COOKIES_TXT')
+    if not cookie_text:
+        cookie_path = (os.getenv('YTDLP_COOKIES_FILE', '') or '').strip()
+        return cookie_path if cookie_path and os.path.exists(cookie_path) else ''
+
+    if '\\n' in cookie_text and '\n' not in cookie_text:
+        cookie_text = cookie_text.replace('\\n', '\n')
+
+    try:
+        os.makedirs(TMP_DIR, exist_ok=True)
+        cookie_path = os.path.join(TMP_DIR, 'yt-dlp-cookies.txt')
+        with open(cookie_path, 'w', encoding='utf-8') as f:
+            f.write(cookie_text)
+        _ytdlp_cookie_file = cookie_path
+        return cookie_path
+    except Exception as e:
+        logger.warning(f"Could not write yt-dlp cookie file: {e}")
+        return ''
 
 def _payment_currency():
     cur = os.getenv('PAYMENT_CURRENCY', '').strip().upper()
@@ -596,7 +621,7 @@ class handler(BaseHTTPRequestHandler):
                             ],
                         }
 
-                    return {
+                    ydl_opts = {
                         'quiet': True,
                         'no_warnings': True,
                         'format': ('bestaudio[ext=m4a]/bestaudio[ext=mp3]/bestaudio/best[acodec!=none]'
@@ -620,6 +645,13 @@ class handler(BaseHTTPRequestHandler):
                         'max_sleep_interval': 3,
                         'ignore_no_formats_error': True,
                     }
+                    cookie_file = _get_ytdlp_cookie_file()
+                    if cookie_file:
+                        ydl_opts['cookiefile'] = cookie_file
+                    proxy = (os.getenv('YTDLP_PROXY', '') or '').strip()
+                    if proxy:
+                        ydl_opts['proxy'] = proxy
+                    return ydl_opts
 
                 opts = build_opts()
                 if 'instagram.com' in (url_for_extract or ''):
@@ -659,6 +691,8 @@ class handler(BaseHTTPRequestHandler):
                 msg = 'Direct link not found.'
                 if download_type == 'audio':
                     msg += ' Could not find a suitable audio stream.'
+                elif platform == 'youtube':
+                    msg += ' YouTube is blocking this server/IP. Configure YTDLP_COOKIES_B64 or YTDLP_PROXY on Render and redeploy.'
                 else:
                     msg += ' This format is not currently supported.'
                 self.send_error_json(500, msg)
@@ -822,6 +856,12 @@ class handler(BaseHTTPRequestHandler):
                     'userDailyLimit': _int_env('USER_DAILY_LIMIT', 3),
                     'monthlyDailyLimit': _int_env('MONTHLY_DAILY_LIMIT', 0),
                     'lifetimeDailyLimit': _int_env('LIFETIME_DAILY_LIMIT', 0),
+                    'youtubeCookiesConfigured': bool(
+                        (os.getenv('YTDLP_COOKIES_B64', '') or '').strip()
+                        or (os.getenv('YTDLP_COOKIES_TXT', '') or '').strip()
+                        or (os.getenv('YTDLP_COOKIES_FILE', '') or '').strip()
+                    ),
+                    'youtubeProxyConfigured': bool((os.getenv('YTDLP_PROXY', '') or '').strip()),
                 })
                 return
             if route.endswith('/payment-config'):
