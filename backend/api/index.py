@@ -720,27 +720,27 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         try:
             route = (self.path or '').split('?', 1)[0]
-        if route == '/' or route == '':
-            self.send_json({
-                'service': 'SwiftDL API',
-                'ok': True,
-                'ts': int(time.time()),
-                'version': '4.0.0',
-                'message': 'Welcome to SwiftDL API. Use POST /api to download media.',
-                'documentation': 'https://github.com/VelisArc/video-downloader'
-            })
-            return
-            
-        if route.endswith('/health'):
-            self.send_json({'ok': True, 'ts': int(time.time())})
-            return
-        if route.endswith('/thumb'):
-            qs = urllib.parse.urlparse(self.path).query
-            q = dict(urllib.parse.parse_qsl(qs, keep_blank_values=True))
-            src = (q.get('src') or '').strip()
-            if not src or not _safe_image_url(src):
-                self.send_error_json(400, 'Invalid thumbnail URL')
+            if route == '/' or route == '':
+                self.send_json({
+                    'service': 'SwiftDL API',
+                    'ok': True,
+                    'ts': int(time.time()),
+                    'version': '4.0.0',
+                    'message': 'Welcome to SwiftDL API. Use POST /api to download media.',
+                    'documentation': 'https://github.com/VelisArc/video-downloader'
+                })
                 return
+            
+            if route.endswith('/health'):
+                self.send_json({'ok': True, 'ts': int(time.time())})
+                return
+            if route.endswith('/thumb'):
+                qs = urllib.parse.urlparse(self.path).query
+                q = dict(urllib.parse.parse_qsl(qs, keep_blank_values=True))
+                src = (q.get('src') or '').strip()
+                if not src or not _safe_image_url(src):
+                    self.send_error_json(400, 'Invalid thumbnail URL')
+                    return
                 req = urllib.request.Request(src, headers={'User-Agent': 'Mozilla/5.0'})
                 with urllib.request.urlopen(req, timeout=15) as resp:
                     body = resp.read()
