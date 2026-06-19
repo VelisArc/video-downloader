@@ -12,10 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY api/ ./api/
 COPY wsgi.py ./
 
-RUN mkdir -p /var/data/tmp/user_data /var/data/tmp/yt-dlp-cache
-
 ENV PYTHONUNBUFFERED=1
-ENV TMP_DIR=/var/data/tmp
 ENV PORT=10000
 
 EXPOSE 10000

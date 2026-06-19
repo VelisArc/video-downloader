@@ -29,7 +29,3 @@ services:
         sync: false
       - key: RZP_WEBHOOK_SECRET
         sync: false
-    disk:
-      name: swiftdl-data
-      mountPath: /var/data
-      sizeGB: 1
