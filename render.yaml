@@ -6,7 +6,7 @@ services:
     plan: free
     envVars:
       - key: ALLOWED_ORIGINS
-        value: https://swiftdownlod.online
+        value: https://swiftdownlod.online,https://www.swiftdownlod.online
       - key: MAX_INFLIGHT
         value: 2
       - key: RATE_LIMIT_PER_MIN
