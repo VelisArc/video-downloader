@@ -98,9 +98,9 @@ export default function HowToDownloadInstagramReels() {
         <link rel="canonical" href={siteUrl('/how-to-download-instagram-reels')} />
       </Helmet>
 
-      <section className="rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,_#fff5f1,_#ffffff)] p-5 shadow-[0_20px_48px_rgba(31,34,51,0.06)] md:p-6">
+      <section className="rounded-2xl border border-[var(--border-soft)] bg-[var(--brand-50)] p-5 shadow-sm md:p-6">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mx-auto inline-flex rounded-2xl bg-[linear-gradient(135deg,_#f05f6b,_#f49c4d)] p-3 text-white shadow-lg">
+          <div className="mx-auto inline-flex rounded-2xl" style={{ background: 'linear-gradient(135deg, #f05f6b, #f49c4d)', color: 'white' }} >
             <Instagram className="h-8 w-8" />
           </div>
           <h1 className="mt-5 text-3xl font-black text-[var(--ink-900)] md:text-4xl">

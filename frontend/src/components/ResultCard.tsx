@@ -54,24 +54,22 @@ export default function ResultCard({ videoData }: ResultCardProps) {
     <article
       className="animate-fade-in-up"
       style={{
-        marginTop: '1rem',
-        borderRadius: 'var(--radius-2xl)',
+        marginTop: '0.875rem',
+        borderRadius: 'var(--radius-xl)',
         background: 'var(--surface)',
         border: '1px solid var(--border-soft)',
-        boxShadow: 'var(--shadow-lg)',
         overflow: 'hidden',
       }}
     >
-      <div className="flex flex-col gap-3 md:flex-row" style={{ padding: '1rem' }}>
-        {/* Thumbnail */}
+      <div className="flex flex-col gap-3 md:flex-row" style={{ padding: '0.875rem' }}>
         <div
           style={{
             width: '100%',
-            borderRadius: 'var(--radius-xl)',
+            borderRadius: 'var(--radius-md)',
             overflow: 'hidden',
             flex: 'none',
           }}
-          className="md:w-40"
+          className="md:w-36"
         >
           {videoData.thumbnail ? (
             <img
@@ -79,13 +77,10 @@ export default function ResultCard({ videoData }: ResultCardProps) {
               alt={videoData.title}
               style={{
                 width: '100%',
-                height: '9rem',
+                height: '8rem',
                 objectFit: 'cover',
-                borderRadius: 'var(--radius-xl)',
-                transition: 'transform 500ms ease',
+                borderRadius: 'var(--radius-md)',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
             />
           ) : (
             <div
@@ -94,10 +89,10 @@ export default function ResultCard({ videoData }: ResultCardProps) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: '100%',
-                height: '9rem',
-                borderRadius: 'var(--radius-xl)',
+                height: '8rem',
+                borderRadius: 'var(--radius-md)',
                 background: 'var(--surface-soft)',
-                color: 'var(--brand-700)',
+                color: 'var(--brand-600)',
               }}
             >
               <Video style={{ width: 28, height: 28 }} />
@@ -105,9 +100,7 @@ export default function ResultCard({ videoData }: ResultCardProps) {
           )}
         </div>
 
-        {/* Details */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          {/* Tags */}
           <div
             className="flex flex-wrap"
             style={{ gap: '0.375rem', fontSize: '10px', fontWeight: 500, color: 'var(--ink-600)' }}
@@ -138,30 +131,19 @@ export default function ResultCard({ videoData }: ResultCardProps) {
             )}
           </div>
 
-          {/* Title */}
           <h3
             className="line-clamp-2"
-            style={{
-              marginTop: '0.625rem',
-              fontSize: '0.95rem',
-              fontWeight: 700,
-              color: 'var(--ink-900)',
-              lineHeight: 1.4,
-            }}
+            style={{ marginTop: '0.5rem', fontSize: '0.9rem', fontWeight: 700, color: 'var(--ink-900)', lineHeight: 1.4 }}
           >
             {videoData.title}
           </h3>
 
-          {/* Actions */}
-          <div
-            className="flex flex-col gap-1.5 sm:flex-row"
-            style={{ marginTop: '0.875rem' }}
-          >
+          <div className="flex flex-col gap-1.5 sm:flex-row" style={{ marginTop: '0.75rem' }}>
             <button
               type="button"
               onClick={handleFinalDownload}
               className="btn-brand flex-1"
-              style={{ padding: '0.5rem 0.875rem', fontSize: '0.8rem' }}
+              style={{ padding: '0.45rem 0.75rem', fontSize: '0.8rem' }}
               aria-label="Save file to device"
             >
               <Download style={{ width: 14, height: 14 }} />

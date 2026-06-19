@@ -111,8 +111,8 @@ export default function InstallPrompt() {
 
   return (
     <div className="pointer-events-none fixed bottom-0 left-0 right-0 z-50 p-4 animate-slide-up">
-      <div className="pointer-events-auto mx-auto max-w-md overflow-hidden rounded-3xl border border-[var(--border-strong)] bg-white shadow-[0_28px_60px_rgba(31,34,51,0.18)]">
-        <div className="flex items-center justify-between bg-[linear-gradient(135deg,_#d84853,_#f49c4d)] px-5 py-4 text-white">
+      <div className="pointer-events-auto mx-auto max-w-md overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-white shadow-xl">
+        <div className="flex items-center justify-between px-5 py-4 text-white" style={{ background: 'var(--brand-600)' }}>
           <div className="flex items-center gap-3">
             <div className="rounded-2xl bg-white/15 p-2">
               <Download className="h-4 w-4" />

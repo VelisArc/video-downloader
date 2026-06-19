@@ -95,9 +95,9 @@ export default function HowToDownloadFacebookVideos() {
         />
       </Helmet>
 
-      <section className="rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,_#eef5ff,_#ffffff)] p-5 shadow-[0_20px_48px_rgba(31,34,51,0.06)] md:p-6">
+      <section className="rounded-2xl border border-[var(--border-soft)] bg-[var(--brand-50)] p-5 shadow-sm md:p-6">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mx-auto inline-flex rounded-2xl bg-[linear-gradient(135deg,_#2563eb,_#38bdf8)] p-3 text-white shadow-lg">
+          <div className="mx-auto inline-flex rounded-2xl" style={{ background: 'var(--brand-600)', color: 'white' }}>
             <Share2 className="h-8 w-8" />
           </div>
           <h1 className="mt-5 text-3xl font-black text-[var(--ink-900)] md:text-4xl">

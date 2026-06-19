@@ -8,14 +8,11 @@ import {
 } from 'react-router-dom';
 import {
   Download,
-  LayoutDashboard,
   LogIn,
   LogOut,
   Menu,
   User,
   X,
-  ChevronRight,
-  ExternalLink,
 } from 'lucide-react';
 import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'react-hot-toast';
@@ -118,7 +115,7 @@ function Navbar() {
   };
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `rounded-lg px-3 py-1.5 text-[13px] font-medium transition-all duration-200 ${
+    `rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors duration-150 ${
       isActive
         ? 'bg-[var(--brand-100)] text-[var(--brand-700)]'
         : 'text-[var(--ink-600)] hover:bg-[var(--surface-soft)] hover:text-[var(--ink-900)]'
@@ -138,26 +135,25 @@ function Navbar() {
   return (
     <>
       <header
-        className={`sticky top-0 z-50 transition-all duration-300 ${
-          scrolled ? 'border-b shadow-sm' : ''
+        className={`sticky top-0 z-50 transition-all duration-200 ${
+          scrolled ? 'border-b' : ''
         }`}
         style={{
           borderColor: 'var(--border-soft)',
-          background: scrolled ? 'var(--surface-glass)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(20px) saturate(1.5)' : 'none',
+          background: 'var(--surface)',
         }}
       >
         <div className="section-shell">
           <div className="flex items-center justify-between py-3">
             <Link
               to="/"
-              className="flex items-center gap-2.5 group"
+              className="flex items-center gap-2 group"
               onClick={() => setIsMenuOpen(false)}
             >
-              <div className="rounded-xl p-2 text-white transition-all duration-200 group-hover:scale-105" style={{ background: 'var(--gradient-brand)' }}>
+              <div className="rounded-lg p-1.5 text-white" style={{ background: 'var(--brand-600)' }}>
                 <Download className="h-4 w-4" />
               </div>
-              <span className="text-base font-bold tracking-tight" style={{ color: 'var(--ink-900)' }}>
+              <span className="text-[15px] font-bold tracking-tight" style={{ color: 'var(--ink-900)' }}>
                 {siteConfig.name}
               </span>
             </Link>
@@ -187,13 +183,13 @@ function Navbar() {
                 <div className="flex items-center gap-2">
                   <Link
                     to="/dashboard"
-                    className="flex items-center gap-2 rounded-lg px-2 py-1.5 transition-all duration-200 hover:bg-[var(--surface-soft)]"
+                    className="flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-[var(--surface-soft)]"
                   >
                     {user.photoURL ? (
                       <img
                         src={user.photoURL}
                         alt={user.displayName || 'User'}
-                        className="h-7 w-7 rounded-full ring-2 ring-[var(--border-soft)]"
+                        className="h-7 w-7 rounded-full border border-[var(--border-soft)]"
                       />
                     ) : (
                       <span
@@ -232,7 +228,7 @@ function Navbar() {
               <button
                 type="button"
                 onClick={() => setIsMenuOpen((v) => !v)}
-                className="rounded-lg border p-2 transition-colors hover:bg-[var(--surface-soft)]"
+                className="rounded-md border p-2 transition-colors hover:bg-[var(--surface-soft)]"
                 style={{ borderColor: 'var(--border-soft)', color: 'var(--ink-600)' }}
                 aria-label="Toggle menu"
               >
@@ -244,7 +240,7 @@ function Navbar() {
           {isMenuOpen && (
             <div className="pb-3 lg:hidden animate-fade-in">
               <div
-                className="rounded-xl border p-3 shadow-lg"
+                className="rounded-xl border p-3"
                 style={{ borderColor: 'var(--border-soft)', background: 'var(--surface)' }}
               >
                 <div className="flex flex-col gap-0.5">
@@ -305,16 +301,16 @@ function Navbar() {
 
       {showInstallHelp && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
           style={{ background: 'rgba(0,0,0,0.5)' }}
           onClick={() => setShowInstallHelp(false)}
         >
           <div
-            className="w-full max-w-xs animate-scale-up rounded-2xl p-5 shadow-2xl"
-            style={{ background: 'var(--surface)' }}
+            className="w-full max-w-xs animate-scale-up rounded-xl p-5"
+            style={{ background: 'var(--surface)', boxShadow: 'var(--shadow-2xl)' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="mx-auto inline-flex rounded-xl p-2.5" style={{ background: 'var(--gradient-brand)', color: 'white' }}>
+            <div className="mx-auto inline-flex rounded-lg p-2.5" style={{ background: 'var(--brand-600)', color: 'white' }}>
               <Download className="h-5 w-5" />
             </div>
             <h3 className="mt-3 text-center text-lg font-bold" style={{ color: 'var(--ink-900)' }}>
@@ -323,7 +319,7 @@ function Navbar() {
             <p className="mt-1.5 text-center text-xs leading-5" style={{ color: 'var(--ink-600)' }}>
               Add the app for quicker access from your home screen.
             </p>
-            <div className="mt-4 rounded-xl p-3 text-xs leading-5" style={{ background: 'var(--surface-soft)', color: 'var(--ink-600)' }}>
+            <div className="mt-4 rounded-lg p-3 text-xs leading-5" style={{ background: 'var(--surface-soft)', color: 'var(--ink-600)' }}>
               {isIOS ? (
                 <ol className="space-y-1.5">
                   <li>1. Tap <strong>Share</strong> in Safari</li>
@@ -351,16 +347,16 @@ function Navbar() {
 
       {showLogoutConfirm && (
         <div
-          className="fixed inset-0 z-[110] flex items-center justify-center p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[110] flex items-center justify-center p-4"
           style={{ background: 'rgba(0,0,0,0.5)' }}
           onClick={() => { if (!isLoggingOut) setShowLogoutConfirm(false); }}
         >
           <div
-            className="w-full max-w-xs animate-scale-up rounded-2xl p-5 shadow-2xl"
-            style={{ background: 'var(--surface)' }}
+            className="w-full max-w-xs animate-scale-up rounded-xl p-5"
+            style={{ background: 'var(--surface)', boxShadow: 'var(--shadow-2xl)' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="mx-auto inline-flex rounded-xl p-2.5" style={{ background: 'var(--surface-soft)', color: 'var(--brand-600)' }}>
+            <div className="mx-auto inline-flex rounded-lg p-2.5" style={{ background: 'var(--surface-soft)', color: 'var(--brand-600)' }}>
               <LogOut className="h-5 w-5" />
             </div>
             <h3 className="mt-3 text-center text-lg font-bold" style={{ color: 'var(--ink-900)' }}>
@@ -406,7 +402,7 @@ function AppShell() {
     <Router>
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[101] focus:rounded-lg focus:px-3 focus:py-1.5 focus:text-xs focus:font-semibold focus:text-white"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[101] focus:rounded-md focus:px-3 focus:py-1.5 focus:text-xs focus:font-semibold focus:text-white"
         style={{ background: 'var(--ink-900)' }}
       >
         Skip to content
@@ -420,7 +416,7 @@ function AppShell() {
               background: 'var(--surface)',
               color: 'var(--ink-900)',
               border: '1px solid var(--border-soft)',
-              borderRadius: '12px',
+              borderRadius: '8px',
               fontSize: '13px',
               fontWeight: 500,
               boxShadow: 'var(--shadow-lg)',
@@ -468,14 +464,13 @@ function AppShell() {
         </main>
 
         <footer
-          className="border-t"
-          style={{ borderColor: 'var(--border-soft)', background: 'var(--surface)' }}
+          style={{ borderTop: '1px solid var(--border-soft)', background: 'var(--surface)' }}
         >
           <div className="section-shell py-10">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               <div className="sm:col-span-2 lg:col-span-1">
                 <Link to="/" className="flex items-center gap-2">
-                  <div className="rounded-lg p-1.5 text-white" style={{ background: 'var(--gradient-brand)' }}>
+                  <div className="rounded-md p-1.5 text-white" style={{ background: 'var(--brand-600)' }}>
                     <Download className="h-3.5 w-3.5" />
                   </div>
                   <span className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>
@@ -499,7 +494,7 @@ function AppShell() {
 
               {footerGroups.map((group) => (
                 <div key={group.title}>
-                  <h3 className="text-[11px] font-semibold uppercase tracking-[0.16em]" style={{ color: 'var(--ink-500)' }}>
+                  <h3 className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--ink-500)' }}>
                     {group.title}
                   </h3>
                   <ul className="mt-3 space-y-2">

@@ -5,8 +5,6 @@ import {
   CheckCircle2,
   Download,
   History,
-  Shield,
-  Sparkles,
   Trash2,
   Video,
 } from 'lucide-react';
@@ -25,7 +23,7 @@ import {
   sanitizeFilename,
   saveDownloadHistory,
 } from '../lib/downloads';
-import { platformHighlights, siteConfig, siteUrl } from '../lib/site';
+import { siteConfig, siteUrl } from '../lib/site';
 import { API_BASE } from '../lib/api';
 
 const blankItem: DownloadHistoryItem = {
@@ -43,7 +41,7 @@ const features = [
   {
     title: 'Wide platform coverage',
     description: 'Works with many major yt-dlp-compatible platforms.',
-    icon: Sparkles,
+    icon: CheckCircle2,
   },
   {
     title: 'Browser-first workflow',
@@ -151,150 +149,97 @@ export default function Home() {
         <meta property="og:image" content={siteUrl('/logo.png')} />
       </Helmet>
 
-      <main style={{ paddingBottom: '2.5rem', paddingTop: '2rem' }}>
+      <main style={{ paddingBottom: '3rem', paddingTop: '2.5rem' }}>
         <div className="section-shell">
-          {/* Hero Section */}
+          {/* Hero */}
           <section
             style={{
               position: 'relative',
-              overflow: 'hidden',
-              borderRadius: 'var(--radius-2xl)',
-              background: 'var(--gradient-brand)',
+              borderRadius: 'var(--radius-xl)',
+              background: 'var(--ink-900)',
               padding: '3rem 2rem',
+              overflow: 'hidden',
             }}
           >
             <div
               style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'var(--gradient-mesh)',
-                opacity: 0.4,
+                opacity: 0.06,
+                background: 'radial-gradient(circle at 30% 40%, var(--brand-500), transparent 60%)',
               }}
             />
-            <div style={{ position: 'absolute', inset: 0, opacity: 0.08 }}>
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '-4rem',
-                  right: '-4rem',
-                  width: '16rem',
-                  height: '16rem',
-                  borderRadius: '50%',
-                  background: 'white',
-                  filter: 'blur(80px)',
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '-4rem',
-                  left: '-4rem',
-                  width: '16rem',
-                  height: '16rem',
-                  borderRadius: '50%',
-                  background: 'white',
-                  filter: 'blur(80px)',
-                }}
-              />
-            </div>
-
-            <div style={{ position: 'relative', zIndex: 10, maxWidth: '56rem', margin: '0 auto', textAlign: 'center' }}>
+            <div
+              style={{
+                position: 'relative',
+                zIndex: 10,
+                maxWidth: '40rem',
+                margin: '0 auto',
+                textAlign: 'center',
+              }}
+            >
               <span
                 style={{
                   display: 'inline-block',
                   borderRadius: 'var(--radius-full)',
-                  background: 'rgba(255,255,255,0.18)',
-                  backdropFilter: 'blur(8px)',
-                  padding: '0.4rem 1rem',
-                  fontSize: '12px',
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  padding: '0.375rem 0.875rem',
+                  fontSize: '11px',
                   fontWeight: 600,
                   textTransform: 'uppercase',
-                  letterSpacing: '0.16em',
-                  color: 'rgba(255,255,255,0.9)',
+                  letterSpacing: '0.1em',
+                  color: 'var(--brand-400)',
                 }}
               >
                 Browser-first downloader
               </span>
 
               <h1
-                className="text-balance"
                 style={{
-                  marginTop: '1.5rem',
-                  fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-                  fontWeight: 900,
-                  lineHeight: 1.1,
+                  marginTop: '1.25rem',
+                  fontSize: 'clamp(1.75rem, 4vw, 2.75rem)',
+                  fontWeight: 800,
+                  lineHeight: 1.15,
                   color: 'white',
+                  letterSpacing: '-0.02em',
                 }}
               >
-                Download from{' '}
-                <span style={{ color: 'rgba(255,255,255,0.8)' }}>
-                  any major platform
-                </span>
+                Download videos from{' '}
+                <span style={{ color: 'var(--brand-400)' }}>any major platform</span>
               </h1>
 
               <p
                 style={{
-                  margin: '1rem auto 0',
-                  maxWidth: '40rem',
-                  fontSize: '1rem',
-                  lineHeight: 1.7,
-                  color: 'rgba(255,255,255,0.78)',
+                  margin: '0.875rem auto 0',
+                  maxWidth: '32rem',
+                  fontSize: '0.9rem',
+                  lineHeight: 1.65,
+                  color: 'var(--ink-500)',
                 }}
               >
-                Paste a link, choose format, download. Works with YouTube, Instagram, Facebook, TikTok, and many more.
+                YouTube, Instagram, Facebook, TikTok, and many more.
+                Paste a link, choose format, download.
               </p>
-
-              <div
-                style={{
-                  marginTop: '1.5rem',
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  justifyContent: 'center',
-                  gap: '0.5rem',
-                }}
-              >
-                {platformHighlights.map((hl) => (
-                  <span
-                    key={hl}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.375rem',
-                      borderRadius: 'var(--radius-full)',
-                      background: 'rgba(255,255,255,0.12)',
-                      backdropFilter: 'blur(8px)',
-                      border: '1px solid rgba(255,255,255,0.15)',
-                      padding: '0.4rem 0.875rem',
-                      fontSize: '12px',
-                      fontWeight: 500,
-                      color: 'white',
-                    }}
-                  >
-                    <CheckCircle2 style={{ width: 12, height: 12, opacity: 0.7 }} />
-                    {hl}
-                  </span>
-                ))}
-              </div>
             </div>
           </section>
 
-          {/* Downloader Section */}
+          {/* Downloader */}
           <section
             style={{
               position: 'relative',
               zIndex: 20,
-              margin: '-3rem auto 0',
-              maxWidth: '52rem',
+              margin: '-1.5rem auto 0',
+              maxWidth: '42rem',
             }}
           >
             <div
               style={{
-                borderRadius: 'var(--radius-2xl)',
+                borderRadius: 'var(--radius-xl)',
                 background: 'var(--surface)',
                 border: '1px solid var(--border-soft)',
-                boxShadow: 'var(--shadow-xl)',
-                backdropFilter: 'blur(24px) saturate(1.5)',
-                padding: '1.5rem',
+                boxShadow: 'var(--shadow-lg)',
+                padding: '1.25rem',
               }}
             >
               <DownloaderPanel
@@ -310,26 +255,26 @@ export default function Home() {
           </section>
 
           {/* Features */}
-          <section style={{ marginTop: '4rem' }}>
-            <div className="grid gap-5 md:grid-cols-3">
+          <section style={{ marginTop: '3.5rem' }}>
+            <div className="grid gap-4 md:grid-cols-3">
               {features.map(({ title, description, icon: Icon }) => (
                 <article key={title} className="feature-card">
                   <div
                     style={{
                       display: 'inline-flex',
                       borderRadius: 'var(--radius-md)',
-                      padding: '0.625rem',
+                      padding: '0.5rem',
                       marginBottom: '0.75rem',
-                      background: 'var(--brand-100)',
-                      color: 'var(--brand-700)',
+                      background: 'var(--brand-50)',
+                      color: 'var(--brand-600)',
                     }}
                   >
-                    <Icon style={{ width: 18, height: 18 }} />
+                    <Icon style={{ width: 16, height: 16 }} />
                   </div>
-                  <h2 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--ink-900)' }}>
+                  <h2 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--ink-900)' }}>
                     {title}
                   </h2>
-                  <p style={{ marginTop: '0.375rem', fontSize: '0.85rem', lineHeight: 1.6, color: 'var(--ink-600)' }}>
+                  <p style={{ marginTop: '0.25rem', fontSize: '0.8rem', lineHeight: 1.6, color: 'var(--ink-600)' }}>
                     {description}
                   </p>
                 </article>
@@ -339,11 +284,11 @@ export default function Home() {
 
           {/* Download History */}
           {history.length > 0 && (
-            <section style={{ marginTop: '3.5rem' }}>
+            <section style={{ marginTop: '3rem' }}>
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <span className="section-eyebrow">Browser history</span>
-                  <h2 style={{ marginTop: '0.5rem', fontSize: '1.5rem', fontWeight: 900, color: 'var(--ink-900)' }}>
+                  <h2 style={{ marginTop: '0.5rem', fontSize: '1.25rem', fontWeight: 800, color: 'var(--ink-900)' }}>
                     Recent downloads
                   </h2>
                 </div>
@@ -358,7 +303,7 @@ export default function Home() {
                 </button>
               </div>
 
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 stagger-children" style={{ marginTop: '1.25rem' }}>
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 stagger-children" style={{ marginTop: '1rem' }}>
                 {history.map((item) => (
                   <article
                     key={item.id}
@@ -369,11 +314,7 @@ export default function Home() {
                       <img
                         src={item.thumbnail}
                         alt={item.title}
-                        style={{
-                          width: '100%',
-                          height: '8rem',
-                          objectFit: 'cover',
-                        }}
+                        style={{ width: '100%', height: '7rem', objectFit: 'cover' }}
                       />
                     ) : (
                       <div
@@ -381,16 +322,16 @@ export default function Home() {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          height: '8rem',
+                          height: '7rem',
                           background: 'var(--surface-soft)',
-                          color: 'var(--brand-700)',
+                          color: 'var(--brand-600)',
                         }}
                       >
                         <Video style={{ width: 24, height: 24 }} />
                       </div>
                     )}
 
-                    <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    <div style={{ padding: '0.875rem', display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                       <div>
                         <div className="flex flex-wrap" style={{ gap: '0.375rem' }}>
                           <span className="pill-soft">{item.ext.toUpperCase()}</span>
@@ -400,16 +341,11 @@ export default function Home() {
                         </div>
                         <h3
                           className="line-clamp-2"
-                          style={{
-                            marginTop: '0.5rem',
-                            fontSize: '0.9rem',
-                            fontWeight: 700,
-                            color: 'var(--ink-900)',
-                          }}
+                          style={{ marginTop: '0.375rem', fontSize: '0.85rem', fontWeight: 600, color: 'var(--ink-900)' }}
                         >
                           {item.title}
                         </h3>
-                        <p style={{ marginTop: '0.25rem', fontSize: '11px', color: 'var(--ink-500)' }}>
+                        <p style={{ marginTop: '0.125rem', fontSize: '11px', color: 'var(--ink-500)' }}>
                           Saved on {item.date}
                         </p>
                       </div>

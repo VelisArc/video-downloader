@@ -14,7 +14,6 @@ import { siteConfig, siteUrl } from '../lib/site';
 const platformData = [
   {
     title: 'Instagram',
-    accent: 'from-[#f05f6b] to-[#f49c4d]',
     icon: Instagram,
     copy:
       'Strong for reels, post videos, and other supported Instagram media.',
@@ -28,7 +27,6 @@ const platformData = [
   },
   {
     title: 'Facebook',
-    accent: 'from-[#2563eb] to-[#38bdf8]',
     icon: Facebook,
     copy:
       'Strong for feed videos, Watch links, reels, and other supported Facebook URLs.',
@@ -42,7 +40,6 @@ const platformData = [
   },
   {
     title: 'Broader extractor coverage',
-    accent: 'from-[var(--ink-900)] to-[var(--ink-700)]',
     icon: Globe2,
     copy:
       'SwiftDL now accepts many other yt-dlp-compatible links as well, including major short-video, long-form video, and community platforms.',
@@ -84,13 +81,14 @@ export default function SupportedPlatforms() {
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         {platformData.map(
-          ({ title, accent, icon: Icon, copy, points, to, cta }) => (
+          ({ title, icon: Icon, copy, points, to, cta }) => (
             <article
               key={title}
               className="card overflow-hidden"
             >
               <div
-                className={`bg-gradient-to-r ${accent} px-5 py-4 text-white`}
+                className="px-5 py-4 text-white"
+                style={{ background: title === 'Instagram' ? 'linear-gradient(135deg, #f05f6b, #f49c4d)' : title === 'Facebook' ? 'var(--brand-600)' : 'var(--ink-900)' }}
               >
                 <div className="inline-flex rounded-[24px] bg-white/15 p-3">
                   <Icon className="h-7 w-7" />
