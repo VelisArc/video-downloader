@@ -142,7 +142,7 @@ Important:
 - `YTDLP_COOKIES_B64`: base64 of a Netscape-format YouTube cookies.txt file.
 - `YTDLP_PROXY`: outbound proxy URL, for example `http://user:pass@host:port`.
 
-YouTube may challenge or block datacenter IPs. If Render returns a "Direct link not found" YouTube error, configure one of these values and redeploy the backend.
+YouTube may challenge or block datacenter IPs. If Render returns a "Direct link not found" YouTube error, configure one of these values and redeploy the backend. The backend also accepts these aliases if you already used them in Render: `YOUTUBE_COOKIES_B64`, `YT_DLP_COOKIES_B64`, `COOKIES_B64`, `YOUTUBE_PROXY`, and `YT_DLP_PROXY`.
 
 Tips (Windows):
 - One-line JSON clipboard:

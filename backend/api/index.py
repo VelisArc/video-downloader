@@ -44,6 +44,30 @@ _info_cache = {}
 _cooldown_until = {}
 _ytdlp_cookie_file = None
 
+YTDLP_COOKIES_B64_ENV_KEYS = (
+    'YTDLP_COOKIES_B64',
+    'YOUTUBE_COOKIES_B64',
+    'YT_DLP_COOKIES_B64',
+    'COOKIES_B64',
+)
+YTDLP_COOKIES_TXT_ENV_KEYS = (
+    'YTDLP_COOKIES_TXT',
+    'YOUTUBE_COOKIES_TXT',
+    'YT_DLP_COOKIES_TXT',
+    'COOKIES_TXT',
+)
+YTDLP_COOKIES_FILE_ENV_KEYS = (
+    'YTDLP_COOKIES_FILE',
+    'YOUTUBE_COOKIES_FILE',
+    'YT_DLP_COOKIES_FILE',
+    'COOKIES_FILE',
+)
+YTDLP_PROXY_ENV_KEYS = (
+    'YTDLP_PROXY',
+    'YOUTUBE_PROXY',
+    'YT_DLP_PROXY',
+)
+
 USAGE_DIR = os.path.join(TMP_DIR, 'user_data', 'usage')
 
 def _int_env(name, default):
@@ -286,9 +310,16 @@ def _safe_image_url(u):
     except Exception:
         return False
 
-def _read_text_env(b64_name, txt_name):
-    raw_b64 = (os.getenv(b64_name, '') or '').strip()
-    raw_txt = (os.getenv(txt_name, '') or '').strip()
+def _first_env_value(names):
+    for name in names:
+        raw = (os.getenv(name, '') or '').strip()
+        if raw:
+            return raw, name
+    return '', ''
+
+def _read_text_env(b64_names, txt_names):
+    raw_b64, _ = _first_env_value(b64_names)
+    raw_txt, _ = _first_env_value(txt_names)
     if raw_b64:
         try:
             return base64.b64decode(raw_b64).decode('utf-8', errors='ignore')
@@ -298,14 +329,25 @@ def _read_text_env(b64_name, txt_name):
         return raw_txt
     return ''
 
+def _configured_env_name(*env_groups):
+    for names in env_groups:
+        _, name = _first_env_value(names)
+        if name:
+            return name
+    return ''
+
+def _get_ytdlp_proxy():
+    proxy, _ = _first_env_value(YTDLP_PROXY_ENV_KEYS)
+    return proxy
+
 def _get_ytdlp_cookie_file():
     global _ytdlp_cookie_file
     if _ytdlp_cookie_file and os.path.exists(_ytdlp_cookie_file):
         return _ytdlp_cookie_file
 
-    cookie_text = _read_text_env('YTDLP_COOKIES_B64', 'YTDLP_COOKIES_TXT')
+    cookie_text = _read_text_env(YTDLP_COOKIES_B64_ENV_KEYS, YTDLP_COOKIES_TXT_ENV_KEYS)
     if not cookie_text:
-        cookie_path = (os.getenv('YTDLP_COOKIES_FILE', '') or '').strip()
+        cookie_path, _ = _first_env_value(YTDLP_COOKIES_FILE_ENV_KEYS)
         return cookie_path if cookie_path and os.path.exists(cookie_path) else ''
 
     if '\\n' in cookie_text and '\n' not in cookie_text:
@@ -586,10 +628,7 @@ class handler(BaseHTTPRequestHandler):
             entitlement = self._get_entitlement(auth_ctx.get('uid') if auth_ctx else None)
             is_unlimited = bool(entitlement.get('unlimited'))
             limit = self._daily_limit_for_entitlement(entitlement, auth_ctx.get('uid') if auth_ctx else None)
-            allowed, remaining = self._reserve_quota(auth_ctx.get('uid') if auth_ctx else None, limit)
-            if not allowed:
-                self.send_error_json(429, 'Daily download limit reached. Please login or upgrade to Premium.')
-                return
+            remaining = None
 
             url_for_extract = url.split('#', 1)[0].strip()
             platform = _detect_platform_from_host(urllib.parse.urlparse(url_for_extract).netloc or '')
@@ -648,7 +687,7 @@ class handler(BaseHTTPRequestHandler):
                     cookie_file = _get_ytdlp_cookie_file()
                     if cookie_file:
                         ydl_opts['cookiefile'] = cookie_file
-                    proxy = (os.getenv('YTDLP_PROXY', '') or '').strip()
+                    proxy = _get_ytdlp_proxy()
                     if proxy:
                         ydl_opts['proxy'] = proxy
                     return ydl_opts
@@ -692,10 +731,24 @@ class handler(BaseHTTPRequestHandler):
                 if download_type == 'audio':
                     msg += ' Could not find a suitable audio stream.'
                 elif platform == 'youtube':
-                    msg += ' YouTube is blocking this server/IP. Configure YTDLP_COOKIES_B64 or YTDLP_PROXY on Render and redeploy.'
+                    cookie_env = _configured_env_name(
+                        YTDLP_COOKIES_B64_ENV_KEYS,
+                        YTDLP_COOKIES_TXT_ENV_KEYS,
+                        YTDLP_COOKIES_FILE_ENV_KEYS,
+                    )
+                    proxy_env = _configured_env_name(YTDLP_PROXY_ENV_KEYS)
+                    if cookie_env or proxy_env:
+                        msg += ' YouTube is still blocking extraction. Refresh the YouTube cookies or use a working outbound proxy.'
+                    else:
+                        msg += ' YouTube is blocking this server/IP. Configure YTDLP_COOKIES_B64 or YTDLP_PROXY on Render and redeploy.'
                 else:
                     msg += ' This format is not currently supported.'
                 self.send_error_json(500, msg)
+                return
+
+            allowed, remaining = self._reserve_quota(auth_ctx.get('uid') if auth_ctx else None, limit)
+            if not allowed:
+                self.send_error_json(429, 'Daily download limit reached. Please login or upgrade to Premium.')
                 return
 
             duration_seconds = info.get('duration')
@@ -842,6 +895,12 @@ class handler(BaseHTTPRequestHandler):
                 currency = _payment_currency()
                 monthly_amount = _monthly_amount_subunits()
                 lifetime_amount = _lifetime_amount_subunits()
+                youtube_cookie_env = _configured_env_name(
+                    YTDLP_COOKIES_B64_ENV_KEYS,
+                    YTDLP_COOKIES_TXT_ENV_KEYS,
+                    YTDLP_COOKIES_FILE_ENV_KEYS,
+                )
+                youtube_proxy_env = _configured_env_name(YTDLP_PROXY_ENV_KEYS)
                 self.send_json({
                     'razorpayKeyId': key_id,
                     'razorpayConfigured': bool(key_id),
@@ -856,12 +915,10 @@ class handler(BaseHTTPRequestHandler):
                     'userDailyLimit': _int_env('USER_DAILY_LIMIT', 3),
                     'monthlyDailyLimit': _int_env('MONTHLY_DAILY_LIMIT', 0),
                     'lifetimeDailyLimit': _int_env('LIFETIME_DAILY_LIMIT', 0),
-                    'youtubeCookiesConfigured': bool(
-                        (os.getenv('YTDLP_COOKIES_B64', '') or '').strip()
-                        or (os.getenv('YTDLP_COOKIES_TXT', '') or '').strip()
-                        or (os.getenv('YTDLP_COOKIES_FILE', '') or '').strip()
-                    ),
-                    'youtubeProxyConfigured': bool((os.getenv('YTDLP_PROXY', '') or '').strip()),
+                    'youtubeCookiesConfigured': bool(youtube_cookie_env),
+                    'youtubeCookieSource': youtube_cookie_env,
+                    'youtubeProxyConfigured': bool(youtube_proxy_env),
+                    'youtubeProxySource': youtube_proxy_env,
                 })
                 return
             if route.endswith('/payment-config'):
