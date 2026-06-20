@@ -144,7 +144,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="glass-panel min-w-0 rounded-lg p-3 sm:p-4">
+            <div className="glass-panel min-w-0 overflow-hidden rounded-lg p-2.5 sm:p-4">
               <div className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-md border px-3 py-2" style={{ borderColor: 'rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.08)' }}>
                 <div className="flex items-center gap-2">
                   <img src="/logo.png" alt="" className="h-8 w-8 rounded-md bg-white p-1" />
@@ -158,7 +158,7 @@ export default function Home() {
                 </span>
               </div>
 
-              <div className="rounded-lg border p-4 sm:p-5" style={{ borderColor: 'rgba(255,255,255,0.16)', background: 'var(--surface)' }}>
+              <div className="rounded-lg border p-3 sm:p-5" style={{ borderColor: 'rgba(255,255,255,0.16)', background: 'var(--surface)' }}>
                 <DownloaderPanel url={url} setUrl={setUrl} downloadType={type} setDownloadType={setType} isLoading={loading} onDownload={handleDownload} />
                 {showResults && <ResultCard videoData={data} />}
               </div>

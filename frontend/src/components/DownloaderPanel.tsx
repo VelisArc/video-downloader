@@ -58,39 +58,41 @@ export default function DownloaderPanel({ url, setUrl, downloadType, setDownload
 
       <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_auto]">
         <div
-          className="flex min-h-12 items-center gap-2 rounded-md border px-3 transition-colors"
+          className="grid gap-2 rounded-md border p-2 transition-colors sm:flex sm:min-h-12 sm:items-center sm:px-3"
           style={{
             borderColor: focused ? 'var(--border-strong)' : 'var(--border)',
             background: 'var(--surface)',
             boxShadow: focused ? '0 0 0 4px rgba(20,184,166,0.12)' : 'var(--shadow-xs)',
           }}
         >
-          <Link2 className="h-5 w-5 shrink-0" style={{ color: 'var(--ink-500)' }} />
-          <input
-            ref={ref}
-            type="url"
-            value={url}
-            onChange={event => setUrl(event.target.value)}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            onKeyDown={event => event.key === 'Enter' && !isLoading && onDownload()}
-            placeholder="https://..."
-            className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none"
-            style={{ color: 'var(--ink-900)' }}
-            aria-label="Video URL"
-          />
-          {url && (
-            <button
-              onClick={() => setUrl('')}
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md transition-colors hover:bg-[var(--surface-soft)]"
-              style={{ color: 'var(--ink-500)' }}
-              type="button"
-              aria-label="Clear URL"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-          <button onClick={paste} className="btn-outline min-h-8 shrink-0 px-2.5 py-1 text-xs" type="button">
+          <div className="flex min-h-9 min-w-0 items-center gap-2">
+            <Link2 className="h-5 w-5 shrink-0" style={{ color: 'var(--ink-500)' }} />
+            <input
+              ref={ref}
+              type="url"
+              value={url}
+              onChange={event => setUrl(event.target.value)}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              onKeyDown={event => event.key === 'Enter' && !isLoading && onDownload()}
+              placeholder="https://..."
+              className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none"
+              style={{ color: 'var(--ink-900)' }}
+              aria-label="Video URL"
+            />
+            {url && (
+              <button
+                onClick={() => setUrl('')}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md transition-colors hover:bg-[var(--surface-soft)]"
+                style={{ color: 'var(--ink-500)' }}
+                type="button"
+                aria-label="Clear URL"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+          <button onClick={paste} className="btn-outline min-h-9 w-full shrink-0 px-2.5 py-1 text-xs sm:min-h-8 sm:w-auto" type="button">
             <Clipboard className="h-3.5 w-3.5" /> Paste
           </button>
         </div>

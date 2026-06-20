@@ -64,12 +64,12 @@ export default function ResultCard({ videoData }: Props) {
           <div className="flex flex-wrap gap-1.5">
             <span className="pill"><Sparkles className="h-3.5 w-3.5" />{videoData.ext.toUpperCase()}</span>
             {videoData.platform && <span className="pill">{fmt(videoData.platform)}</span>}
-            {videoData.uploader && <span className="pill"><User className="h-3.5 w-3.5" />{videoData.uploader}</span>}
+            {videoData.uploader && <span className="pill"><User className="h-3.5 w-3.5" /><span className="truncate">{videoData.uploader}</span></span>}
             {videoData.duration && videoData.duration !== 'Unknown' && <span className="pill"><Clock3 className="h-3.5 w-3.5" />{videoData.duration}</span>}
             {videoData.view_count && videoData.view_count !== 'N/A' && <span className="pill"><Eye className="h-3.5 w-3.5" />{videoData.view_count}</span>}
           </div>
 
-          <h3 className="mt-3 line-clamp-2 text-base font-extrabold">{videoData.title}</h3>
+          <h3 className="mt-3 line-clamp-2 break-words text-base font-extrabold">{videoData.title}</h3>
 
           <div className="mt-4 grid gap-2 sm:grid-cols-[1fr_auto_auto]">
             <button onClick={download} className="btn-primary w-full">

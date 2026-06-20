@@ -129,7 +129,7 @@ export default function Dashboard() {
             ].map(s => (
               <div key={s.label} className="card" style={{ padding: '1.25rem 1rem' }}>
                 <s.icon size={18} style={{ color: 'var(--brand-600)' }} />
-                <p className="mt-3 text-xl font-bold" style={{ color: 'var(--ink-900)' }}>{s.value}</p>
+                <p className="mt-3 break-words text-xl font-bold" style={{ color: 'var(--ink-900)' }}>{s.value}</p>
                 <p className="text-[11px] mt-1" style={{ color: 'var(--ink-500)' }}>{s.label}</p>
               </div>
             ))}
@@ -137,10 +137,10 @@ export default function Dashboard() {
 
           {(entitlement.premiumPlan || isPremium) && (
             <section className="card" style={{ padding: 0 }}>
-              <div className="flex items-center justify-between gap-3 border-b px-5 py-4" style={{ borderColor: 'var(--border)' }}>
+              <div className="flex min-w-0 flex-wrap items-center justify-between gap-3 border-b px-4 py-4 sm:px-5" style={{ borderColor: 'var(--border)' }}>
                 <div>
                   <h2 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>Premium validity</h2>
-                  <p className="mt-1 text-xs" style={{ color: 'var(--ink-500)' }}>{entitlement.subscriptionId || entitlement.orderId || entitlement.paymentId || 'Billing reference pending'}</p>
+                  <p className="mt-1 break-all text-xs" style={{ color: 'var(--ink-500)' }}>{entitlement.subscriptionId || entitlement.orderId || entitlement.paymentId || 'Billing reference pending'}</p>
                 </div>
                 <span className={`pill ${isPremium ? 'badge-green' : 'badge-amber'}`}>{premiumStatus}</span>
               </div>

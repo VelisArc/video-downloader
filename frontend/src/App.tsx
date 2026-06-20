@@ -272,7 +272,7 @@ function AppShell() {
       </a>
       <div className="flex min-h-screen flex-col">
         <Toaster
-          position="top-right"
+          position="top-center"
           toastOptions={{
             duration: 3000,
             style: {
