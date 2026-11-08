@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://swiftdownlod.online/sitemap.xml
+Sitemap: https://sharehub.online/sitemap.xml
 
 # Crawl-delay (optional, for politeness)
 Crawl-delay: 1

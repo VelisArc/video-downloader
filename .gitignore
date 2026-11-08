@@ -1,18 +1,52 @@
-node_modules
-dist
-dist-ssr
-*.local
-*.local.*
+﻿# Dependencies
+node_modules/
+frontend/node_modules/
+backend-worker/node_modules/
+
+# Build outputs
+frontend/dist/
+backend-worker/dist/
+
+# Environment files
 .env
-.env.*
-!.env.example
-.DS_Store
-user_data/
-__pycache__/
-*.py[cod]
+.env.local
+.env.*.local
+.env.cloudflare.example
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
+
+# OS
+.DS_Store
 Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+.nyc_output/
+
+# TypeScript
+*.tsbuildinfo
+
+# Wrangler
+.wrangler/
+
+# Firebase
+firebase-debug.log
+firebase-debug.*.log
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+
+temp/
+extractor/.venv/

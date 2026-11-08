@@ -1,8 +1,8 @@
 {
-  "name": "swiftdl-frontend",
+  "name": "sharehub-frontend",
   "private": true,
-  "version": "4.0.0",
-  "description": "SwiftDL — Multi-platform video & audio downloader with premium dark mode UI, cookie vault, and Razorpay billing",
+  "version": "4.1.0",
+  "description": "ShareHub — Multi-platform video & audio downloader with premium dark mode UI, cookie vault, and Razorpay billing",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -22,12 +22,12 @@
     "@playwright/test": "^1.59.1",
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
-    "@vitejs/plugin-react": "^6.0.1",
+    "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.27",
     "playwright": "^1.59.1",
     "postcss": "^8.5.8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.9.3",
-    "vite": "^8.0.3"
+    "vite": "^5.4.21"
   }
 }

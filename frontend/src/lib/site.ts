@@ -1,12 +1,12 @@
 export const siteConfig = {
-  name: 'SwiftDL',
-  shortName: 'SwiftDL',
-  domain: 'swiftdownlod.online',
-  baseUrl: 'https://swiftdownlod.online',
-  supportEmail: 'support@swiftdownlod.online',
-  supportMailto: 'mailto:support@swiftdownlod.online',
+  name: 'ShareHub',
+  shortName: 'ShareHub',
+  domain: 'sharehub.online',
+  baseUrl: 'https://sharehub.online',
+  supportEmail: 'support@sharehub.online',
+  supportMailto: 'mailto:support@sharehub.online',
   supportHours: 'Monday to Friday, 9:00 AM to 6:00 PM IST',
-  defaultTitle: 'SwiftDL | Multi-Platform Video Downloader',
+  defaultTitle: 'ShareHub | Multi-Platform Video Downloader',
   defaultDescription:
     'Download video and audio from many major platforms with a fast browser workflow.',
 };

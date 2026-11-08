@@ -1,22 +1,22 @@
-const CACHE_NAME = 'swiftdl-v3';
+const CACHE_NAME = 'sharehub-v5';
 const urlsToCache = [
     '/',
     '/index.html',
     '/logo.png',
     '/manifest.json'
 ];
-const RUNTIME_CACHE = 'swiftdl-runtime-v2';
+const RUNTIME_CACHE = 'sharehub-runtime-v4';
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('SwiftDL: Caching app shell');
+                console.log('ShareHub: Caching app shell');
                 return cache.addAll(urlsToCache);
             })
             .catch((err) => {
-                console.log('SwiftDL: Cache failed', err);
+                console.log('ShareHub: Cache failed', err);
             })
     );
     self.skipWaiting();
@@ -29,7 +29,7 @@ self.addEventListener('activate', (event) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
                     if (cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE) {
-                        console.log('SwiftDL: Removing old cache', cacheName);
+                        console.log('ShareHub: Removing old cache', cacheName);
                         return caches.delete(cacheName);
                     }
                 })

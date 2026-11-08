@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
-import { auth, googleProvider } from '../lib/firebase';
+import { auth, firebaseConfigured, googleProvider } from '../lib/firebase';
 import toast from 'react-hot-toast';
 
 interface AuthContextType {
@@ -18,6 +18,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!auth) {
+      setLoading(false);
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
@@ -26,6 +30,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signInWithGoogle = async () => {
+    if (!auth || !firebaseConfigured) {
+      toast.error('Sign-in is not configured. Add the VITE_FIREBASE_* environment variables.', {
+        duration: 6000,
+      });
+      return;
+    }
     try {
       await signInWithPopup(auth, googleProvider);
       toast.success('Successfully logged in!');
@@ -52,6 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
+    if (!auth) return;
     try {
       await signOut(auth);
       toast.success('Logged out successfully');

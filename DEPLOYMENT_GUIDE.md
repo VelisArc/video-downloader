@@ -1,299 +1,226 @@
-# SwiftDL - Deployment Guide (Vercel)
+# ShareHub - Cloudflare Deployment Guide
 
-## ✅ Current Features (Release Checklist)
-
-### Downloading
-1. Instagram + Facebook video downloads (and audio when available)
-2. Daily quota: Guest 1/day, Logged-in 3/day
-3. Paid plans: Monthly Unlimited ($2/month) + Lifetime Unlimited ($20 one-time)
-
-### Monetization
-1. AdSense loads only for free users
-2. Paid users (Monthly/Lifetime) see no ads
-
-### SEO
-1. Canonical + OpenGraph meta on key pages
-2. Sitemap + robots configured
-3. HowTo + FAQ schema added on guide pages
-
-## 📁 File Structure
+## 📁 Project Structure
 
 ```
-video-downloader-main/
-├── api/
-│   ├── index.py             # API (downloads + subscriptions + quota)
-│   ├── requirements.txt     # Python deps (yt-dlp, firebase-admin)
-│   └── test.py              # Basic tests
-├── public/
-│   ├── sitemap.xml
-│   ├── robots.txt
-│   ├── sw.js
-│   └── adsense-verification.html
-├── src/
-│   ├── pages/               # Home, Pricing, Guides, Legal pages
-│   ├── context/             # Auth + Entitlement contexts
-│   └── components/          # AdSense runtime loader, etc.
-├── index.html               # SEO base (no static AdSense script)
-└── vercel.json              # Routing + headers
+video-downloader/
+├── frontend/                    # React + Vite frontend (Cloudflare Pages)
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   ├── vite.config.ts
+│   └── wrangler.toml           # Cloudflare Pages config
+├── backend-worker/              # TypeScript backend (Cloudflare Workers)
+│   ├── src/
+│   │   └── index.ts            # Hono API server
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── wrangler.toml           # Cloudflare Worker config
+│   └── worker-configuration.d.ts
+├── .github/workflows/
+│   └── deploy-cloudflare.yml   # CI/CD pipeline
+├── .env.cloudflare.example     # Environment variables template
+└── wrangler.toml               # Root config (optional)
 ```
 
-## 🔧 Step-by-Step Setup
+## 🚀 Quick Deploy
 
-### 1. Update All Files
+### Prerequisites
+- Cloudflare account
+- Node.js 20+
+- Firebase project (for auth)
+- Razorpay account (for payments, optional)
 
-Replace the following files with the new versions I provided:
+### 1. Setup Cloudflare Account
+1. Create Cloudflare account at https://cloudflare.com
+2. Get your Account ID from the dashboard
+3. Create API Token with "Cloudflare Pages:Edit" and "Cloudflare Workers:Edit" permissions
 
-#### Frontend:
-- `src/App.tsx` - New professional UI with all features
-- `index.html` - SEO optimized
+### 2. Configure GitHub Secrets
+Go to your GitHub repo → Settings → Secrets and variables → Actions → New repository secret:
 
-#### Backend:
-- `api/index.py` - API (downloads + payments + entitlement)
+**Required for Frontend (Pages project `sharehub-frontend`):**
+- `CLOUDFLARE_API_TOKEN` - Your Cloudflare API token
+- `CLOUDFLARE_ACCOUNT_ID` - Your Cloudflare account ID
+- `VITE_API_BASE_URL` - Your backend worker URL (e.g., `https://sharehub-backend.your-subdomain.workers.dev`)
+- `VITE_FIREBASE_API_KEY` - Firebase client API key
+- `VITE_FIREBASE_AUTH_DOMAIN` - Firebase auth domain
+- `VITE_FIREBASE_PROJECT_ID` - Firebase project ID
+- `VITE_FIREBASE_STORAGE_BUCKET` - Firebase storage bucket
+- `VITE_FIREBASE_MESSAGING_SENDER_ID` - Firebase messaging sender ID
+- `VITE_FIREBASE_APP_ID` - Firebase app ID
+- `VITE_FIREBASE_MEASUREMENT_ID` - Firebase measurement ID (optional)
 
-#### Configuration:
-- `vercel.json` - Security headers + proper routing
+**Required for Backend (Worker `sharehub-backend`):**
+- `FIREBASE_ADMIN_JSON` - Full Firebase service account JSON (or use `FIREBASE_ADMIN_JSON_B64` for base64)
+- `RAZORPAY_KEY_ID` - Razorpay key ID
+- `RAZORPAY_KEY_SECRET` - Razorpay key secret
+- `RZP_WEBHOOK_SECRET` - Razorpay webhook secret (optional)
+- `ALLOWED_ORIGINS` - Comma-separated allowed origins (e.g., `https://sharehub.online,https://www.sharehub.online,https://sharehub-frontend.pages.dev`)
+- `PAYMENT_CURRENCY` - Currency code (default: INR)
+- `MONTHLY_AMOUNT` - Monthly plan amount in subunits (default: 19900 for ₹199)
+- `LIFETIME_AMOUNT` - Lifetime plan amount in subunits (default: 99900 for ₹999)
 
-#### New Files to Create:
-Create these new files in your project root:
+**Optional for Backend:**
+- `EXTRACTOR_API_URL` - Media extraction provider endpoint (receives `POST { url, type }`)
+- `EXTRACTOR_API_KEY` - Provider API key
+- `EXTRACTOR_TIMEOUT_MS` - Provider request timeout (default: 20000)
+- `FREE_COOKIE_VAULT_LIMIT` - Cookie slots for free users (default: 2)
+- `PREMIUM_COOKIE_VAULT_LIMIT` - Cookie slots for premium users (default: 10)
+- `YTDLP_COOKIES_B64` - Base64 encoded YouTube cookies (forwarded to the provider)
+- `YTDLP_PROXY` - Outbound proxy URL (forwarded to the provider)
+- `RATE_LIMIT_PER_MIN` - Rate limit per minute (default: 30)
+- `MAX_INFLIGHT` - Max concurrent requests (default: 3)
+- `GUEST_DAILY_LIMIT` - Guest daily downloads (default: 1)
+- `USER_DAILY_LIMIT` - Logged-in user daily downloads (default: 3)
+- `MONTHLY_DAILY_LIMIT` - Monthly plan daily limit (default: 75)
+- `LIFETIME_DAILY_LIMIT` - Lifetime plan daily limit (default: 150)
+- `INFO_CACHE_TTL_SEC` - Metadata cache TTL (default: 15)
 
-**sitemap.xml:**
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://swiftdownlod.online/</loc>
-    <lastmod>2024-10-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-</urlset>
-```
+### 3. Deploy via GitHub Actions
+1. Push to main branch
+2. GitHub Actions will automatically:
+   - Build and deploy frontend to Cloudflare Pages
+   - Build and deploy backend to Cloudflare Workers
 
-**robots.txt:**
-```
-User-agent: *
-Allow: /
+### 4. Manual Deploy (Alternative)
 
-Sitemap: https://swiftdownlod.online/sitemap.xml
-
-User-agent: *
-Disallow: /api/
-```
-
-### 2. Public-only mode
-
-This version supports public Instagram and Facebook links only. Cookie-based downloads are not used.
-
-### 3. Install Dependencies
-
+#### Frontend (Cloudflare Pages)
 ```bash
-# Install Node.js dependencies
+cd frontend
 npm install
-
-# Python dependencies are auto-installed by Vercel
+VITE_API_BASE_URL=https://sharehub-backend.<subdomain>.workers.dev npm run build
+# Deploy via Cloudflare dashboard or:
+npx wrangler pages deploy dist --project-name=sharehub-frontend
 ```
 
-### 4. Test Locally
-
+#### Backend (Cloudflare Workers)
 ```bash
-# Run development server
+cd backend-worker
+npm install
+npm run build   # type-check
+npm test        # vitest suite
+npx wrangler deploy
+```
+
+The worker name comes from `backend-worker/wrangler.toml` (`sharehub-backend`). There is no
+`--env production` section, so pass no `--env` flag.
+
+#### Set backend secrets
+```bash
+cd backend-worker
+npx wrangler secret put FIREBASE_ADMIN_JSON
+npx wrangler secret put RAZORPAY_KEY_ID
+npx wrangler secret put RAZORPAY_KEY_SECRET
+npx wrangler secret put EXTRACTOR_API_URL
+npx wrangler secret put EXTRACTOR_API_KEY
+```
+Plain (non-secret) tuning values can go under `[vars]` in `backend-worker/wrangler.toml`.
+
+## 🔧 Local Development
+
+### Frontend
+```bash
+cd frontend
+npm install
 npm run dev
-
-# Build production version
-npm run build
-
-# Test build
-npm run preview
 ```
 
-### 5. Deploy to Vercel
-
+### Backend
 ```bash
-# Login to Vercel
-vercel login
-
-# Deploy
-vercel --prod
+cd backend-worker
+npm install
+npm run dev
 ```
 
-## 🔐 Environment Setup
+### Environment Files
+Copy `.env.cloudflare.example` to `.env.local` in both frontend and backend-worker directories and fill in your values.
 
-### Required for Subscriptions + Paid (Razorpay)
-- `RAZORPAY_KEY_ID`
-- `RAZORPAY_KEY_SECRET`
-- (Optional) `RZP_WEBHOOK_SECRET` if you want webhook verification endpoint
-Alternative (not recommended for production):
-- Local dev only: create `rzp-key.csv` (NOT committed). Example: `rzp-key.example.csv`
-- Or set `RAZORPAY_KEYS_CSV` as `key_id,key_secret`
+## 🌐 Custom Domains
 
-### Required for login-based quota + paid entitlement (Firebase Admin)
-- `FIREBASE_ADMIN_JSON` (Firebase service account JSON, as a single env var string)
-- Alternative: `FIREBASE_ADMIN_JSON_B64` (base64 of the same JSON)
+### Frontend (Cloudflare Pages)
+1. Go to Cloudflare Pages → `sharehub-frontend` → Custom domains
+2. Add `sharehub.online` and `www.sharehub.online`
+3. Configure the DNS records Cloudflare shows (the zone must exist in the same account)
 
-How to get it:
-1. Firebase Console → Project Settings → Service accounts
-2. Click “Generate new private key” and download JSON
-3. Vercel → Project → Settings → Environment Variables → add `FIREBASE_ADMIN_JSON` and paste the full JSON
+### Backend (Cloudflare Workers)
+1. Go to Cloudflare Workers → `sharehub-backend` → Settings → Domains & Routes
+2. Add `api.sharehub.online`
+3. Update `VITE_API_BASE_URL` in the frontend build to `https://api.sharehub.online`
+4. Add the frontend origins to `ALLOWED_ORIGINS`
 
-Important:
-- Service account must be from the same Firebase project used by the frontend (authDomain/projectId).
+> The custom domain only works after `sharehub.online` is added as a zone in your
+> Cloudflare account. A Worker/Pages upload alone does not register the domain.
 
-### Optional but recommended for YouTube on Render
-- `YTDLP_COOKIES_B64`: base64 of a Netscape-format YouTube cookies.txt file.
-- `YTDLP_PROXY`: outbound proxy URL, for example `http://user:pass@host:port`.
+## 📝 Important Notes
 
-YouTube may challenge or block datacenter IPs. If Render returns a "Direct link not found" YouTube error, configure one of these values and redeploy the backend. The backend also accepts these aliases if you already used them in Render: `YOUTUBE_COOKIES_B64`, `YT_DLP_COOKIES_B64`, `COOKIES_B64`, `YOUTUBE_PROXY`, and `YT_DLP_PROXY`.
+### Video Extraction
+The backend runs entirely on Cloudflare Workers and **cannot run yt-dlp** (Python). Instead:
 
-Tips (Windows):
-- One-line JSON clipboard:
-  - `Get-Content .\\swiftdownlod-firebase-adminsdk-xxxxx.json -Raw | ConvertFrom-Json | ConvertTo-Json -Compress | Set-Clipboard`
-- Base64 clipboard:
-  - `$c = Get-Content .\\swiftdownlod-firebase-adminsdk-xxxxx.json -Raw; [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($c)) | Set-Clipboard`
+1. **Direct media URLs are handled natively** — links ending in `mp4`, `webm`, `mp3`,
+   `m4a`, etc. return download metadata immediately.
+2. **Platform links use an extraction provider** — set `EXTRACTOR_API_URL` (and optionally
+   `EXTRACTOR_API_KEY`). The Worker sends `POST { "url": "...", "type": "video" }` and
+   expects JSON like `{ "downloadUrl", "title", "thumbnail", "ext", "platform" }`.
+3. **Without a provider** the endpoint returns `501` with a configuration message instead
+   of failing silently.
 
-### Google AdSense
-- AdSense auto-ads script is loaded at runtime for free users only.
-- For verification, use: `/adsense-verification.html` (served as a static file).
+You can back the provider with a separate Python/yt-dlp service, a RapidAPI extractor, or
+any HTTP service that implements the contract above.
 
-### Security Notes (Critical)
-1. Never commit payment keys or Firebase service account JSON to Git.
-2. Keep all secrets in Vercel → Project → Settings → Environment Variables.
+### Firebase Setup
+1. Create Firebase project at https://console.firebase.google.com
+2. Enable Authentication → Google Sign-In
+3. Enable Firestore Database
+4. Generate service account key: Project Settings → Service Accounts → Generate new private key
+5. Add authorized domains in Firebase Auth settings
 
-## 📊 SEO Configuration
+### Razorpay Setup (Optional)
+1. Create Razorpay account at https://razorpay.com
+2. Get API keys from Dashboard → Settings → API Keys
+3. Set up webhook URL: `https://sharehub-backend.<subdomain>.workers.dev/api/rzp-webhook`
+   (or `https://api.sharehub.online/api/rzp-webhook` once the custom domain is active)
+4. Enable subscription/webhook events in Razorpay dashboard
 
-### Meta Tags Added:
-- ✅ Primary meta tags (title, description, keywords)
-- ✅ Open Graph (Facebook sharing)
-- ✅ Twitter Cards
-- ✅ Schema.org structured data
-- ✅ Canonical URL
-- ✅ Robots meta tag
+## 🔒 Security Checklist
+- [ ] All secrets in GitHub Secrets (not in code)
+- [ ] `ALLOWED_ORIGINS` configured correctly
+- [ ] Firebase authorized domains updated
+- [ ] Razorpay webhook signature verification enabled
+- [ ] Rate limiting configured
+- [ ] CORS headers properly set
 
-### Structured Data:
-- WebApplication schema
-- Organization schema
-- Aggregate rating (4.8/5 from 15,420 users - you can change this)
+## 🐛 Troubleshooting
 
-### Submit to Search Engines:
+### Frontend build fails
+- Check Node.js version (20+)
+- Verify all VITE_* environment variables are set
+- Check Cloudflare Pages build logs
 
-**Google Search Console:**
-1. Go to https://search.google.com/search-console
-2. Add property: `swiftdownlod.online`
-3. Verify ownership (DNS or HTML)
-4. Submit sitemap: `https://swiftdownlod.online/sitemap.xml`
+### Backend deploy fails
+- Verify `FIREBASE_ADMIN_JSON` is valid JSON
+- Check Cloudflare Worker logs in dashboard
+- Ensure compatibility flags include `nodejs_compat`
 
-**Bing Webmaster:**
-1. Go to https://www.bing.com/webmasters
-2. Add site
-3. Submit sitemap
+### CORS errors
+- Verify `ALLOWED_ORIGINS` includes your frontend domain
+- Check that frontend `VITE_API_BASE_URL` matches backend worker URL
 
-## 🎯 Testing Checklist
+### Video downloads not working
+- Direct media URLs work without configuration; platform links need `EXTRACTOR_API_URL`
+- Check browser console for API errors
+- Verify backend `/api/health` and `/api/config` respond
 
-Before deploying, test these:
+## 📊 Monitoring
+- Cloudflare Pages: Analytics in Pages dashboard
+- Cloudflare Workers: Logs in Workers dashboard
+- Use `console.log` in worker for debugging (visible in real-time logs)
 
-- [ ] Instagram/Facebook download works (public links)
-- [ ] Error messages display properly
-- [ ] Mobile responsive design works
-- [ ] Sitemap.xml is accessible
-- [ ] Robots.txt is accessible
-- [ ] All buttons work correctly
-- [ ] Loading states show properly
-- [ ] Monthly/Lifetime purchase flow works (Razorpay)
-- [ ] Paid users see no AdSense ads
-
-## 🐛 Common Issues & Fixes
-
-### Issue: "Could not process video"
-**Fix**: Ensure the link is public. Private/restricted posts may not be downloadable.
-
-### Issue: Premium purchase fails
-**Fix**:
-1. Set `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` in Vercel Environment Variables
-2. Set `FIREBASE_ADMIN_JSON` (or `FIREBASE_ADMIN_JSON_B64`)
-3. Enable Firestore Database in Firebase Console
-
-### Issue: AdSense not verifying
-**Fix**:
-1. Use `/adsense-verification.html` for verification
-2. Wait 24-48 hours after deployment
-3. Use "Fetch as Google" in Search Console
-
-### Issue: Build fails on Vercel
-**Fix**:
-1. Check `package.json` dependencies
-2. Ensure Python packages in `api/requirements.txt` are correct
-3. Check Vercel deployment logs
-
-## 📱 Features Overview
-
-### For Users:
-- Download videos in MP4 format
-- Download audio in MP3 format
-- No registration required
-- Unlimited downloads for public links (subject to anti-abuse rate limiting)
-- HD quality support
-- Fast processing
-- Clean, modern interface
-
-### For You (Admin):
-- SEO optimized
-- AdSense integrated
-- Legal protection (Terms, Privacy)
-- Professional design
-- Mobile responsive
-- Error handling
-- Analytics ready
-
-## 🔄 Maintenance
-
-### Regular Tasks:
-1. **Monthly**: Check Google Search Console for SEO performance
-2. **Monthly**: Monitor AdSense earnings
-3. **As needed**: Update yt-dlp version in requirements.txt
-
-### Updating yt-dlp:
-```bash
-# In api/requirements.txt, change to:
-yt-dlp==LATEST_VERSION
-```
-
-## 📈 Performance Tips
-
-1. **CDN**: Vercel automatically provides CDN
-2. **Images**: Optimize thumbnail loading
-3. **Caching**: Browser caching enabled via headers
-4. **Compression**: Gzip enabled by Vercel
-
-## 🆘 Support
-
-If you need help:
-1. Check Vercel deployment logs
-2. Test API endpoints: `/api/health` and `/api/config`
-3. Check browser console for errors
-
-## 🎉 Final Steps
-
-1. Replace all files with new versions
-2. Create sitemap.xml and robots.txt
-3. Test locally with `npm run dev`
-4. Deploy with `vercel --prod`
-5. Submit sitemap to Google Search Console
-6. Verify AdSense code
-7. Monitor for 24 hours
+## 🔄 Updates
+- Push to main branch for automatic deployment
+- For manual updates, run deploy commands above
+- Monitor GitHub Actions for deployment status
 
 ---
 
-## 📝 Quick Deploy Commands
-
-```bash
-# Clean install
-rm -rf node_modules package-lock.json
-npm install
-
-# Build
-npm run build
-
-# Deploy
-vercel --prod
-```
-
-**Your website is now professional, SEO-optimized, and ready for ranking! 🚀**
+**Your ShareHub is now deployed on Cloudflare's global network! 🚀**

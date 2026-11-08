@@ -1,0 +1,6 @@
+# Cloudflare Pages configuration for the frontend.
+# Build the frontend first (`cd frontend && npm run build`), then deploy with:
+#   npx wrangler pages deploy frontend/dist --project-name=sharehub-frontend
+name = "sharehub-frontend"
+compatibility_date = "2025-08-01"
+pages_build_output_dir = "frontend/dist"

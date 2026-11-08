@@ -1030,11 +1030,11 @@ class handler(BaseHTTPRequestHandler):
             route = (self.path or '').split('?', 1)[0]
             if route in ('', '/', '/api', '/api/'):
                 self.send_json({
-                    'service': 'SwiftDL API',
+                    'service': 'ShareHub API',
                     'ok': True,
                     'ts': int(time.time()),
                     'version': '4.0.0',
-                    'message': 'Welcome to SwiftDL API. Use POST /api to download media.',
+                    'message': 'Welcome to ShareHub API. Use POST /api to download media.',
                     'documentation': 'https://github.com/VelisArc/video-downloader'
                 })
                 return
@@ -1427,7 +1427,7 @@ class handler(BaseHTTPRequestHandler):
         plans = _rzp_request('GET', '/plans', query={'count': 100})
         for p in (plans.get('items') or []):
             item = p.get('item') or {}
-            if item.get('name') == 'SwiftDL Monthly Unlimited' and int(item.get('amount') or 0) == monthly_amount and (item.get('currency') or '').upper() == currency:
+            if item.get('name') == 'ShareHub Monthly Unlimited' and int(item.get('amount') or 0) == monthly_amount and (item.get('currency') or '').upper() == currency:
                 plan_id = p.get('id')
                 if plan_id:
                     try:
@@ -1439,7 +1439,7 @@ class handler(BaseHTTPRequestHandler):
             'period': 'monthly',
             'interval': 1,
             'item': {
-                'name': 'SwiftDL Monthly Unlimited',
+                'name': 'ShareHub Monthly Unlimited',
                 'description': 'Premium fair-use downloads for 1 month',
                 'amount': monthly_amount,
                 'currency': currency

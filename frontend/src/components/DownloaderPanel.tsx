@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Clipboard, Download, FileAudio2, Link2, Video, X } from 'lucide-react';
+import { ArrowRight, Clipboard, FileAudio2, Link2, Video, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import LoadingIndicator from './LoadingIndicator';
 import type { DownloadType } from '../lib/downloads';
@@ -33,22 +33,32 @@ export default function DownloaderPanel({ url, setUrl, downloadType, setDownload
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>Download setup</p>
-          <p className="mt-1 text-sm" style={{ color: 'var(--ink-600)' }}>Public source link</p>
+          <p className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>Paste a public link</p>
+          <p className="mt-0.5 text-xs" style={{ color: 'var(--ink-500)' }}>Video or audio - we detect the rest.</p>
         </div>
 
-        <div className="inline-grid grid-cols-2 rounded-md border p-1" style={{ borderColor: 'var(--border)', background: 'var(--surface-soft)' }} aria-label="Download type">
+        <div
+          className="inline-grid grid-cols-2 gap-1 rounded-full border p-1"
+          style={{ borderColor: 'var(--border)', background: 'var(--surface-soft)' }}
+          aria-label="Download type"
+          role="group"
+        >
           {(['video', 'audio'] as const).map(type => {
             const active = downloadType === type;
             return (
               <button
                 key={type}
                 onClick={() => setDownloadType(type)}
-                className="inline-flex min-h-9 items-center justify-center gap-2 rounded-md px-3 text-sm font-semibold transition-colors"
-                style={active ? { background: 'var(--surface)', color: 'var(--brand-700)', boxShadow: 'var(--shadow-xs)' } : { color: 'var(--ink-600)' }}
+                className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full px-3.5 text-xs font-bold transition-all duration-200"
+                style={
+                  active
+                    ? { background: 'var(--grad-brand)', color: '#ffffff', boxShadow: '0 6px 16px -6px rgba(192,38,211,0.55)' }
+                    : { color: 'var(--ink-500)' }
+                }
                 type="button"
+                aria-pressed={active}
               >
-                {type === 'video' ? <Video className="h-4 w-4" /> : <FileAudio2 className="h-4 w-4" />}
+                {type === 'video' ? <Video className="h-3.5 w-3.5" /> : <FileAudio2 className="h-3.5 w-3.5" />}
                 {type === 'video' ? 'Video' : 'Audio'}
               </button>
             );
@@ -56,56 +66,77 @@ export default function DownloaderPanel({ url, setUrl, downloadType, setDownload
         </div>
       </div>
 
-      <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_auto]">
+      <div className="mt-4 grid gap-2.5 lg:grid-cols-[1fr_auto]">
         <div
-          className="grid gap-2 rounded-md border p-2 transition-colors sm:flex sm:min-h-12 sm:items-center sm:px-3"
+          className="flex min-h-[3.25rem] items-center gap-2 rounded-2xl border px-3 transition-all duration-200"
           style={{
-            borderColor: focused ? 'var(--border-strong)' : 'var(--border)',
+            borderColor: focused ? 'color-mix(in srgb, var(--brand-600) 60%, var(--border))' : 'var(--border)',
             background: 'var(--surface)',
-            boxShadow: focused ? '0 0 0 4px rgba(20,184,166,0.12)' : 'var(--shadow-xs)',
+            boxShadow: focused ? '0 0 0 4px rgba(192,38,211,0.14)' : 'var(--shadow-xs)',
           }}
         >
-          <div className="flex min-h-9 min-w-0 items-center gap-2">
-            <Link2 className="h-5 w-5 shrink-0" style={{ color: 'var(--ink-500)' }} />
-            <input
-              ref={ref}
-              type="url"
-              value={url}
-              onChange={event => setUrl(event.target.value)}
-              onFocus={() => setFocused(true)}
-              onBlur={() => setFocused(false)}
-              onKeyDown={event => event.key === 'Enter' && !isLoading && onDownload()}
-              placeholder="https://..."
-              className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none"
-              style={{ color: 'var(--ink-900)' }}
-              aria-label="Video URL"
-            />
-            {url && (
-              <button
-                onClick={() => setUrl('')}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md transition-colors hover:bg-[var(--surface-soft)]"
-                style={{ color: 'var(--ink-500)' }}
-                type="button"
-                aria-label="Clear URL"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-          <button onClick={paste} className="btn-outline min-h-9 w-full shrink-0 px-2.5 py-1 text-xs sm:min-h-8 sm:w-auto" type="button">
+          <Link2 className="h-5 w-5 shrink-0" style={{ color: focused ? 'var(--brand-600)' : 'var(--ink-400)' }} />
+          <input
+            ref={ref}
+            type="url"
+            value={url}
+            onChange={event => setUrl(event.target.value)}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            onKeyDown={event => event.key === 'Enter' && !isLoading && onDownload()}
+            placeholder="https://instagram.com/reel/..."
+            className="min-w-0 flex-1 border-0 bg-transparent py-3 text-sm font-medium outline-none placeholder:text-[var(--ink-400)]"
+            style={{ color: 'var(--ink-900)' }}
+            aria-label="Video URL"
+          />
+          {url && (
+            <button
+              onClick={() => setUrl('')}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-[var(--surface-soft)]"
+              style={{ color: 'var(--ink-500)' }}
+              type="button"
+              aria-label="Clear URL"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+          <button
+            onClick={paste}
+            className="hidden min-h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 text-xs font-bold transition-colors hover:bg-[var(--surface-soft)] sm:inline-flex"
+            style={{ borderColor: 'var(--border)', color: 'var(--ink-600)' }}
+            type="button"
+          >
             <Clipboard className="h-3.5 w-3.5" /> Paste
           </button>
         </div>
 
-        <button onClick={onDownload} disabled={isLoading} className="btn-primary min-h-12 px-5">
+        <button onClick={onDownload} disabled={isLoading} className="btn-primary min-h-[3.25rem] px-6 text-[15px]">
           {isLoading ? (
             <LoadingIndicator label="Checking..." compact tone="light" />
           ) : (
             <>
-              <Download className="h-4 w-4" /> Download {downloadType}
+              Download {downloadType}
+              <ArrowRight className="h-4 w-4" />
             </>
           )}
         </button>
+
+        <button
+          onClick={paste}
+          className="btn-outline min-h-11 w-full text-xs sm:hidden"
+          type="button"
+        >
+          <Clipboard className="h-4 w-4" /> Paste from clipboard
+        </button>
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-medium" style={{ color: 'var(--ink-400)' }}>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--success-500)' }} />
+          Public links only
+        </span>
+        <span aria-hidden>|</span>
+        <span>Failed checks don&apos;t use your daily limit</span>
       </div>
     </div>
   );

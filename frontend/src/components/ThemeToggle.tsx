@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
 
 function getTheme(): 'light' | 'dark' {
-  const saved = localStorage.getItem('swiftdl-theme');
+  const saved = localStorage.getItem('sharehub-theme');
   if (saved === 'dark' || saved === 'light') return saved;
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
@@ -12,13 +12,13 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('swiftdl-theme', theme);
+    localStorage.setItem('sharehub-theme', theme);
   }, [theme]);
 
   return (
     <button
       onClick={() => setTheme(p => p === 'dark' ? 'light' : 'dark')}
-      className="relative flex h-10 w-10 items-center justify-center rounded-md border transition-colors hover:bg-[var(--surface-soft)]"
+      className="relative flex h-10 w-10 items-center justify-center rounded-xl border transition-colors hover:bg-[var(--surface-soft)]"
       style={{ borderColor: 'var(--border)', color: 'var(--ink-600)', background: 'var(--surface)' }}
       aria-label="Toggle theme"
       title="Toggle theme"

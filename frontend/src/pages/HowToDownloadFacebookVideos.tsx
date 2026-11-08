@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { ChevronDown, Share2, Link as LinkIcon } from 'lucide-react';
+import { AlertTriangle, ArrowRight, CheckCircle2, ChevronDown, Link2, Share2, Link as LinkIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { siteConfig, siteUrl } from '../lib/site';
 
@@ -8,7 +8,7 @@ const steps = [
   'Open Facebook and navigate to the video, Reel, or Watch content you want to save.',
   'Click or tap the Share button (three dots or arrow icon) on the post.',
   'Select "Copy Link" from the available options.',
-  'Return to SwiftDL and paste the copied URL into the input field.',
+  'Return to ShareHub and paste the copied URL into the input field.',
   'Select "Video" for video, or "Audio" for audio extraction.',
   'Click Download, then save the file to your device after processing.',
 ];
@@ -50,66 +50,199 @@ export default function HowToDownloadFacebookVideos() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <div className="shell" style={{ maxWidth: 720, padding: '2rem 1rem 3rem' }}>
+    <div style={{ background: 'var(--canvas)' }}>
       <Helmet><title>Facebook Download Guide | {siteConfig.name}</title><meta name="description" content="Learn how to download Facebook videos and Reels." /><link rel="canonical" href={siteUrl('/how-to-download-facebook-videos')} /></Helmet>
 
-      <div className="rounded-xl border p-6 text-center mb-8" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
-        <div className="mx-auto inline-flex rounded-xl p-3 text-white mb-4" style={{ background: 'var(--brand-600)' }}><Share2 className="h-8 w-8" /></div>
-        <h1 className="text-2xl font-bold" style={{ color: 'var(--ink-900)' }}>How to download Facebook videos</h1>
-        <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--ink-600)' }}>A practical guide for public Facebook videos, Reels, and Watch content.</p>
-        <Link to="/" className="btn-primary inline-flex mt-4 text-xs">Open downloader</Link>
-      </div>
+      {/* Hero --------------------------------------------------------------- */}
+      <header className="hero-canvas">
+        <span className="aurora-orb aurora-orb--one" aria-hidden />
+        <span className="aurora-orb aurora-orb--two" aria-hidden />
+        <span className="aurora-orb aurora-orb--three" aria-hidden />
+        <div className="shell relative">
+          <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 px-1 py-14 text-center sm:py-20">
+            <div
+              className="flex h-16 w-16 items-center justify-center rounded-2xl text-white sm:h-[4.5rem] sm:w-[4.5rem]"
+              style={{ background: 'var(--grad-brand)', boxShadow: 'var(--glow-brand)' }}
+            >
+              <Share2 className="h-8 w-8 sm:h-9 sm:w-9" aria-hidden />
+            </div>
+            <span className="eyebrow mono" style={{ color: 'var(--brand-300)' }}>Facebook · Guide</span>
+            <h1 className="text-balance text-3xl font-extrabold leading-[1.08] text-white sm:text-5xl">
+              How to download <span className="gradient-text">Facebook videos</span>
+            </h1>
+            <p className="max-w-xl text-[15px] leading-7 sm:text-base" style={{ color: 'var(--brand-200)' }}>
+              A practical guide for public Facebook videos, Reels, and Watch content.
+            </p>
+            <Link to="/" className="btn-primary min-h-11 px-6 text-sm">
+              Open downloader <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+          </div>
+        </div>
+      </header>
 
-      <div className="card mb-8">
-        <h2 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>Basic workflow</h2>
-        <ol className="mt-3 space-y-3">
+      {/* Steps timeline ------------------------------------------------------- */}
+      <section className="shell mx-auto max-w-3xl px-4 pt-12 sm:px-6 sm:pt-16">
+        <span className="eyebrow mono">Workflow</span>
+        <h2 className="section-heading">Basic workflow</h2>
+
+        <div className="relative mt-8 space-y-3 sm:space-y-4">
+          <span className="absolute bottom-7 left-5 top-7 w-px sm:left-6" style={{ background: 'var(--grad-brand)' }} aria-hidden />
           {steps.map((s, i) => (
-            <li key={i} className="flex gap-3 text-xs leading-relaxed" style={{ color: 'var(--ink-600)' }}>
-              <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0 mt-0.5" style={{ background: 'var(--brand-600)' }}>{i + 1}</span>
-              {s}
-            </li>
+            <div
+              key={i}
+              className="relative flex items-start gap-4 rounded-2xl border p-4 transition-all duration-200 hover:shadow-sm sm:gap-5 sm:p-5"
+              style={{ borderColor: 'var(--border)', background: 'var(--surface)', boxShadow: 'var(--shadow-xs)' }}
+            >
+              <span
+                className="mono relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white sm:h-12 sm:w-12 sm:text-base"
+                style={{ background: 'var(--grad-brand)', boxShadow: 'var(--glow-violet)' }}
+                aria-hidden
+              >
+                {i + 1}
+              </span>
+              <p className="break-words pt-1.5 text-[15px] leading-7 sm:pt-2.5 sm:text-base" style={{ color: 'var(--ink-700)' }}>
+                {s}
+              </p>
+            </div>
           ))}
-        </ol>
-      </div>
+        </div>
+      </section>
 
-      <div className="card mb-8">
-        <h2 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>Good link types</h2>
-        <ul className="mt-3 space-y-2">
-          {goodLinks.map(l => <li key={l} className="text-xs font-mono" style={{ color: 'var(--ink-600)' }}>{l}</li>)}
-        </ul>
-      </div>
+      {/* Good link types ------------------------------------------------------- */}
+      <section className="shell mx-auto max-w-3xl px-4 pt-8 sm:px-6 sm:pt-10">
+        <div className="card sm:p-6">
+          <div className="flex items-center gap-3">
+            <span className="icon-tile">
+              <Link2 className="h-5 w-5" aria-hidden />
+            </span>
+            <h2 className="text-lg font-bold sm:text-xl" style={{ color: 'var(--ink-900)' }}>Good link types</h2>
+          </div>
+          <ul className="mt-4 space-y-2">
+            {goodLinks.map(l => (
+              <li
+                key={l}
+                className="mono break-all rounded-xl border px-3.5 py-2.5 text-[13px] leading-6 sm:text-sm"
+                style={{ borderColor: 'var(--border)', background: 'var(--surface-soft)', color: 'var(--ink-700)' }}
+              >
+                {l}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
-      <div className="card mb-8">
-        <h2 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>What to expect</h2>
-        <ul className="mt-3 space-y-2">
-          {features.map(f => <li key={f} className="flex items-start gap-2 text-xs leading-relaxed" style={{ color: 'var(--ink-600)' }}><span className="w-1.5 h-1.5 rounded-full mt-1 shrink-0" style={{ background: 'var(--brand-500)' }} />{f}</li>)}
-        </ul>
-      </div>
+      {/* What to expect — success callout ------------------------------------- */}
+      <section className="shell mx-auto max-w-3xl px-4 pt-6 sm:px-6 sm:pt-8">
+        <div
+          className="rounded-2xl border p-5 sm:p-6"
+          style={{ background: 'var(--success-100)', borderColor: 'color-mix(in srgb, var(--success-500) 38%, var(--border))' }}
+        >
+          <div className="flex items-center gap-3">
+            <span
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+              style={{ background: 'color-mix(in srgb, var(--success-500) 18%, transparent)', color: 'var(--success-600)' }}
+            >
+              <CheckCircle2 className="h-5 w-5" aria-hidden />
+            </span>
+            <h2 className="text-lg font-bold sm:text-xl" style={{ color: 'var(--ink-900)' }}>What to expect</h2>
+          </div>
+          <ul className="mt-4 space-y-2.5">
+            {features.map(f => (
+              <li key={f} className="flex items-start gap-2.5 text-[15px] leading-7 sm:text-base" style={{ color: 'var(--ink-800)' }}>
+                <CheckCircle2 className="mt-1 h-4 w-4 shrink-0" style={{ color: 'var(--success-600)' }} aria-hidden />
+                <span className="break-words">{f}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
-      <div className="card mb-8">
-        <h2 className="text-sm font-bold" style={{ color: 'var(--ink-900)' }}>Common failure causes</h2>
-        <ul className="mt-3 space-y-2">
-          {failures.map(f => <li key={f} className="flex items-start gap-2 text-xs leading-relaxed" style={{ color: 'var(--ink-600)' }}><LinkIcon className="h-3 w-3 mt-0.5 shrink-0" style={{ color: 'var(--brand-500)' }} />{f}</li>)}
-        </ul>
-      </div>
+      {/* Common failure causes — warning callout -------------------------------- */}
+      <section className="shell mx-auto max-w-3xl px-4 pt-6 sm:px-6 sm:pt-8">
+        <div
+          className="rounded-2xl border p-5 sm:p-6"
+          style={{ background: 'var(--warning-100)', borderColor: 'color-mix(in srgb, var(--warning-500) 42%, var(--border))' }}
+        >
+          <div className="flex items-center gap-3">
+            <span
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+              style={{ background: 'color-mix(in srgb, var(--warning-500) 20%, transparent)', color: 'var(--warning-600)' }}
+            >
+              <AlertTriangle className="h-5 w-5" aria-hidden />
+            </span>
+            <h2 className="text-lg font-bold sm:text-xl" style={{ color: 'var(--ink-900)' }}>Common failure causes</h2>
+          </div>
+          <ul className="mt-4 space-y-2.5">
+            {failures.map(f => (
+              <li key={f} className="flex items-start gap-2.5 text-[15px] leading-7 sm:text-base" style={{ color: 'var(--ink-800)' }}>
+                <LinkIcon className="mt-1 h-4 w-4 shrink-0" style={{ color: 'var(--warning-600)' }} aria-hidden />
+                <span className="break-words">{f}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
-      <div className="space-y-2">
-        <h2 className="text-sm font-bold mb-3" style={{ color: 'var(--ink-900)' }}>FAQ</h2>
-        {faqs.map((f, i) => {
-          const isOpen = open === i;
-          return (
-            <article key={f.q} className="card" style={{ padding: 0, overflow: 'hidden' }}>
-              <button onClick={() => setOpen(isOpen ? null : i)} className="flex w-full items-center justify-between gap-4 p-3 text-left">
-                <span className="text-xs font-semibold" style={{ color: 'var(--ink-900)' }}>{f.q}</span>
-                <ChevronDown className={`h-3.5 w-3.5 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} style={{ color: 'var(--ink-400)' }} />
-              </button>
-              <div className={`grid transition-all duration-200 ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-                <div className="overflow-hidden px-3 pb-3"><p className="text-xs leading-relaxed" style={{ color: 'var(--ink-600)' }}>{f.a}</p></div>
-              </div>
-            </article>
-          );
-        })}
-      </div>
+      {/* FAQ ------------------------------------------------------------------ */}
+      <section className="shell mx-auto max-w-3xl px-4 pt-12 sm:px-6 sm:pt-16">
+        <span className="eyebrow mono">Questions</span>
+        <h2 className="section-heading">FAQ</h2>
+
+        <div className="mt-6 space-y-2.5 sm:space-y-3">
+          {faqs.map((f, i) => {
+            const isOpen = open === i;
+            return (
+              <article
+                key={f.q}
+                className="overflow-hidden rounded-2xl border transition-all duration-200"
+                style={{
+                  borderColor: isOpen ? 'color-mix(in srgb, var(--brand-600) 35%, var(--border))' : 'var(--border)',
+                  background: 'var(--surface)',
+                  boxShadow: isOpen ? 'var(--shadow-sm)' : 'var(--shadow-xs)',
+                }}
+              >
+                <button
+                  onClick={() => setOpen(isOpen ? null : i)}
+                  className="flex min-h-11 w-full items-center justify-between gap-4 p-4 text-left sm:p-5"
+                  aria-expanded={isOpen}
+                >
+                  <span className="break-words text-[15px] font-bold leading-snug sm:text-base" style={{ color: 'var(--ink-900)' }}>{f.q}</span>
+                  <span
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-200"
+                    style={{ background: isOpen ? 'var(--grad-brand)' : 'var(--surface-soft)', color: isOpen ? 'white' : 'var(--ink-500)' }}
+                  >
+                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} aria-hidden />
+                  </span>
+                </button>
+                <div className={`grid transition-all duration-200 ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                  <div className="overflow-hidden">
+                    <p className="break-words border-t px-4 pb-4 pt-4 text-[15px] leading-7 sm:px-5 sm:pb-5 sm:text-base" style={{ borderColor: 'var(--border)', color: 'var(--ink-600)' }}>{f.a}</p>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Feathered CTA --------------------------------------------------------- */}
+      <section className="shell mx-auto max-w-3xl px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16">
+        <div
+          className="relative overflow-hidden rounded-3xl border px-6 py-10 text-center sm:px-10 sm:py-12"
+          style={{ borderColor: 'color-mix(in srgb, var(--brand-500) 32%, var(--border))', background: 'var(--grad-brand-soft)', boxShadow: 'var(--shadow-sm)' }}
+        >
+          <span className="dot-grid pointer-events-none absolute inset-0" aria-hidden />
+          <div className="relative">
+            <span className="eyebrow mono">ShareHub</span>
+            <h2 className="mt-3 text-2xl font-extrabold sm:text-3xl" style={{ color: 'var(--ink-900)' }}>Ready to download?</h2>
+            <div className="mt-6 flex justify-center">
+              <Link to="/" className="btn-primary min-h-11 px-7 text-sm">
+                Open downloader <ArrowRight className="h-4 w-4" aria-hidden />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

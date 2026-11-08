@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, type Auth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -11,7 +11,16 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
+export const firebaseConfigured = Boolean(
+  firebaseConfig.apiKey &&
+    firebaseConfig.authDomain &&
+    firebaseConfig.projectId &&
+    firebaseConfig.appId,
+);
+
 const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
+// Do not call getAuth() without a valid config: Firebase throws
+// auth/invalid-api-key and would take the whole app down at module load.
+export const auth: Auth | null = firebaseConfigured ? getAuth(app) : null;
 export const googleProvider = new GoogleAuthProvider();
