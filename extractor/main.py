@@ -134,7 +134,9 @@ def resolve(url: str, media_type: str):
             msg = msg[:300] + "…"
         # Common, user-meaningful cases stay readable.
         lowered = msg.lower()
-        if any(s in lowered for s in ("private", "login", "sign in", "cookies", "age")):
+        if any(s in lowered for s in ("bot", "sign in to confirm", "confirm you're not", "verify you")):
+            detail = "The platform blocked extraction from this server (bot verification). Try a different public link."
+        elif any(s in lowered for s in ("private", "login", "sign in", "cookies", "age")):
             detail = "This link is private or restricted. A public link is required."
         elif any(s in lowered for s in ("not available", "unavailable", "removed", "deleted")):
             detail = "This video is not available anymore."
